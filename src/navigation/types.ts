@@ -14,6 +14,10 @@ export type HomeStackParamList = {
   Home: undefined;
 };
 
+export type AuthStackParamList = {
+  SignUp: undefined;
+};
+
 export type AnalyzeStackParamList = {
   HomeDrawer: undefined;
 };
