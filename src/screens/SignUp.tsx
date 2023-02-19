@@ -11,15 +11,6 @@ import {
 import {useState} from 'react';
 import {useAppDispatch} from '../store';
 import userSlice from '../slices/userSlice';
-import {
-  Canvas,
-  Circle,
-  Group,
-  LinearGradient,
-  useClockValue,
-  useComputedValue,
-  vec,
-} from '@shopify/react-native-skia';
 
 const SignUp = () => {
   const dispatch = useAppDispatch();
@@ -31,27 +22,8 @@ const SignUp = () => {
     }
   };
 
-  const r = 256 / 2;
-  const interval = 2000;
-
-  const clock = useClockValue();
-  const opacity = useComputedValue(() => {
-    return (clock.current % interval) / interval;
-  }, [clock]);
-
   return (
     <SafeAreaView style={styles.safeContainer}>
-      <Canvas style={{width: 256, height: 256, position: 'absolute'}}>
-        <Group opacity={opacity}>
-          <Circle r={r} cx={r} cy={r}>
-            <LinearGradient
-              start={vec(0, 0)}
-              end={vec(2 * r, 2 * r)}
-              colors={['#00ff87', '#60efff']}
-            />
-          </Circle>
-        </Group>
-      </Canvas>
       <KeyboardAvoidingView
         style={[styles.container, {paddingHorizontal: 20}]}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
