@@ -1,6 +1,6 @@
-import HomeStack from './homeRoots/HomeStack';
+import HomeStack from '~/navigation/home/HomeStack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {HomeTabParamList} from './types';
+import {HomeTabParamList} from '~/navigation/types';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 

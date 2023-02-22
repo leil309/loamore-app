@@ -1,13 +1,13 @@
 import {NavigationContainer} from '@react-navigation/native';
-import HomeTabs from './HomeTabs';
-import {useAppSelector} from '../store';
-import AuthStacks from './AuthStacks';
+import AuthStacks from '~/navigation/auth/AuthStacks';
+import RootDrawer from '~/navigation/RootDrawer';
+import {useAppSelector} from '~/store';
 
 const AppNavigation = () => {
   const character = useAppSelector(state => state.user.character);
   return (
     <NavigationContainer>
-      {character?.charName ? <HomeTabs /> : <AuthStacks />}
+      {character?.charName ? <RootDrawer /> : <AuthStacks />}
     </NavigationContainer>
   );
 };

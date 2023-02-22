@@ -1,7 +1,11 @@
 import {NavigatorScreenParams} from '@react-navigation/native';
+import GearDetail from '~/screens/GearDetail';
 
 export type RootStackParamList = {
   Root: NavigatorScreenParams<HomeTabParamList>;
+};
+export type RootDrawerParamList = {
+  HomeTab: NavigatorScreenParams<HomeTabParamList>;
 };
 
 export type HomeTabParamList = {
@@ -10,8 +14,8 @@ export type HomeTabParamList = {
 };
 
 export type HomeStackParamList = {
-  HomeDrawer: undefined;
   Home: undefined;
+  GearDetail: undefined;
 };
 
 export type AuthStackParamList = {
