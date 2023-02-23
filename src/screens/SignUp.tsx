@@ -19,6 +19,15 @@ const SignUp = () => {
   const onSubmit = () => {
     if (charName.trim()) {
       dispatch(userSlice.actions.setCharacter({name: charName.trim()}));
+      dispatch(
+        userSlice.actions.setCharacterInfo({
+          name: charName.trim(),
+          server: '',
+          guild: '',
+          level: '',
+          uri: '',
+        }),
+      );
     }
   };
 

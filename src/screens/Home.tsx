@@ -13,6 +13,9 @@ const Home = () => {
   const charName = useAppSelector(state => state.user.characterName)?.name;
   const character = useAppSelector(state => state.user.character);
 
+  console.log('char NAME', charName);
+  console.log('char', character);
+
   const [name, setName] = useState(character?.name || '');
   const [level, setLevel] = useState(character?.level || '');
   const [guild, setGuild] = useState(character?.guild || '');
@@ -20,7 +23,7 @@ const Home = () => {
   const [uri, setUri] = useState(character?.uri || '');
 
   useEffect(() => {
-    if (!character?.name) {
+    if (!character?.uri) {
       fetch(`https://lostark.game.onstove.com/Profile/Character/${charName}`)
         .then(response => response.text())
         .then(html => {
