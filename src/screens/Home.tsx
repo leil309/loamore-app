@@ -1,17 +1,12 @@
-import {
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Pressable, SafeAreaView, ScrollView, Text, View} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../store';
 import userSlice from '../slices/userSlice';
 import AppHeader from '~/components/common/AppHeader';
 import {useEffect, useState} from 'react';
 import CharacterCard from '~/components/CharacterCard';
 import {Colors} from '~/components/common/Colors';
+import StatCard from '~/components/StatCard';
+import {baseCard, subText} from '~/components/styles';
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -57,25 +52,17 @@ const Home = () => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: Colors.backgroundColor}}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{padding: 15}}>
         <View style={{height: 44}} />
         <CharacterCard imageUri={uri} />
-        <CharacterCard imageUri={uri} />
-        <Text style={styles.text}>{name}</Text>
-        <Text style={styles.text}>{level}</Text>
-        <Text style={styles.text}>{guild}</Text>
-        <Text style={styles.text}>{server}</Text>
-        <Pressable onPress={resetName}>
-          <Text style={styles.text}>resetName</Text>
+        <StatCard name={name} level={level} server={server} />
+
+        <Pressable style={[baseCard, {marginTop: 15}]} onPress={resetName}>
+          <Text style={subText}>resetName</Text>
         </Pressable>
       </ScrollView>
       <AppHeader />
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  text: {
-    color: '#FFFFFF',
-  },
-});
 export default Home;

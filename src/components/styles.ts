@@ -1,5 +1,4 @@
 import {StyleSheet} from 'react-native';
-import {Colors} from '~/components/common/Colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,9 +12,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: '100%',
+    borderWidth: 0,
+    backgroundColor: '#15181d',
+    padding: 15,
+    borderRadius: 25,
   },
   header: {
     width: '100%',
@@ -31,10 +32,26 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
   },
+  text: {
+    color: '#e8e8e8',
+    fontSize: 15,
+    fontWeight: '700',
+    textAlign: 'center',
+    justifyContent: 'center',
+  },
+  subText: {
+    color: '#939393',
+    fontSize: 15,
+    fontWeight: '500',
+    textAlign: 'center',
+    justifyContent: 'center',
+  },
 });
 
 export const baseContainer = styles.container;
 export const baseWrapper = styles.wrapper;
 export const baseCard = styles.card;
+export const baseText = styles.text;
+export const subText = styles.subText;
 export const appHeader = styles.header;
 export const characterImage = styles.characterImage;
