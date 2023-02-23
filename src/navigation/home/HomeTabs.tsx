@@ -8,24 +8,33 @@ import {HomeTabParamList} from '~/navigation/types';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {BlurView} from '@react-native-community/blur';
+import {Platform, View} from 'react-native';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
 const CustomTabBar = (props: BottomTabBarProps) => {
   return (
-    <BlurView
-      {...props}
+    <View
       style={{
+        overflow: 'hidden',
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
-      }}
-      blurType="dark"
-      blurAmount={10}
-      blurRadius={25}>
-      <BottomTabBar {...props} style={{backgroundColor: '#000000'}} />
-    </BlurView>
+        height: 49,
+      }}>
+      <BlurView
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}
+        blurType={'dark'}
+        blurAmount={Platform.OS === 'ios' ? 20 : 100}>
+        <BottomTabBar {...props} style={{backgroundColor: '#000000'}} />
+      </BlurView>
+    </View>
   );
 };
 
