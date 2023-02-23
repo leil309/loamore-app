@@ -1,10 +1,10 @@
 import {StyleSheet} from 'react-native';
+import {Colors} from '~/components/common/Colors';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: Colors.backgroundColor,
   },
   wrapper: {
     flex: 1,
@@ -46,12 +46,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
   },
+  contentContainer: {
+    padding: 15,
+    marginTop: 44,
+    paddingBottom: 60,
+  },
 });
 
-export const baseContainer = styles.container;
+export const mainContainer = styles.container;
 export const baseWrapper = styles.wrapper;
 export const baseCard = styles.card;
 export const baseText = styles.text;
 export const subText = styles.subText;
+export const contentContainer = styles.contentContainer;
 export const appHeader = styles.header;
 export const characterImage = styles.characterImage;

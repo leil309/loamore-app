@@ -18,7 +18,7 @@ const SignUp = () => {
   const [charName, setCharName] = useState('');
   const onSubmit = () => {
     if (charName.trim()) {
-      dispatch(userSlice.actions.setCharacter({charName: charName.trim()}));
+      dispatch(userSlice.actions.setCharacter({name: charName.trim()}));
     }
   };
 

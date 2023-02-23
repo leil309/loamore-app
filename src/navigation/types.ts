@@ -9,10 +9,10 @@ export type RootDrawerParamList = {
 
 export type HomeTabParamList = {
   HomeStack: NavigatorScreenParams<HomeStackParamList>;
-  secondStack: NavigatorScreenParams<AnalyzeStackParamList>;
-  AnalyzeStack: NavigatorScreenParams<AnalyzeStackParamList>;
-  RankingStack: NavigatorScreenParams<AnalyzeStackParamList>;
-  MenuStack: NavigatorScreenParams<AnalyzeStackParamList>;
+  CompareStack: NavigatorScreenParams<CompareStackParamList>;
+  MarketStack: NavigatorScreenParams<MarketStackParamList>;
+  RankingStack: NavigatorScreenParams<RankingStackParamList>;
+  MenuStack: NavigatorScreenParams<MenuStackParamList>;
 };
 
 export type HomeStackParamList = {
@@ -24,6 +24,22 @@ export type AuthStackParamList = {
   SignUp: undefined;
 };
 
-export type AnalyzeStackParamList = {
-  HomeDrawer: undefined;
+export type CompareStackParamList = {
+  Compare: undefined;
+  CompareDetail: undefined;
+};
+
+export type MarketStackParamList = {
+  Market: undefined;
+  MarketDetail: undefined;
+};
+
+export type RankingStackParamList = {
+  Ranking: undefined;
+  RankingDetail: undefined;
+};
+
+export type MenuStackParamList = {
+  Menu: undefined;
+  MenuDetail: undefined;
 };

@@ -10,6 +10,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {BlurView} from '@react-native-community/blur';
 import {Platform, View} from 'react-native';
+import CompareStack from '~/navigation/home/CompareStack';
+import MarketStack from '~/navigation/home/MarketStack';
+import Ranking from '~/screens/Ranking';
+import RankingStack from '~/navigation/home/RankingStack';
+import MenuStack from '~/navigation/home/MenuStack';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
@@ -30,7 +35,7 @@ const CustomTabBar = (props: BottomTabBarProps) => {
   );
 };
 
-const HomeTabs = () => {
+const HomeTab = () => {
   const navigation = useNavigation<NavigationProp<HomeTabParamList>>();
 
   return (
@@ -69,12 +74,12 @@ const HomeTabs = () => {
         }}
       />
       <Tab.Screen
-        name={'secondStack'}
-        component={HomeStack}
+        name={'CompareStack'}
+        component={CompareStack}
         listeners={{
           tabPress: () =>
-            navigation.navigate('HomeStack', {
-              screen: 'Home',
+            navigation.navigate('CompareStack', {
+              screen: 'Compare',
             }),
         }}
         options={{
@@ -89,32 +94,32 @@ const HomeTabs = () => {
         }}
       />
       <Tab.Screen
-        name={'AnalyzeStack'}
-        component={HomeStack}
+        name={'MarketStack'}
+        component={MarketStack}
         listeners={{
           tabPress: () =>
-            navigation.navigate('HomeStack', {
-              screen: 'Home',
+            navigation.navigate('MarketStack', {
+              screen: 'Market',
             }),
         }}
         options={{
-          tabBarLabel: '전체',
+          tabBarLabel: '경매장',
           tabBarIcon: ({color, focused}) => (
-            <MaterialCommunityIcons
-              name={focused ? 'heart' : 'heart-outline'}
+            <MaterialIcons
+              name={focused ? 'gavel' : 'gavel'}
               color={color}
-              size={30}
+              size={26}
             />
           ),
         }}
       />
       <Tab.Screen
         name={'RankingStack'}
-        component={HomeStack}
+        component={RankingStack}
         listeners={{
           tabPress: () =>
-            navigation.navigate('HomeStack', {
-              screen: 'Home',
+            navigation.navigate('RankingStack', {
+              screen: 'Ranking',
             }),
         }}
         options={{
@@ -130,11 +135,11 @@ const HomeTabs = () => {
       />
       <Tab.Screen
         name={'MenuStack'}
-        component={HomeStack}
+        component={MenuStack}
         listeners={{
           tabPress: () =>
-            navigation.navigate('HomeStack', {
-              screen: 'Home',
+            navigation.navigate('MenuStack', {
+              screen: 'Menu',
             }),
         }}
         options={{
@@ -151,4 +156,4 @@ const HomeTabs = () => {
     </Tab.Navigator>
   );
 };
-export default HomeTabs;
+export default HomeTab;

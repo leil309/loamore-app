@@ -1,6 +1,6 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {RootDrawerParamList} from '~/navigation/types';
-import HomeTabs from '~/navigation/home/HomeTabs';
+import HomeTab from '~/navigation/home/HomeTab';
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
 const RootDrawer = () => {
@@ -10,7 +10,7 @@ const RootDrawer = () => {
         headerShown: false,
       }}
       initialRouteName="HomeTab">
-      <Drawer.Screen name="HomeTab" component={HomeTabs} />
+      <Drawer.Screen name="HomeTab" component={HomeTab} />
     </Drawer.Navigator>
   );
 };

@@ -1,6 +1,6 @@
 import {Dimensions, Image, StyleSheet, View} from 'react-native';
 import {Colors} from '~/components/common/Colors';
-import {baseContainer} from '~/components/styles';
+import {mainContainer} from '~/components/styles';
 
 interface ICharacterCard {
   imageUri?: string;
@@ -18,7 +18,7 @@ const CharacterCard = ({imageUri}: ICharacterCard) => {
     : {source: require('assets/default-character.png')};
 
   return (
-    <View style={baseContainer}>
+    <View style={mainContainer}>
       <View
         style={[
           styles.wrapper,

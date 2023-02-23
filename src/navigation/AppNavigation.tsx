@@ -4,10 +4,12 @@ import RootDrawer from '~/navigation/RootDrawer';
 import {useAppSelector} from '~/store';
 
 const AppNavigation = () => {
+  const characterName = useAppSelector(state => state.user.characterName);
   const character = useAppSelector(state => state.user.character);
+
   return (
     <NavigationContainer>
-      {character?.charName ? <RootDrawer /> : <AuthStacks />}
+      {characterName?.name && character?.name ? <RootDrawer /> : <AuthStacks />}
     </NavigationContainer>
   );
 };

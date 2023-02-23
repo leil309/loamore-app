@@ -6,60 +6,65 @@ import {useEffect, useState} from 'react';
 import CharacterCard from '~/components/CharacterCard';
 import {Colors} from '~/components/common/Colors';
 import StatCard from '~/components/StatCard';
-import {baseCard, subText} from '~/components/styles';
+import {
+  baseCard,
+  contentContainer,
+  mainContainer,
+  subText,
+} from '~/components/styles';
 
 const Home = () => {
   const dispatch = useAppDispatch();
   const cheerio = require('react-native-cheerio');
+  const charName = useAppSelector(state => state.user.characterName)?.name;
   const character = useAppSelector(state => state.user.character);
 
-  const [name, setName] = useState('');
-  const [level, setLevel] = useState('');
-  const [guild, setGuild] = useState('');
-  const [server, setServer] = useState('');
-  const [uri, setUri] = useState('');
-
-  const resetName = () => {
-    dispatch(userSlice.actions.setCharacter({charName: ''}));
-  };
+  const [name, setName] = useState(character?.name || '');
+  const [level, setLevel] = useState(character?.level || '');
+  const [guild, setGuild] = useState(character?.guild || '');
+  const [server, setServer] = useState(character?.server || '');
+  const [uri, setUri] = useState(character?.uri || '');
 
   useEffect(() => {
-    fetch(
-      `https://lostark.game.onstove.com/Profile/Character/${character?.charName}`,
-    )
-      .then(response => response.text())
-      .then(html => {
-        const $ = cheerio.load(html);
+    if (!character) {
+      fetch(`https://lostark.game.onstove.com/Profile/Character/${charName}`)
+        .then(response => response.text())
+        .then(html => {
+          const $ = cheerio.load(html);
 
-        const tName = $('.profile-character-info__name').text();
-        const tLevel = $('.level-info__item').text();
-        const tGuild = $('.profile-character-info__guild').text();
-        const tServer = $('.profile-character-info__server').text();
-        const tUri = $('.profile-equipment__character img').attr('src');
+          const tName = $('.profile-character-info__name').text();
+          const tLevel = $('.level-info__item').text();
+          const tGuild = $('.profile-character-info__guild').text();
+          const tServer = $('.profile-character-info__server').text();
+          const tUri = $('.profile-equipment__character img').attr('src');
 
-        console.log(tName);
-        console.log(tLevel);
-        console.log(tGuild);
-        console.log(tServer);
+          setName(tName);
+          setLevel(tLevel);
+          setGuild(tGuild);
+          setServer(tServer);
+          setUri(tUri);
 
-        setName(tName);
-        setLevel(tLevel);
-        setGuild(tGuild);
-        setServer(tServer);
-        setUri(tUri);
-      });
-  }, [character?.charName, cheerio]);
+          dispatch(
+            userSlice.actions.setCharacterInfo({
+              name: tName || '',
+              guild: tGuild || '',
+              server: tServer || '',
+              level: tLevel || '',
+              uri: tUri || '',
+            }),
+          );
+        });
+    }
+  }, [character, charName, cheerio, dispatch]);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: Colors.backgroundColor}}>
-      <ScrollView contentContainerStyle={{padding: 15}}>
-        <View style={{height: 44}} />
+    <SafeAreaView style={mainContainer}>
+      <ScrollView contentContainerStyle={contentContainer}>
         <CharacterCard imageUri={uri} />
-        <StatCard name={name} level={level} server={server} />
-
-        <Pressable style={[baseCard, {marginTop: 15}]} onPress={resetName}>
-          <Text style={subText}>resetName</Text>
-        </Pressable>
+        <StatCard name={name} level={level} server={server} guild={guild} />
+        <View style={{marginTop: 15}} />
+        <CharacterCard imageUri={uri} />
+        <StatCard name={name} level={level} server={server} guild={guild} />
       </ScrollView>
       <AppHeader />
     </SafeAreaView>
