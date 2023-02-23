@@ -21,17 +21,8 @@ const CustomTabBar = (props: BottomTabBarProps) => {
         bottom: 0,
         left: 0,
         right: 0,
-        height: 49,
       }}>
-      <BlurView
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-        }}
-        blurType={'dark'}
-        blurAmount={Platform.OS === 'ios' ? 20 : 100}>
+      <BlurView blurType={'dark'} blurAmount={Platform.OS === 'ios' ? 20 : 100}>
         <BottomTabBar {...props} style={{backgroundColor: '#000000'}} />
       </BlurView>
     </View>
@@ -49,6 +40,7 @@ const HomeTabs = () => {
         tabBarActiveTintColor: 'white',
         tabBarLabelStyle: {marginBottom: 5},
         tabBarStyle: {
+          overflow: 'hidden',
           borderTopColor: '#66666666',
           backgroundColor: 'transparent',
           zIndex: 0,
