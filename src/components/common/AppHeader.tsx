@@ -1,36 +1,39 @@
-import {Pressable, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Platform,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {BlurView} from '@react-native-community/blur';
 
 const AppHeader = () => {
   const navigation = useNavigation();
   return (
-    <SafeAreaView style={styles.blurContainer}>
+    <SafeAreaView
+      style={[{height: Platform.OS === 'ios' ? 80 : 40}, styles.blurContainer]}>
       <BlurView
         reducedTransparencyFallbackColor={'#FFFFFF'}
         style={styles.blurContainer}
         blurType={'dark'}
-        blurAmount={100}>
-        <View style={styles.wrapper}>
-          <View style={styles.item}>
-            <Pressable onPress={() => navigation.goBack()}>
-              <Text style={styles.title}>BACK</Text>
-            </Pressable>
-          </View>
+        blurAmount={100}
+      />
+      <View style={styles.wrapper}>
+        <Pressable onPress={() => navigation.goBack()}>
+          <Text style={styles.title}>BACK</Text>
+        </Pressable>
 
-          <View style={styles.item}>
-            <Pressable onPress={() => navigation.goBack()}>
-              <Text style={styles.title}>BACK</Text>
-            </Pressable>
-          </View>
+        <Pressable onPress={() => navigation.goBack()}>
+          <Text style={styles.title}>BACK</Text>
+        </Pressable>
 
-          <View style={styles.item}>
-            <Pressable onPress={() => navigation.goBack()}>
-              <Text style={styles.title}>Loamore</Text>
-            </Pressable>
-          </View>
-        </View>
-      </BlurView>
+        <Pressable onPress={() => navigation.goBack()}>
+          <Text style={styles.title}>Loamore</Text>
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 };
@@ -41,7 +44,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 80,
     zIndex: 5,
     elevation: 5,
     overflow: 'hidden',
@@ -49,11 +51,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   wrapper: {
-    height: 45,
+    flex: 1,
+    height: 40,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 10,
+    zIndex: 6,
+    elevation: 6,
   },
   item: {
     flex: 1,
