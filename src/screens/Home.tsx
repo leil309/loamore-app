@@ -52,11 +52,10 @@ const Home = () => {
         setServer(tServer);
         setUri(tUri);
       });
-  }, [cheerio]);
+  }, [character?.charName, cheerio]);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#15181d'}}>
-      <AppHeader />
       <ScrollView>
         <View style={{height: 45}} />
         <CharacterCard imageUri={uri} />
@@ -69,6 +68,7 @@ const Home = () => {
           <Text style={styles.text}>resetName</Text>
         </Pressable>
       </ScrollView>
+      <AppHeader />
     </SafeAreaView>
   );
 };
