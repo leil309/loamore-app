@@ -1,17 +1,11 @@
-import {Pressable, SafeAreaView, ScrollView, Text, View} from 'react-native';
-import {useAppDispatch, useAppSelector} from '../store';
+import {SafeAreaView, ScrollView, View} from 'react-native';
+import {useAppDispatch, useAppSelector} from '~/store';
 import userSlice from '../slices/userSlice';
 import AppHeader from '~/components/common/AppHeader';
 import {useEffect, useState} from 'react';
 import CharacterCard from '~/components/CharacterCard';
-import {Colors} from '~/components/common/Colors';
 import StatCard from '~/components/StatCard';
-import {
-  baseCard,
-  contentContainer,
-  mainContainer,
-  subText,
-} from '~/components/styles';
+import {contentContainer, mainContainer} from '~/components/styles';
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -26,10 +20,11 @@ const Home = () => {
   const [uri, setUri] = useState(character?.uri || '');
 
   useEffect(() => {
-    if (!character) {
+    if (!character?.name) {
       fetch(`https://lostark.game.onstove.com/Profile/Character/${charName}`)
         .then(response => response.text())
         .then(html => {
+          console.log('runs');
           const $ = cheerio.load(html);
 
           const tName = $('.profile-character-info__name').text();
