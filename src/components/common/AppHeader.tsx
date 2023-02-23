@@ -13,7 +13,7 @@ const AppHeader = () => {
         reducedTransparencyFallbackColor={'#FFFFFF'}
         style={styles.blurContainer}
         blurType={'dark'}
-        blurAmount={Platform.OS === 'ios' ? 20 : 100}
+        blurAmount={Platform.OS === 'ios' ? 20 : 25}
       />
       {Platform.OS === 'ios' ? (
         <View style={{height: 40}} />

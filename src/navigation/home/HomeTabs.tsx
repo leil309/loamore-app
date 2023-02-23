@@ -22,7 +22,7 @@ const CustomTabBar = (props: BottomTabBarProps) => {
         left: 0,
         right: 0,
       }}>
-      <BlurView blurType={'dark'} blurAmount={Platform.OS === 'ios' ? 20 : 100}>
+      <BlurView blurType={'dark'} blurAmount={Platform.OS === 'ios' ? 20 : 25}>
         <BottomTabBar {...props} />
       </BlurView>
     </View>
