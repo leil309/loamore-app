@@ -11,6 +11,7 @@ import userSlice from '../slices/userSlice';
 import AppHeader from '~/components/common/AppHeader';
 import {useEffect, useState} from 'react';
 import CharacterCard from '~/components/CharacterCard';
+import {Colors} from '~/components/common/Colors';
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -55,9 +56,9 @@ const Home = () => {
   }, [character?.charName, cheerio]);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#15181d'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: Colors.backgroundColor}}>
       <ScrollView>
-        <View style={{height: 45}} />
+        <View style={{height: 44}} />
         <CharacterCard imageUri={uri} />
         <CharacterCard imageUri={uri} />
         <Text style={styles.text}>{name}</Text>

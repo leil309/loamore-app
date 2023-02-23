@@ -1,5 +1,4 @@
 import {
-  Dimensions,
   Platform,
   Pressable,
   SafeAreaView,
@@ -7,31 +6,27 @@ import {
   Text,
   View,
 } from 'react-native';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {useNavigation} from '@react-navigation/native';
 import {BlurView} from '@react-native-community/blur';
 
 const AppHeader = () => {
   const navigation = useNavigation();
+  const statusBarHeight = getStatusBarHeight(true);
+
   return (
     <SafeAreaView
-      style={[{height: Platform.OS === 'ios' ? 80 : 40}, styles.blurContainer]}>
+      style={[{height: statusBarHeight + 44}, styles.blurContainer]}>
       <BlurView
         reducedTransparencyFallbackColor={'#FFFFFF'}
         style={styles.blurContainer}
         blurType={'dark'}
-        blurAmount={100}
+        blurAmount={Platform.OS === 'ios' ? 20 : 100}
       />
+      {Platform.OS === 'ios' ? <View style={{height: 40}} /> : null}
       <View style={styles.wrapper}>
         <Pressable onPress={() => navigation.goBack()}>
-          <Text style={styles.title}>BACK</Text>
-        </Pressable>
-
-        <Pressable onPress={() => navigation.goBack()}>
-          <Text style={styles.title}>BACK</Text>
-        </Pressable>
-
-        <Pressable onPress={() => navigation.goBack()}>
-          <Text style={styles.title}>Loamore</Text>
+          <Text style={styles.headerText}>LOA</Text>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -66,6 +61,11 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#FFFFFF',
+  },
+  headerText: {
+    color: '#707375',
+    fontSize: 23,
+    fontWeight: 'bold',
   },
   title: {
     fontSize: 20,

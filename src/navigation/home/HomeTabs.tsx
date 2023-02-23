@@ -1,16 +1,51 @@
 import HomeStack from '~/navigation/home/HomeStack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {
+  BottomTabBar,
+  BottomTabBarProps,
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
 import {HomeTabParamList} from '~/navigation/types';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {BlurView} from '@react-native-community/blur';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
+
+const CustomTabBar = (props: BottomTabBarProps) => {
+  return (
+    <BlurView
+      {...props}
+      style={{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+      }}
+      blurType="dark"
+      blurAmount={10}
+      blurRadius={25}>
+      <BottomTabBar {...props} style={{backgroundColor: '#000000'}} />
+    </BlurView>
+  );
+};
 
 const HomeTabs = () => {
   const navigation = useNavigation<NavigationProp<HomeTabParamList>>();
 
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBar={props => <CustomTabBar {...props} />}
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: 'white',
+        tabBarLabelStyle: {marginBottom: 5},
+        tabBarStyle: {
+          borderTopColor: '#66666666',
+          backgroundColor: 'transparent',
+          zIndex: 0,
+          elevation: 0,
+        },
+      }}>
       <Tab.Screen
         name={'HomeStack'}
         component={HomeStack}
@@ -21,7 +56,6 @@ const HomeTabs = () => {
             }),
         }}
         options={{
-          headerShown: false,
           tabBarIcon: ({color, focused}) => (
             <MaterialCommunityIcons
               name={focused ? 'home' : 'home-outline'}
@@ -41,7 +75,6 @@ const HomeTabs = () => {
             }),
         }}
         options={{
-          headerShown: false,
           tabBarIcon: ({color, focused}) => (
             <MaterialCommunityIcons
               name={focused ? 'heart' : 'heart-outline'}
