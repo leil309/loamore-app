@@ -11,6 +11,7 @@ import {
 import {useState} from 'react';
 import {useAppDispatch} from '../store';
 import userSlice from '../slices/userSlice';
+import {baseCard, baseText, mainContainer} from '~/components/styles';
 
 const SignUp = () => {
   const dispatch = useAppDispatch();
@@ -32,16 +33,17 @@ const SignUp = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <SafeAreaView style={mainContainer}>
       <KeyboardAvoidingView
         style={[styles.container, {paddingHorizontal: 20}]}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <View style={styles.card}>
-          <Text style={styles.text}>캐릭터명을 입력해 주세요</Text>
+        <View style={baseCard}>
+          <Text style={baseText}>캐릭터명을 입력해 주세요</Text>
           <TextInput
             style={styles.input}
             keyboardType={'web-search'}
-            placeholder={'Search...'}
+            placeholder={''}
+            placeholderTextColor={'#939393'}
             value={charName}
             onChangeText={props => setCharName(props)}
             autoFocus={true}
@@ -49,7 +51,7 @@ const SignUp = () => {
             autoCorrect={false}
           />
           <TouchableOpacity style={styles.submitButton} onPress={onSubmit}>
-            <Text>입력</Text>
+            <Text style={baseText}>입력</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -64,15 +66,9 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
   },
-  card: {
-    margin: 20,
-    padding: 10,
-    borderWidth: 5,
-    borderRadius: 10,
-    borderColor: '#e1e1e1',
-    backgroundColor: '#a8a8a8',
-  },
   input: {
+    color: '#e1e1e1',
+    marginVertical: 20,
     justifyContent: 'center',
   },
   text: {
