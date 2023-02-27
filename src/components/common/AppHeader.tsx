@@ -1,10 +1,10 @@
 import {
   Platform,
   Pressable,
+  StatusBar,
   StyleSheet,
   Text,
   View,
-  StatusBar,
 } from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {useNavigation} from '@react-navigation/native';
@@ -12,15 +12,13 @@ import {BlurView} from '@react-native-community/blur';
 
 const AppHeader = () => {
   const navigation = useNavigation();
-  const statusBarHeight =
-    Platform.OS === 'ios'
-      ? getStatusBarHeight(true)
-      : StatusBar?.currentHeight || 0;
+  const statusBarHeight = StatusBar?.currentHeight || 0;
 
   console.log(StatusBar.currentHeight);
 
   return (
-    <View style={[{height: 44 + statusBarHeight}, styles.blurContainer]}>
+    <View
+      style={[{height: 44 + getStatusBarHeight(true)}, styles.blurContainer]}>
       <BlurView
         reducedTransparencyFallbackColor={'#FFFFFF'}
         style={styles.blurContainer}
