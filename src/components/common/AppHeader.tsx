@@ -12,13 +12,15 @@ import {BlurView} from '@react-native-community/blur';
 
 const AppHeader = () => {
   const navigation = useNavigation();
-  const statusBarHeight = StatusBar?.currentHeight || 0;
+  const statusBarHeight =
+    Platform.OS === 'ios'
+      ? getStatusBarHeight(true)
+      : StatusBar?.currentHeight || 0;
 
   console.log(StatusBar.currentHeight);
 
   return (
-    <View
-      style={[{height: 44 + getStatusBarHeight(true)}, styles.blurContainer]}>
+    <View style={[{height: 44 + statusBarHeight}, styles.blurContainer]}>
       <BlurView
         reducedTransparencyFallbackColor={'#FFFFFF'}
         style={styles.blurContainer}
@@ -30,7 +32,7 @@ const AppHeader = () => {
       ) : (
         <View
           style={{
-            height: 44 + statusBarHeight,
+            height: 44 + (StatusBar?.currentHeight || 0),
             position: 'absolute',
             top: 0,
             bottom: 0,
@@ -40,7 +42,8 @@ const AppHeader = () => {
           }}
         />
       )}
-      <View style={[styles.wrapper, {marginTop: statusBarHeight}]}>
+      <View
+        style={[styles.wrapper, {marginTop: StatusBar?.currentHeight || 0}]}>
         <Pressable onPress={() => navigation.goBack()}>
           <Text style={styles.headerText}>LOA</Text>
         </Pressable>
