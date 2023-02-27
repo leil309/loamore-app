@@ -1,14 +1,26 @@
-import {Platform, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {useNavigation} from '@react-navigation/native';
 import {BlurView} from '@react-native-community/blur';
 
 const AppHeader = () => {
   const navigation = useNavigation();
-  const statusBarHeight = getStatusBarHeight(true);
+  const statusBarHeight =
+    Platform.OS === 'ios'
+      ? getStatusBarHeight(true)
+      : StatusBar?.currentHeight || 0;
+
+  console.log(StatusBar.currentHeight);
 
   return (
-    <View style={[{height: statusBarHeight + 44}, styles.blurContainer]}>
+    <View style={[{height: 44 + statusBarHeight}, styles.blurContainer]}>
       <BlurView
         reducedTransparencyFallbackColor={'#FFFFFF'}
         style={styles.blurContainer}
@@ -20,7 +32,7 @@ const AppHeader = () => {
       ) : (
         <View
           style={{
-            height: 44,
+            height: 44 + statusBarHeight,
             position: 'absolute',
             top: 0,
             bottom: 0,
@@ -30,7 +42,7 @@ const AppHeader = () => {
           }}
         />
       )}
-      <View style={styles.wrapper}>
+      <View style={[styles.wrapper, {marginTop: statusBarHeight}]}>
         <Pressable onPress={() => navigation.goBack()}>
           <Text style={styles.headerText}>LOA</Text>
         </Pressable>

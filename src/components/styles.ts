@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StatusBar, StyleSheet} from 'react-native';
 import {Colors} from '~/components/common/Colors';
 
 const styles = StyleSheet.create({
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 15,
-    marginTop: 44,
+    marginTop: 44 + (Platform.OS === 'ios' ? 0 : StatusBar?.currentHeight || 0),
     paddingBottom: 60,
   },
 });
