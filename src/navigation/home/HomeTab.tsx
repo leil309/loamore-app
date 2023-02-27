@@ -48,7 +48,7 @@ const HomeTab = () => {
         tabBarStyle: {
           borderTopColor: '#66666666',
           backgroundColor:
-            Platform.OS === 'ios' ? 'transparent' : 'rgba(255,255,255,0.05)',
+            Platform.OS === 'ios' ? 'transparent' : 'rgba(180,225,255,0.05)',
           zIndex: 0,
           elevation: 0,
         },

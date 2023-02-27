@@ -1,11 +1,11 @@
-import {SafeAreaView, ScrollView, View} from 'react-native';
+import {Pressable, SafeAreaView, ScrollView, Text, View} from 'react-native';
 import {useAppDispatch, useAppSelector} from '~/store';
 import userSlice from '../slices/userSlice';
 import AppHeader from '~/components/common/AppHeader';
 import {useEffect, useState} from 'react';
 import CharacterCard from '~/components/CharacterCard';
 import StatCard from '~/components/StatCard';
-import {contentContainer, mainContainer} from '~/components/styles';
+import {baseText, contentContainer, mainContainer} from '~/components/styles';
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -21,6 +21,15 @@ const Home = () => {
   const [guild, setGuild] = useState(character?.guild || '');
   const [server, setServer] = useState(character?.server || '');
   const [uri, setUri] = useState(character?.uri || '');
+
+  const reload = () => {
+    fetch(`https://lostark.game.onstove.com/Profile/Character/${charName}`)
+      .then(response => response.text())
+      .then(html => {
+        const $ = cheerio.load(html);
+        console.log($('script').get()[2]);
+      });
+  };
 
   useEffect(() => {
     if (!character?.uri) {
@@ -61,6 +70,11 @@ const Home = () => {
         <CharacterCard imageUri={uri} />
         <StatCard name={name} level={level} server={server} guild={guild} />
         <View style={{marginTop: 15}} />
+
+        <Pressable onPress={reload}>
+          <Text style={baseText}>reload</Text>
+        </Pressable>
+
         <CharacterCard imageUri={uri} />
         <StatCard name={name} level={level} server={server} guild={guild} />
       </ScrollView>
