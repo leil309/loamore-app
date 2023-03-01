@@ -17,6 +17,7 @@ const UserLoader = () => {
       const getCharLevel =
         (await AsyncStorage.getItem('character_level')) || '';
       const getCharUri = (await AsyncStorage.getItem('character_uri')) || '';
+      const getCharJob = (await AsyncStorage.getItem('character_job')) || '';
 
       console.log(getCharName);
       console.log(getCharServer);
@@ -34,6 +35,7 @@ const UserLoader = () => {
           guild: getCharGuild,
           uri: getCharUri,
           server: getCharServer,
+          job: getCharJob,
         }),
       );
     })();

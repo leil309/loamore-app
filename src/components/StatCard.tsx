@@ -6,9 +6,10 @@ interface IStatCard {
   level: string;
   server: string;
   guild: string;
+  job: string;
 }
 
-const StatCard = ({name, level, server, guild}: IStatCard) => {
+const StatCard = ({name, level, server, guild, job}: IStatCard) => {
   return (
     <View style={[mainContainer, {marginTop: 15}]}>
       <View style={baseCard}>
@@ -27,6 +28,10 @@ const StatCard = ({name, level, server, guild}: IStatCard) => {
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={subText}>서버</Text>
           <Text style={baseText}>{server}</Text>
+        </View>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={subText}>직업</Text>
+          <Text style={baseText}>{job}</Text>
         </View>
       </View>
     </View>

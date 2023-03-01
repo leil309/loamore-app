@@ -20,6 +20,7 @@ const Home = () => {
   const [level, setLevel] = useState(character?.level || '');
   const [guild, setGuild] = useState(character?.guild || '');
   const [server, setServer] = useState(character?.server || '');
+  const [job, setJob] = useState(character?.job || '');
   const [uri, setUri] = useState(character?.uri || '');
 
   const reload = () => {
@@ -27,7 +28,9 @@ const Home = () => {
       .then(response => response.text())
       .then(html => {
         const $ = cheerio.load(html);
-        console.log($('script').get()[2]);
+        const test = $('.states_box');
+        console.log(test);
+        // console.log($('script').get()[2]);
       });
   };
 
@@ -40,9 +43,12 @@ const Home = () => {
           const $ = cheerio.load(html);
 
           const tName = $('.profile-character-info__name').text();
-          const tLevel = $('.level-info__item').text();
+          const tLevel = $('.profile-character-info__lv').text();
           const tGuild = $('.profile-character-info__guild').text();
-          const tServer = $('.profile-character-info__server').text();
+          const tServer = $('.profile-character-info__server')
+            .text()
+            .replace('@', '');
+          const tJob = $('.profile-character-info__img').attr('alt');
           const tUri = $('.profile-equipment__character img').attr('src');
 
           setName(tName);
@@ -50,6 +56,7 @@ const Home = () => {
           setGuild(tGuild);
           setServer(tServer);
           setUri(tUri);
+          setJob(tJob);
 
           dispatch(
             userSlice.actions.setCharacterInfo({
@@ -58,6 +65,7 @@ const Home = () => {
               server: tServer || '',
               level: tLevel || '',
               uri: tUri || '',
+              job: tJob || '',
             }),
           );
         });
@@ -68,7 +76,13 @@ const Home = () => {
     <SafeAreaView style={mainContainer}>
       <ScrollView contentContainerStyle={contentContainer}>
         <CharacterCard imageUri={uri} />
-        <StatCard name={name} level={level} server={server} guild={guild} />
+        <StatCard
+          name={name}
+          level={level}
+          server={server}
+          guild={guild}
+          job={job}
+        />
         <View style={{marginTop: 15}} />
 
         <Pressable onPress={reload}>
@@ -76,7 +90,13 @@ const Home = () => {
         </Pressable>
 
         <CharacterCard imageUri={uri} />
-        <StatCard name={name} level={level} server={server} guild={guild} />
+        <StatCard
+          name={name}
+          level={level}
+          server={server}
+          guild={guild}
+          job={job}
+        />
       </ScrollView>
       <AppHeader />
     </SafeAreaView>
