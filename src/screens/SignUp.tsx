@@ -27,6 +27,7 @@ const SignUp = () => {
           guild: '',
           level: '',
           uri: '',
+          job: '',
         }),
       );
     }
