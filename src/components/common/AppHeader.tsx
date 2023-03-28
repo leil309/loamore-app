@@ -45,7 +45,7 @@ const AppHeader = () => {
       <View
         style={[styles.wrapper, {marginTop: StatusBar?.currentHeight || 0}]}>
         <Pressable onPress={() => navigation.goBack()}>
-          <Text style={styles.headerText}>LOA</Text>
+          <Text style={styles.headerText}>LoaMore</Text>
         </Pressable>
       </View>
     </View>

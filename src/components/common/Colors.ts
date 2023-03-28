@@ -1,6 +1,8 @@
 export enum Colors {
   imageBackgroundColor = '#15181d',
-  backgroundColor = '#0c0d0f',
+  backgroundColor = '#15181e',
+
+  cardColor = '#1c1f27',
 
   lightgrey = '#e0e0e0',
   red = 'red',

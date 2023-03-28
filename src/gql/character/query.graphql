@@ -1,0 +1,58 @@
+query FindCharacter($name: String!) {
+    findCharacter(name: $name) {
+        attack_power
+        character_accessory {
+            additional_effect
+            base_effect
+            bracelet_effect
+            character_id
+            engraving
+            id
+            image_uri
+            name
+            quality
+            slot
+            tier
+        }
+        character_gear {
+            additional_effect
+            base_effect
+            character_id
+            id
+            image_uri
+            name
+            quality
+            set_name
+            slot
+            tier
+        }
+        character_gem {
+            character_id
+            gem_id
+            id
+            slot
+        }
+        charisma
+        class
+        courage
+        critical
+        domination
+        endurance
+        engraving
+        expertise
+        guild_name
+        id
+        image_uri
+        ins_date
+        item_level
+        kindness
+        level
+        max_health
+        name
+        server_name
+        specialization
+        swiftness
+        upd_date
+        wisdom
+    }
+}
