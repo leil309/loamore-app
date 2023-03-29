@@ -31,6 +31,18 @@ query FindCharacter($name: String!) {
             gem_id
             id
             slot
+            gem {
+                class
+                direction
+                effect_type
+                id
+                image_uri
+                level
+                name
+                rate
+                skill
+                tier
+            }
         }
         charisma
         class

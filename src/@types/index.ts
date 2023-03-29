@@ -52,5 +52,36 @@ export interface ICharacter {
     gem_id: any;
     id: any;
     slot: number;
+    gem: {
+      class: string;
+      direction: string;
+      effect_type: string;
+      id: any;
+      image_uri: string;
+      level: number;
+      name: string;
+      rate: number;
+      skill: string;
+      tier: number;
+    };
   }> | null;
+}
+
+export interface ICharacterGem {
+  character_id: any;
+  gem_id: any;
+  id: any;
+  slot: number;
+  gem: {
+    class: string;
+    direction: string;
+    effect_type: string;
+    id: any;
+    image_uri: string;
+    level: number;
+    name: string;
+    rate: number;
+    skill: string;
+    tier: number;
+  };
 }

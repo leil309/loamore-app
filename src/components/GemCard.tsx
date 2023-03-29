@@ -1,35 +1,51 @@
-import {Text, View} from 'react-native';
-import {baseCard, mainContainer, baseText, subText} from '~/components/styles';
+import {Image, Text, View} from 'react-native';
+import {baseCard, mainContainer} from '~/components/styles';
+import {ICharacterGem} from '~/@types';
 
 interface IGemCard {
-  critical: number;
+  gemList?: Array<ICharacterGem> | undefined | null;
 }
 
-const GemCard = ({
-  critical,
-  specialization,
-  domination,
-  swiftness,
-}: IGemCard) => {
+const GemCard = ({gemList}: IGemCard) => {
+  const gemTypeRegex = /\s(홍|멸)/;
+
   return (
     <View style={[mainContainer, {marginTop: 15}]}>
-      <View style={baseCard}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={subText}>치명</Text>
-          <Text style={baseText}>{critical}</Text>
-        </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={subText}>특화</Text>
-          <Text style={baseText}>{specialization}</Text>
-        </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={subText}>제압</Text>
-          <Text style={baseText}>{domination}</Text>
-        </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={subText}>신속</Text>
-          <Text style={baseText}>{swiftness}</Text>
-        </View>
+      <View style={[baseCard, {flexDirection: 'row'}]}>
+        {gemList
+          ? gemList.map(x => (
+              <View
+                key={x.slot}
+                style={{
+                  marginHorizontal: 2,
+                  borderRadius: 10,
+                  borderColor: '#ffb547',
+                  borderWidth: 0.5,
+                }}>
+                <Image
+                  source={{
+                    uri: `https://cdn-lostark.game.onstove.com/${x.gem.image_uri}`,
+                  }}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    resizeMode: 'cover',
+                  }}
+                />
+                <View
+                  style={{
+                    backgroundColor: 'rgba(0,0,0,0.5)',
+                    width: '100%',
+                    borderRadius: 10,
+                  }}>
+                  <Text style={{color: '#FFFFFF'}}>
+                    {x.gem.level}
+                    {gemTypeRegex.exec(x.gem.name)[1]}
+                  </Text>
+                </View>
+              </View>
+            ))
+          : null}
       </View>
     </View>
   );

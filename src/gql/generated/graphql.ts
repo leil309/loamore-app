@@ -1,11 +1,11 @@
 import {
-  useQuery,
   useInfiniteQuery,
-  UseQueryOptions,
   UseInfiniteQueryOptions,
-  QueryFunctionContext,
+  useQuery,
+  UseQueryOptions,
 } from 'react-query';
 import {axiosFetcher} from './fetcher';
+
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends {[key: string]: unknown}> = {[K in keyof T]: T[K]};
@@ -29,6 +29,10 @@ export type Scalars = {
 export type ICharacterCount = {
   character_accessory: Scalars['Int'];
   character_gear: Scalars['Int'];
+  character_gem: Scalars['Int'];
+};
+
+export type IGemCount = {
   character_gem: Scalars['Int'];
 };
 
@@ -112,9 +116,25 @@ export type ICharacterGear = {
 export type ICharacterGem = {
   character: ICharacter;
   character_id: Scalars['BigInt'];
+  gem: IGem;
   gem_id: Scalars['BigInt'];
   id: Scalars['BigInt'];
   slot: Scalars['Int'];
+};
+
+export type IGem = {
+  _count: IGemCount;
+  character_gem?: Maybe<Array<ICharacterGem>>;
+  class: Scalars['String'];
+  direction: Scalars['String'];
+  effect_type: Scalars['String'];
+  id: Scalars['BigInt'];
+  image_uri: Scalars['String'];
+  level: Scalars['Int'];
+  name: Scalars['String'];
+  rate: Scalars['Int'];
+  skill: Scalars['String'];
+  tier: Scalars['Int'];
 };
 
 export type IFindCharacterQueryVariables = Exact<{
@@ -176,6 +196,18 @@ export type IFindCharacterQuery = {
       gem_id: any;
       id: any;
       slot: number;
+      gem: {
+        class: string;
+        direction: string;
+        effect_type: string;
+        id: any;
+        image_uri: string;
+        level: number;
+        name: string;
+        rate: number;
+        skill: string;
+        tier: number;
+      };
     }> | null;
   };
 };
@@ -214,6 +246,18 @@ export const FindCharacterDocument = `
       gem_id
       id
       slot
+      gem {
+        class
+        direction
+        effect_type
+        id
+        image_uri
+        level
+        name
+        rate
+        skill
+        tier
+      }
     }
     charisma
     class

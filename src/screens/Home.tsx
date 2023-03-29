@@ -37,29 +37,15 @@ const Home = () => {
               guild={character.guild_name}
               job={character.class}
             />
+            <GemCard gemList={character.character_gem} />
             <BattleStatsCard
               critical={character.critical}
               domination={character.domination}
               specialization={character.specialization}
               swiftness={character.swiftness}
-            />
-            <BattleStatsCard
-              critical={character.critical}
-              domination={character.domination}
-              specialization={character.specialization}
-              swiftness={character.swiftness}
-            />
-            <BattleStatsCard
-              critical={character.critical}
-              domination={character.domination}
-              specialization={character.specialization}
-              swiftness={character.swiftness}
-            />
-            <BattleStatsCard
-              critical={character.critical}
-              domination={character.domination}
-              specialization={character.specialization}
-              swiftness={character.swiftness}
+              endurance={character.endurance}
+              expertise={character.expertise}
+              engraving={character.engraving}
             />
           </>
         ) : null}
