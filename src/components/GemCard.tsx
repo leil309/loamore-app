@@ -9,6 +9,7 @@ interface IGemCard {
 const GemCard = ({gemList}: IGemCard) => {
   const gemTypeRegex = /\s(홍|멸)/;
 
+  // @ts-ignore
   return (
     <View style={[mainContainer, {marginTop: 15}]}>
       <View style={[baseCard, {flexDirection: 'row'}]}>
@@ -24,7 +25,7 @@ const GemCard = ({gemList}: IGemCard) => {
                 }}>
                 <Image
                   source={{
-                    uri: `https://cdn-lostark.game.onstove.com/${x.gem.image_uri}`,
+                    uri: `https://cdn-lostark.game.onstove.com/${x.item.image_uri}`,
                   }}
                   style={{
                     width: 25,
@@ -39,8 +40,8 @@ const GemCard = ({gemList}: IGemCard) => {
                     borderRadius: 10,
                   }}>
                   <Text style={{color: '#FFFFFF'}}>
-                    {x.gem.level}
-                    {gemTypeRegex.exec(x.gem.name)[1]}
+                    {x.level}
+                    {gemTypeRegex.exec(x.item.name)[1]}
                   </Text>
                 </View>
               </View>

@@ -47,6 +47,15 @@ const Home = () => {
               expertise={character.expertise}
               engraving={character.engraving}
             />
+            <BattleStatsCard
+              critical={character.critical}
+              domination={character.domination}
+              specialization={character.specialization}
+              swiftness={character.swiftness}
+              endurance={character.endurance}
+              expertise={character.expertise}
+              engraving={character.engraving}
+            />
           </>
         ) : null}
       </ScrollView>

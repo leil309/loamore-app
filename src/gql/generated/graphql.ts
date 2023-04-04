@@ -1,11 +1,11 @@
 import {
-  useInfiniteQuery,
-  UseInfiniteQueryOptions,
   useQuery,
+  useInfiniteQuery,
   UseQueryOptions,
+  UseInfiniteQueryOptions,
+  QueryFunctionContext,
 } from 'react-query';
 import {axiosFetcher} from './fetcher';
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends {[key: string]: unknown}> = {[K in keyof T]: T[K]};
@@ -32,7 +32,9 @@ export type ICharacterCount = {
   character_gem: Scalars['Int'];
 };
 
-export type IGemCount = {
+export type IItemCount = {
+  character_accessory: Scalars['Int'];
+  character_gear: Scalars['Int'];
   character_gem: Scalars['Int'];
 };
 
@@ -92,11 +94,10 @@ export type ICharacterAccessory = {
   character_id: Scalars['BigInt'];
   engraving?: Maybe<Scalars['String']>;
   id: Scalars['BigInt'];
-  image_uri: Scalars['String'];
-  name: Scalars['String'];
+  item: IItem;
+  item_id: Scalars['BigInt'];
   quality?: Maybe<Scalars['Int']>;
   slot: Scalars['Int'];
-  tier: Scalars['Int'];
 };
 
 export type ICharacterGear = {
@@ -104,37 +105,38 @@ export type ICharacterGear = {
   base_effect?: Maybe<Scalars['String']>;
   character: ICharacter;
   character_id: Scalars['BigInt'];
+  honing: Scalars['Int'];
   id: Scalars['BigInt'];
-  image_uri: Scalars['String'];
-  name: Scalars['String'];
-  quality?: Maybe<Scalars['Int']>;
-  set_name?: Maybe<Scalars['String']>;
+  item: IItem;
+  item_id: Scalars['BigInt'];
+  quality: Scalars['Int'];
   slot: Scalars['Int'];
-  tier?: Maybe<Scalars['Int']>;
 };
 
 export type ICharacterGem = {
   character: ICharacter;
   character_id: Scalars['BigInt'];
-  gem: IGem;
-  gem_id: Scalars['BigInt'];
-  id: Scalars['BigInt'];
-  slot: Scalars['Int'];
-};
-
-export type IGem = {
-  _count: IGemCount;
-  character_gem?: Maybe<Array<ICharacterGem>>;
-  class: Scalars['String'];
   direction: Scalars['String'];
   effect_type: Scalars['String'];
   id: Scalars['BigInt'];
-  image_uri: Scalars['String'];
+  item: IItem;
+  item_id: Scalars['BigInt'];
   level: Scalars['Int'];
-  name: Scalars['String'];
   rate: Scalars['Int'];
   skill: Scalars['String'];
-  tier: Scalars['Int'];
+  slot: Scalars['Int'];
+};
+
+export type IItem = {
+  _count: IItemCount;
+  character_accessory?: Maybe<Array<ICharacterAccessory>>;
+  character_gear?: Maybe<Array<ICharacterGear>>;
+  character_gem?: Maybe<Array<ICharacterGem>>;
+  id: Scalars['BigInt'];
+  image_uri: Scalars['String'];
+  name: Scalars['String'];
+  set_name?: Maybe<Scalars['String']>;
+  tier?: Maybe<Scalars['Int']>;
 };
 
 export type IFindCharacterQueryVariables = Exact<{
@@ -173,40 +175,50 @@ export type IFindCharacterQuery = {
       character_id: any;
       engraving?: string | null;
       id: any;
-      image_uri: string;
-      name: string;
+      item_id: any;
       quality?: number | null;
       slot: number;
-      tier: number;
+      item: {
+        id: any;
+        image_uri: string;
+        name: string;
+        set_name?: string | null;
+        tier?: number | null;
+      };
     }> | null;
     character_gear?: Array<{
       additional_effect?: string | null;
       base_effect?: string | null;
       character_id: any;
+      honing: number;
       id: any;
-      image_uri: string;
-      name: string;
-      quality?: number | null;
-      set_name?: string | null;
+      item_id: any;
+      quality: number;
       slot: number;
-      tier?: number | null;
+      item: {
+        id: any;
+        image_uri: string;
+        name: string;
+        set_name?: string | null;
+        tier?: number | null;
+      };
     }> | null;
     character_gem?: Array<{
       character_id: any;
-      gem_id: any;
+      direction: string;
+      effect_type: string;
       id: any;
+      item_id: any;
+      level: number;
+      rate: number;
+      skill: string;
       slot: number;
-      gem: {
-        class: string;
-        direction: string;
-        effect_type: string;
+      item: {
         id: any;
         image_uri: string;
-        level: number;
         name: string;
-        rate: number;
-        skill: string;
-        tier: number;
+        set_name?: string | null;
+        tier?: number | null;
       };
     }> | null;
   };
@@ -223,41 +235,51 @@ export const FindCharacterDocument = `
       character_id
       engraving
       id
-      image_uri
-      name
+      item {
+        id
+        image_uri
+        name
+        set_name
+        tier
+      }
+      item_id
       quality
       slot
-      tier
     }
     character_gear {
       additional_effect
       base_effect
       character_id
+      honing
       id
-      image_uri
-      name
+      item {
+        id
+        image_uri
+        name
+        set_name
+        tier
+      }
+      item_id
       quality
-      set_name
       slot
-      tier
     }
     character_gem {
       character_id
-      gem_id
+      direction
+      effect_type
       id
-      slot
-      gem {
-        class
-        direction
-        effect_type
+      item {
         id
         image_uri
-        level
         name
-        rate
-        skill
+        set_name
         tier
       }
+      item_id
+      level
+      rate
+      skill
+      slot
     }
     charisma
     class

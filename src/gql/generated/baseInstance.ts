@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const baseInstance = axios.create({
-  baseURL: 'http://127.0.0.1:4001/graphql',
+  baseURL: 'http://49.173.69.230:4001/graphql',
   timeout: 5000,
 });
 baseInstance.interceptors.request.use(
@@ -15,7 +15,6 @@ baseInstance.interceptors.request.use(
 baseInstance.interceptors.response.use(
   async res => {
     const {
-      config,
       data: {errors},
     } = res;
 

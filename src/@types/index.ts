@@ -29,59 +29,69 @@ export interface ICharacter {
     character_id: any;
     engraving?: string | null;
     id: any;
-    image_uri: string;
-    name: string;
+    item_id: any;
     quality?: number | null;
     slot: number;
-    tier: number;
+    item: {
+      id: any;
+      image_uri: string;
+      name: string;
+      set_name?: string | null;
+      tier?: number | null;
+    };
   }> | null;
   character_gear?: Array<{
     additional_effect?: string | null;
     base_effect?: string | null;
     character_id: any;
+    honing: number;
     id: any;
-    image_uri: string;
-    name: string;
-    quality?: number | null;
-    set_name?: string | null;
+    item_id: any;
+    quality: number;
     slot: number;
-    tier?: number | null;
+    item: {
+      id: any;
+      image_uri: string;
+      name: string;
+      set_name?: string | null;
+      tier?: number | null;
+    };
   }> | null;
   character_gem?: Array<{
     character_id: any;
-    gem_id: any;
+    direction: string;
+    effect_type: string;
     id: any;
+    item_id: any;
+    level: number;
+    rate: number;
+    skill: string;
     slot: number;
-    gem: {
-      class: string;
-      direction: string;
-      effect_type: string;
+    item: {
       id: any;
       image_uri: string;
-      level: number;
       name: string;
-      rate: number;
-      skill: string;
-      tier: number;
+      set_name?: string | null;
+      tier?: number | null;
     };
   }> | null;
 }
 
 export interface ICharacterGem {
   character_id: any;
-  gem_id: any;
+  direction: string;
+  effect_type: string;
   id: any;
+  item_id: any;
+  level: number;
+  rate: number;
+  skill: string;
   slot: number;
-  gem: {
-    class: string;
-    direction: string;
-    effect_type: string;
+  item: {
     id: any;
     image_uri: string;
-    level: number;
     name: string;
-    rate: number;
-    skill: string;
-    tier: number;
+    set_name?: string | null;
+    tier?: number | null;
   };
 }

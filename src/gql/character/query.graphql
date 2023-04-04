@@ -8,41 +8,51 @@ query FindCharacter($name: String!) {
             character_id
             engraving
             id
-            image_uri
-            name
+            item {
+                id
+                image_uri
+                name
+                set_name
+                tier
+            }
+            item_id
             quality
             slot
-            tier
         }
         character_gear {
             additional_effect
             base_effect
             character_id
+            honing
             id
-            image_uri
-            name
+            item {
+                id
+                image_uri
+                name
+                set_name
+                tier
+            }
+            item_id
             quality
-            set_name
             slot
-            tier
         }
         character_gem {
             character_id
-            gem_id
+            direction
+            effect_type
             id
-            slot
-            gem {
-                class
-                direction
-                effect_type
+            item {
                 id
                 image_uri
-                level
                 name
-                rate
-                skill
+                set_name
                 tier
             }
+            item_id
+            level
+            rate
+            skill
+            slot
         }
         charisma
         class
