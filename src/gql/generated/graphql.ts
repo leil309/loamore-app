@@ -1,11 +1,11 @@
 import {
-  useQuery,
   useInfiniteQuery,
-  UseQueryOptions,
   UseInfiniteQueryOptions,
-  QueryFunctionContext,
+  useQuery,
+  UseQueryOptions,
 } from 'react-query';
 import {axiosFetcher} from './fetcher';
+
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends {[key: string]: unknown}> = {[K in keyof T]: T[K]};
@@ -28,8 +28,13 @@ export type Scalars = {
 
 export type ICharacterCount = {
   character_accessory: Scalars['Int'];
+  character_engraving: Scalars['Int'];
   character_gear: Scalars['Int'];
   character_gem: Scalars['Int'];
+};
+
+export type IEngravingCount = {
+  character_engraving: Scalars['Int'];
 };
 
 export type IItemCount = {
@@ -60,6 +65,7 @@ export type ICharacter = {
   _count: ICharacterCount;
   attack_power: Scalars['Int'];
   character_accessory?: Maybe<Array<ICharacterAccessory>>;
+  character_engraving?: Maybe<Array<ICharacterEngraving>>;
   character_gear?: Maybe<Array<ICharacterGear>>;
   character_gem?: Maybe<Array<ICharacterGem>>;
   charisma: Scalars['Int'];
@@ -68,7 +74,6 @@ export type ICharacter = {
   critical: Scalars['Int'];
   domination: Scalars['Int'];
   endurance: Scalars['Int'];
-  engraving: Scalars['String'];
   expertise: Scalars['Int'];
   guild_name?: Maybe<Scalars['String']>;
   id: Scalars['BigInt'];
@@ -100,6 +105,16 @@ export type ICharacterAccessory = {
   slot: Scalars['Int'];
 };
 
+export type ICharacterEngraving = {
+  character: ICharacter;
+  character_id: Scalars['BigInt'];
+  engraving: IEngraving;
+  engraving_id: Scalars['BigInt'];
+  id: Scalars['BigInt'];
+  level: Scalars['Int'];
+  slot: Scalars['Int'];
+};
+
 export type ICharacterGear = {
   additional_effect?: Maybe<Scalars['String']>;
   base_effect?: Maybe<Scalars['String']>;
@@ -127,6 +142,21 @@ export type ICharacterGem = {
   slot: Scalars['Int'];
 };
 
+export enum IClassYn {
+  N = 'N',
+  Y = 'Y',
+}
+
+export type IEngraving = {
+  _count: IEngravingCount;
+  character_engraving?: Maybe<Array<ICharacterEngraving>>;
+  class_yn: IClassYn;
+  id: Scalars['BigInt'];
+  image_uri: Scalars['String'];
+  info: Scalars['String'];
+  name: Scalars['String'];
+};
+
 export type IItem = {
   _count: IItemCount;
   character_accessory?: Maybe<Array<ICharacterAccessory>>;
@@ -152,7 +182,6 @@ export type IFindCharacterQuery = {
     critical: number;
     domination: number;
     endurance: number;
-    engraving: string;
     expertise: number;
     guild_name?: string | null;
     id: any;
@@ -184,6 +213,20 @@ export type IFindCharacterQuery = {
         name: string;
         set_name?: string | null;
         tier?: number | null;
+      };
+    }> | null;
+    character_engraving?: Array<{
+      character_id: any;
+      engraving_id: any;
+      id: any;
+      level: number;
+      slot: number;
+      engraving: {
+        id: any;
+        class_yn: IClassYn;
+        image_uri: string;
+        info: string;
+        name: string;
       };
     }> | null;
     character_gear?: Array<{
@@ -235,6 +278,9 @@ export const FindCharacterDocument = `
       character_id
       engraving
       id
+      item_id
+      quality
+      slot
       item {
         id
         image_uri
@@ -242,8 +288,19 @@ export const FindCharacterDocument = `
         set_name
         tier
       }
-      item_id
-      quality
+    }
+    character_engraving {
+      character_id
+      engraving {
+        id
+        class_yn
+        image_uri
+        info
+        name
+      }
+      engraving_id
+      id
+      level
       slot
     }
     character_gear {
@@ -252,6 +309,9 @@ export const FindCharacterDocument = `
       character_id
       honing
       id
+      item_id
+      quality
+      slot
       item {
         id
         image_uri
@@ -259,15 +319,17 @@ export const FindCharacterDocument = `
         set_name
         tier
       }
-      item_id
-      quality
-      slot
     }
     character_gem {
       character_id
       direction
       effect_type
       id
+      item_id
+      level
+      rate
+      skill
+      slot
       item {
         id
         image_uri
@@ -275,11 +337,6 @@ export const FindCharacterDocument = `
         set_name
         tier
       }
-      item_id
-      level
-      rate
-      skill
-      slot
     }
     charisma
     class
@@ -287,7 +344,6 @@ export const FindCharacterDocument = `
     critical
     domination
     endurance
-    engraving
     expertise
     guild_name
     id

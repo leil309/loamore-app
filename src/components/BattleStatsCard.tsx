@@ -1,5 +1,7 @@
-import {Text, View} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import {baseCard, baseText, mainContainer} from '~/components/styles';
+import {IEngraving} from '~/@types';
+import {IClassYn} from '~/gql/generated/graphql';
 
 interface IBattleStats {
   critical: number;
@@ -8,8 +10,12 @@ interface IBattleStats {
   swiftness: number;
   endurance: number;
   expertise: number;
-  engraving: string;
+  engraving: Array<IEngraving> | undefined | null;
 }
+
+const defaultImg = Image.resolveAssetSource(
+  require('assets/default-character.png'),
+);
 
 const BattleStatsCard = ({
   critical,
@@ -32,8 +38,12 @@ const BattleStatsCard = ({
   const mainStats = stats.filter(x => x.value >= 150);
   const elseStats = stats.filter(x => x.value < 150);
 
-  const engravingList: Array<{name: string; level: number}> =
-    JSON.parse(engraving);
+  const classEngraving = engraving?.filter(
+    x => x.engraving.class_yn === IClassYn.Y,
+  );
+  const normalEngraving = engraving?.filter(
+    x => x.engraving.class_yn === IClassYn.N,
+  );
 
   return (
     <View
@@ -80,17 +90,56 @@ const BattleStatsCard = ({
           : null}
       </View>
       <View style={[baseCard, {width: '48%'}]}>
-        {engravingList
-          ? engravingList.map((x, index) => (
-              <View key={index}>
-                <Text style={[baseText, {textAlign: 'left'}]}>
-                  {x.level + ' ' + x.name}
-                </Text>
-              </View>
-            ))
-          : null}
+        {classEngraving ? classEngraving.map(x => EngravingItem(x)) : null}
+        <View
+          style={{
+            borderColor: '#FFFFFF',
+            borderBottomWidth: 0.5,
+            borderTopWidth: 0.5,
+            marginVertical: 4,
+          }}
+        />
+        {normalEngraving ? normalEngraving.map(x => EngravingItem(x)) : null}
       </View>
     </View>
   );
 };
+
+const EngravingItem = (x: IEngraving) => {
+  return (
+    <View
+      key={x.slot}
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}>
+      <Image
+        defaultSource={defaultImg}
+        source={{
+          uri: `https://cdn-lostark.game.onstove.com/${x.engraving.image_uri}`,
+        }}
+        style={{
+          borderRadius: 99,
+          borderColor: '#AAAAAA',
+          borderWidth: 0.5,
+          width: 30,
+          height: 30,
+          marginRight: 10,
+          marginBottom: 1.5,
+        }}
+        resizeMode={'contain'}
+      />
+      <Text
+        style={[
+          baseText,
+          {
+            textAlign: 'left',
+          },
+        ]}>
+        {x.level + ' ' + x.engraving.name}
+      </Text>
+    </View>
+  );
+};
+
 export default BattleStatsCard;

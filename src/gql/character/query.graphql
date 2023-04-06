@@ -8,6 +8,9 @@ query FindCharacter($name: String!) {
             character_id
             engraving
             id
+            item_id
+            quality
+            slot
             item {
                 id
                 image_uri
@@ -15,8 +18,19 @@ query FindCharacter($name: String!) {
                 set_name
                 tier
             }
-            item_id
-            quality
+        }
+        character_engraving {
+            character_id
+            engraving {
+                id
+                class_yn
+                image_uri
+                info
+                name
+            }
+            engraving_id
+            id
+            level
             slot
         }
         character_gear {
@@ -25,6 +39,9 @@ query FindCharacter($name: String!) {
             character_id
             honing
             id
+            item_id
+            quality
+            slot
             item {
                 id
                 image_uri
@@ -32,15 +49,17 @@ query FindCharacter($name: String!) {
                 set_name
                 tier
             }
-            item_id
-            quality
-            slot
         }
         character_gem {
             character_id
             direction
             effect_type
             id
+            item_id
+            level
+            rate
+            skill
+            slot
             item {
                 id
                 image_uri
@@ -48,11 +67,6 @@ query FindCharacter($name: String!) {
                 set_name
                 tier
             }
-            item_id
-            level
-            rate
-            skill
-            slot
         }
         charisma
         class
@@ -60,7 +74,6 @@ query FindCharacter($name: String!) {
         critical
         domination
         endurance
-        engraving
         expertise
         guild_name
         id
