@@ -1,3 +1,5 @@
+import {IClassYn} from '~/gql/generated/graphql';
+
 export interface ICharacter {
   attack_power: number;
   charisma: number;
@@ -6,7 +8,6 @@ export interface ICharacter {
   critical: number;
   domination: number;
   endurance: number;
-  engraving: string;
   expertise: number;
   guild_name?: string | null;
   id: any;
@@ -38,6 +39,20 @@ export interface ICharacter {
       name: string;
       set_name?: string | null;
       tier?: number | null;
+    };
+  }> | null;
+  character_engraving?: Array<{
+    character_id: any;
+    engraving_id: any;
+    id: any;
+    level: number;
+    slot: number;
+    engraving: {
+      id: any;
+      class_yn: IClassYn;
+      image_uri: string;
+      info: string;
+      name: string;
     };
   }> | null;
   character_gear?: Array<{
@@ -93,5 +108,20 @@ export interface ICharacterGem {
     name: string;
     set_name?: string | null;
     tier?: number | null;
+  };
+}
+
+export interface IEngraving {
+  character_id: any;
+  engraving_id: any;
+  id: any;
+  level: number;
+  slot: number;
+  engraving: {
+    id: any;
+    class_yn: IClassYn;
+    image_uri: string;
+    info: string;
+    name: string;
   };
 }
