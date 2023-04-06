@@ -26,7 +26,7 @@ const BattleStatsCard = ({
     {value: domination, name: '제압'},
     {value: swiftness, name: '신속'},
     {value: endurance, name: '인내'},
-    {value: expertise, name: '제압'},
+    {value: expertise, name: '숙련'},
   ];
 
   const mainStats = stats.filter(x => x.value >= 150);

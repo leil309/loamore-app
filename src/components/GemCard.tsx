@@ -9,7 +9,6 @@ interface IGemCard {
 const GemCard = ({gemList}: IGemCard) => {
   const gemTypeRegex = /\s(홍|멸)/;
 
-  // @ts-ignore
   return (
     <View style={[mainContainer, {marginTop: 15}]}>
       <View style={[baseCard, {flexDirection: 'row'}]}>
@@ -41,6 +40,7 @@ const GemCard = ({gemList}: IGemCard) => {
                   }}>
                   <Text style={{color: '#FFFFFF'}}>
                     {x.level}
+                    {/* @ts-ignore */}
                     {gemTypeRegex.exec(x.item.name)[1]}
                   </Text>
                 </View>
