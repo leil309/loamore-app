@@ -45,6 +45,10 @@ const Home = () => {
               swiftness={character.swiftness}
               endurance={character.endurance}
               expertise={character.expertise}
+              wisdom={character.wisdom}
+              courage={character.courage}
+              charisma={character.charisma}
+              kindness={character.kindness}
               engraving={character.character_engraving}
             />
           </>
