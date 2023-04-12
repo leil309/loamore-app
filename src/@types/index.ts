@@ -1,4 +1,8 @@
-import {IClassYn} from '~/gql/generated/graphql';
+import {
+  ICharacterSkillCounterYn,
+  IClassYn,
+  ISelectedYn,
+} from '~/gql/generated/graphql';
 
 export interface ICharacter {
   attack_power: number;
@@ -27,83 +31,107 @@ export interface ICharacter {
     additional_effect?: string | null;
     base_effect?: string | null;
     bracelet_effect?: string | null;
-    character_id: any;
     engraving?: string | null;
     id: any;
-    item_id: any;
     quality?: number | null;
     slot: number;
     item: {
-      id: any;
-      image_uri: string;
       name: string;
+      image_uri: string;
+      grade?: number | null;
       set_name?: string | null;
       tier?: number | null;
+      id: any;
     };
   }> | null;
   character_engraving?: Array<{
-    character_id: any;
-    engraving_id: any;
     id: any;
     level: number;
     slot: number;
     engraving: {
-      id: any;
       class_yn: IClassYn;
+      id: any;
       image_uri: string;
       info: string;
       name: string;
     };
   }> | null;
   character_gear?: Array<{
-    additional_effect?: string | null;
     base_effect?: string | null;
-    character_id: any;
     honing: number;
     id: any;
-    item_id: any;
     quality: number;
     slot: number;
+    additional_effect?: string | null;
     item: {
       id: any;
+      image_uri: string;
+      name: string;
+      set_name?: string | null;
+      tier?: number | null;
+      grade?: number | null;
+    };
+  }> | null;
+  character_gem?: Array<{
+    direction: string;
+    effect_type: string;
+    id: any;
+    level: number;
+    rate: number;
+    skill_id: any;
+    slot: number;
+    skill: {image_uri: string; name: string; id: any};
+    item: {
+      id: any;
+      grade?: number | null;
       image_uri: string;
       name: string;
       set_name?: string | null;
       tier?: number | null;
     };
   }> | null;
-  character_gem?: Array<{
-    character_id: any;
-    direction: string;
-    effect_type: string;
+  character_skill?: Array<{
+    attack_type?: string | null;
+    counter_yn: ICharacterSkillCounterYn;
     id: any;
-    item_id: any;
-    level: number;
-    rate: number;
-    skill: string;
-    slot: number;
-    item: {
+    level?: number | null;
+    rune_id?: any | null;
+    stagger_value?: string | null;
+    super_armor?: string | null;
+    weak_point?: number | null;
+    character_skill_tripod?: Array<{
+      level?: number | null;
+      selected_yn: ISelectedYn;
+      tripod: {name: string; image_uri: string; slot: number; tier: number};
+    }> | null;
+    skill: {
+      class: string;
       id: any;
       image_uri: string;
       name: string;
-      set_name?: string | null;
-      tier?: number | null;
+      tripod?: Array<{
+        id: any;
+        image_uri: string;
+        name: string;
+        slot: number;
+        tier: number;
+      }> | null;
     };
   }> | null;
 }
 
 export interface ICharacterGem {
-  character_id: any;
   direction: string;
   effect_type: string;
   id: any;
-  item_id: any;
   level: number;
   rate: number;
-  skill: string;
+  skill_id: any;
   slot: number;
+  skill: {image_uri: string; name: string; id: any};
   item: {
     id: any;
+    grade?: number | null;
     image_uri: string;
     name: string;
     set_name?: string | null;
@@ -112,14 +140,12 @@ export interface ICharacterGem {
 }
 
 export interface IEngraving {
-  character_id: any;
-  engraving_id: any;
   id: any;
   level: number;
   slot: number;
   engraving: {
-    id: any;
     class_yn: IClassYn;
+    id: any;
     image_uri: string;
     info: string;
     name: string;

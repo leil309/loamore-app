@@ -31,6 +31,11 @@ export type ICharacterCount = {
   character_engraving: Scalars['Int'];
   character_gear: Scalars['Int'];
   character_gem: Scalars['Int'];
+  character_skill: Scalars['Int'];
+};
+
+export type ICharacterSkillCount = {
+  character_skill_tripod: Scalars['Int'];
 };
 
 export type IEngravingCount = {
@@ -41,6 +46,7 @@ export type IItemCount = {
   character_accessory: Scalars['Int'];
   character_gear: Scalars['Int'];
   character_gem: Scalars['Int'];
+  character_skill: Scalars['Int'];
 };
 
 export type IMutation = {
@@ -61,6 +67,16 @@ export type IQueryFindCharacterArgs = {
   name: Scalars['String'];
 };
 
+export type ISkillCount = {
+  character_gem: Scalars['Int'];
+  character_skill: Scalars['Int'];
+  tripod: Scalars['Int'];
+};
+
+export type ITripodCount = {
+  character_skill_tripod: Scalars['Int'];
+};
+
 export type ICharacter = {
   _count: ICharacterCount;
   attack_power: Scalars['Int'];
@@ -68,6 +84,7 @@ export type ICharacter = {
   character_engraving?: Maybe<Array<ICharacterEngraving>>;
   character_gear?: Maybe<Array<ICharacterGear>>;
   character_gem?: Maybe<Array<ICharacterGem>>;
+  character_skill?: Maybe<Array<ICharacterSkill>>;
   charisma: Scalars['Int'];
   class: Scalars['String'];
   courage: Scalars['Int'];
@@ -138,8 +155,42 @@ export type ICharacterGem = {
   item_id: Scalars['BigInt'];
   level: Scalars['Int'];
   rate: Scalars['Int'];
-  skill: Scalars['String'];
+  skill: ISkill;
+  skill_id: Scalars['BigInt'];
   slot: Scalars['Int'];
+};
+
+export type ICharacterSkill = {
+  _count: ICharacterSkillCount;
+  attack_type?: Maybe<Scalars['String']>;
+  character: ICharacter;
+  character_id: Scalars['BigInt'];
+  character_skill_tripod?: Maybe<Array<ICharacterSkillTripod>>;
+  counter_yn: ICharacterSkillCounterYn;
+  id: Scalars['BigInt'];
+  level?: Maybe<Scalars['Int']>;
+  rune?: Maybe<IItem>;
+  rune_id?: Maybe<Scalars['BigInt']>;
+  skill: ISkill;
+  skill_id: Scalars['BigInt'];
+  stagger_value?: Maybe<Scalars['String']>;
+  super_armor?: Maybe<Scalars['String']>;
+  weak_point?: Maybe<Scalars['Int']>;
+};
+
+export enum ICharacterSkillCounterYn {
+  N = 'N',
+  Y = 'Y',
+}
+
+export type ICharacterSkillTripod = {
+  character_skill: ICharacterSkill;
+  character_skill_id: Scalars['BigInt'];
+  id: Scalars['BigInt'];
+  level?: Maybe<Scalars['Int']>;
+  selected_yn: ISelectedYn;
+  tripod: ITripod;
+  tripod_id: Scalars['BigInt'];
 };
 
 export enum IClassYn {
@@ -162,11 +213,41 @@ export type IItem = {
   character_accessory?: Maybe<Array<ICharacterAccessory>>;
   character_gear?: Maybe<Array<ICharacterGear>>;
   character_gem?: Maybe<Array<ICharacterGem>>;
+  character_skill?: Maybe<Array<ICharacterSkill>>;
+  grade?: Maybe<Scalars['Int']>;
   id: Scalars['BigInt'];
   image_uri: Scalars['String'];
   name: Scalars['String'];
   set_name?: Maybe<Scalars['String']>;
   tier?: Maybe<Scalars['Int']>;
+};
+
+export enum ISelectedYn {
+  N = 'N',
+  Y = 'Y',
+}
+
+export type ISkill = {
+  _count: ISkillCount;
+  character_gem?: Maybe<Array<ICharacterGem>>;
+  character_skill?: Maybe<Array<ICharacterSkill>>;
+  class: Scalars['String'];
+  id: Scalars['BigInt'];
+  image_uri: Scalars['String'];
+  name: Scalars['String'];
+  tripod?: Maybe<Array<ITripod>>;
+};
+
+export type ITripod = {
+  _count: ITripodCount;
+  character_skill_tripod?: Maybe<Array<ICharacterSkillTripod>>;
+  id: Scalars['BigInt'];
+  image_uri: Scalars['String'];
+  name: Scalars['String'];
+  skill: ISkill;
+  skill_id: Scalars['BigInt'];
+  slot: Scalars['Int'];
+  tier: Scalars['Int'];
 };
 
 export type IFindCharacterQueryVariables = Exact<{
@@ -201,67 +282,91 @@ export type IFindCharacterQuery = {
       additional_effect?: string | null;
       base_effect?: string | null;
       bracelet_effect?: string | null;
-      character_id: any;
       engraving?: string | null;
       id: any;
-      item_id: any;
       quality?: number | null;
       slot: number;
       item: {
-        id: any;
-        image_uri: string;
         name: string;
+        image_uri: string;
+        grade?: number | null;
         set_name?: string | null;
         tier?: number | null;
+        id: any;
       };
     }> | null;
     character_engraving?: Array<{
-      character_id: any;
-      engraving_id: any;
       id: any;
       level: number;
       slot: number;
       engraving: {
-        id: any;
         class_yn: IClassYn;
+        id: any;
         image_uri: string;
         info: string;
         name: string;
       };
     }> | null;
     character_gear?: Array<{
-      additional_effect?: string | null;
       base_effect?: string | null;
-      character_id: any;
       honing: number;
       id: any;
-      item_id: any;
       quality: number;
       slot: number;
+      additional_effect?: string | null;
       item: {
         id: any;
+        image_uri: string;
+        name: string;
+        set_name?: string | null;
+        tier?: number | null;
+        grade?: number | null;
+      };
+    }> | null;
+    character_gem?: Array<{
+      direction: string;
+      effect_type: string;
+      id: any;
+      level: number;
+      rate: number;
+      skill_id: any;
+      slot: number;
+      skill: {image_uri: string; name: string; id: any};
+      item: {
+        id: any;
+        grade?: number | null;
         image_uri: string;
         name: string;
         set_name?: string | null;
         tier?: number | null;
       };
     }> | null;
-    character_gem?: Array<{
-      character_id: any;
-      direction: string;
-      effect_type: string;
+    character_skill?: Array<{
+      attack_type?: string | null;
+      counter_yn: ICharacterSkillCounterYn;
       id: any;
-      item_id: any;
-      level: number;
-      rate: number;
-      skill: string;
-      slot: number;
-      item: {
+      level?: number | null;
+      rune_id?: any | null;
+      stagger_value?: string | null;
+      super_armor?: string | null;
+      weak_point?: number | null;
+      character_skill_tripod?: Array<{
+        level?: number | null;
+        selected_yn: ISelectedYn;
+        tripod: {name: string; image_uri: string; slot: number; tier: number};
+      }> | null;
+      skill: {
+        class: string;
         id: any;
         image_uri: string;
         name: string;
-        set_name?: string | null;
-        tier?: number | null;
+        tripod?: Array<{
+          id: any;
+          image_uri: string;
+          name: string;
+          slot: number;
+          tier: number;
+        }> | null;
       };
     }> | null;
   };
@@ -275,68 +380,101 @@ export const FindCharacterDocument = `
       additional_effect
       base_effect
       bracelet_effect
-      character_id
       engraving
       id
-      item_id
-      quality
-      slot
       item {
-        id
-        image_uri
         name
+        image_uri
+        grade
         set_name
         tier
+        id
       }
+      quality
+      slot
     }
     character_engraving {
-      character_id
       engraving {
-        id
         class_yn
+        id
         image_uri
         info
         name
       }
-      engraving_id
       id
       level
       slot
     }
     character_gear {
-      additional_effect
       base_effect
-      character_id
       honing
       id
-      item_id
+      item {
+        id
+        image_uri
+        name
+        set_name
+        tier
+        grade
+      }
       quality
+      slot
+      additional_effect
+    }
+    character_gem {
+      direction
+      effect_type
+      id
+      level
+      rate
+      skill {
+        image_uri
+        name
+        id
+      }
+      skill_id
       slot
       item {
         id
+        grade
         image_uri
         name
         set_name
         tier
       }
     }
-    character_gem {
-      character_id
-      direction
-      effect_type
+    character_skill {
+      attack_type
+      character_skill_tripod {
+        level
+        selected_yn
+        tripod {
+          name
+          image_uri
+          slot
+          tier
+        }
+      }
+      counter_yn
       id
-      item_id
       level
-      rate
-      skill
-      slot
-      item {
+      rune_id
+      skill {
+        class
         id
         image_uri
         name
-        set_name
-        tier
+        tripod {
+          id
+          image_uri
+          name
+          slot
+          tier
+        }
       }
+      stagger_value
+      super_armor
+      weak_point
     }
     charisma
     class

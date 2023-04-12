@@ -32,13 +32,33 @@ const GemCard = ({gemList}: IGemCard) => {
                     resizeMode: 'cover',
                   }}
                 />
+                <Image
+                  source={{
+                    uri: `https://cdn-lostark.game.onstove.com/${x.skill.image_uri}`,
+                  }}
+                  style={{
+                    borderRadius: 10,
+                    width: 24,
+                    height: 24,
+                    resizeMode: 'cover',
+                  }}
+                />
                 <View
                   style={{
                     backgroundColor: 'rgba(0,0,0,0.5)',
                     width: '100%',
                     borderRadius: 10,
+                    borderTopStartRadius: 0,
+                    borderTopEndRadius: 0,
+                    borderTopColor: '#ffb547',
+                    borderTopWidth: 0.5,
                   }}>
-                  <Text style={{color: '#FFFFFF'}}>
+                  <Text
+                    style={[
+                      {
+                        color: '#FFFFFF',
+                      },
+                    ]}>
                     {x.level}
                     {/* @ts-ignore */}
                     {gemTypeRegex.exec(x.item.name)[1]}
