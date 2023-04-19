@@ -34,6 +34,20 @@ export type ICharacterCount = {
   character_skill: Scalars['Int'];
 };
 
+export type ICharacterRankOutput = {
+  classEngraving?: Maybe<Array<Scalars['String']>>;
+  className: Scalars['String'];
+  guildName?: Maybe<Scalars['String']>;
+  id: Scalars['BigInt'];
+  imageUri: Scalars['String'];
+  insDate: Scalars['DateTime'];
+  itemLevel: Scalars['Float'];
+  name: Scalars['String'];
+  serverName: Scalars['String'];
+  setItem?: Maybe<Array<Scalars['String']>>;
+  updDate: Scalars['DateTime'];
+};
+
 export type ICharacterSkillCount = {
   character_skill_tripod: Scalars['Int'];
 };
@@ -61,10 +75,17 @@ export type IMutationUpsertArgs = {
 export type IQuery = {
   /** character 조회 */
   findCharacter: ICharacter;
+  /** ranking 조회 */
+  findCharacterRanking: Array<ICharacterRankOutput>;
 };
 
 export type IQueryFindCharacterArgs = {
   name: Scalars['String'];
+};
+
+export type IQueryFindCharacterRankingArgs = {
+  cursor?: InputMaybe<Scalars['BigInt']>;
+  take?: InputMaybe<Scalars['Int']>;
 };
 
 export type ISkillCount = {
@@ -120,6 +141,7 @@ export type ICharacterAccessory = {
   item_id: Scalars['BigInt'];
   quality?: Maybe<Scalars['Int']>;
   slot: Scalars['Int'];
+  use_yn: IUseYn;
 };
 
 export type ICharacterEngraving = {
@@ -130,6 +152,7 @@ export type ICharacterEngraving = {
   id: Scalars['BigInt'];
   level: Scalars['Int'];
   slot: Scalars['Int'];
+  use_yn: IUseYn;
 };
 
 export type ICharacterGear = {
@@ -143,6 +166,7 @@ export type ICharacterGear = {
   item_id: Scalars['BigInt'];
   quality: Scalars['Int'];
   slot: Scalars['Int'];
+  use_yn: IUseYn;
 };
 
 export type ICharacterGem = {
@@ -158,6 +182,7 @@ export type ICharacterGem = {
   skill: ISkill;
   skill_id: Scalars['BigInt'];
   slot: Scalars['Int'];
+  use_yn: IUseYn;
 };
 
 export type ICharacterSkill = {
@@ -175,6 +200,7 @@ export type ICharacterSkill = {
   skill_id: Scalars['BigInt'];
   stagger_value?: Maybe<Scalars['String']>;
   super_armor?: Maybe<Scalars['String']>;
+  use_yn: IUseYn;
   weak_point?: Maybe<Scalars['Int']>;
 };
 
@@ -191,6 +217,7 @@ export type ICharacterSkillTripod = {
   selected_yn: ISelectedYn;
   tripod: ITripod;
   tripod_id: Scalars['BigInt'];
+  use_yn: IUseYn;
 };
 
 export enum IClassYn {
@@ -249,6 +276,11 @@ export type ITripod = {
   slot: Scalars['Int'];
   tier: Scalars['Int'];
 };
+
+export enum IUseYn {
+  N = 'N',
+  Y = 'Y',
+}
 
 export type IFindCharacterQueryVariables = Exact<{
   name: Scalars['String'];
@@ -370,6 +402,27 @@ export type IFindCharacterQuery = {
       };
     }> | null;
   };
+};
+
+export type IFindCharacterRankingQueryVariables = Exact<{
+  cursor?: InputMaybe<Scalars['BigInt']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type IFindCharacterRankingQuery = {
+  findCharacterRanking: Array<{
+    classEngraving?: Array<string> | null;
+    className: string;
+    guildName?: string | null;
+    id: any;
+    imageUri: string;
+    insDate: any;
+    itemLevel: number;
+    name: string;
+    serverName: string;
+    setItem?: Array<string> | null;
+    updDate: any;
+  }>;
 };
 
 export const FindCharacterDocument = `
@@ -529,6 +582,63 @@ export const useInfiniteFindCharacterQuery = <
         FindCharacterDocument,
         {...variables, ...(metaData.pageParam ?? {})},
       )(),
+    options,
+  );
+};
+
+export const FindCharacterRankingDocument = `
+    query FindCharacterRanking($cursor: BigInt, $take: Int) {
+  findCharacterRanking(cursor: $cursor, take: $take) {
+    classEngraving
+    className
+    guildName
+    id
+    imageUri
+    insDate
+    itemLevel
+    name
+    serverName
+    setItem
+    updDate
+  }
+}
+    `;
+export const useFindCharacterRankingQuery = <
+  TData = IFindCharacterRankingQuery,
+  TError = unknown,
+>(
+  variables?: IFindCharacterRankingQueryVariables,
+  options?: UseQueryOptions<IFindCharacterRankingQuery, TError, TData>,
+) =>
+  useQuery<IFindCharacterRankingQuery, TError, TData>(
+    variables === undefined
+      ? ['FindCharacterRanking']
+      : ['FindCharacterRanking', variables],
+    axiosFetcher<
+      IFindCharacterRankingQuery,
+      IFindCharacterRankingQueryVariables
+    >(FindCharacterRankingDocument, variables),
+    options,
+  );
+export const useInfiniteFindCharacterRankingQuery = <
+  TData = IFindCharacterRankingQuery,
+  TError = unknown,
+>(
+  variables?: IFindCharacterRankingQueryVariables,
+  options?: UseInfiniteQueryOptions<IFindCharacterRankingQuery, TError, TData>,
+) => {
+  return useInfiniteQuery<IFindCharacterRankingQuery, TError, TData>(
+    variables === undefined
+      ? ['FindCharacterRanking.infinite']
+      : ['FindCharacterRanking.infinite', variables],
+    metaData =>
+      axiosFetcher<
+        IFindCharacterRankingQuery,
+        IFindCharacterRankingQueryVariables
+      >(FindCharacterRankingDocument, {
+        ...variables,
+        ...(metaData.pageParam ?? {}),
+      })(),
     options,
   );
 };

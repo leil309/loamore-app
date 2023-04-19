@@ -124,3 +124,19 @@ query FindCharacter($name: String!) {
         wisdom
     }
 }
+
+query FindCharacterRanking($cursor: BigInt, $take: Int) {
+    findCharacterRanking(cursor: $cursor, take: $take) {
+        classEngraving
+        className
+        guildName
+        id
+        imageUri
+        insDate
+        itemLevel
+        name
+        serverName
+        setItem
+        updDate
+    }
+}
