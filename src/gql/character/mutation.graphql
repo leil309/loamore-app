@@ -1,0 +1,3 @@
+mutation UpsertCharacter($name: String!) {
+    upsert(name: $name)
+}

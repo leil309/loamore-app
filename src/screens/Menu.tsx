@@ -1,15 +1,13 @@
 import {
   baseCard,
-  baseText,
   contentContainer,
   mainContainer,
   subText,
 } from '~/components/styles';
-import {Pressable, SafeAreaView, ScrollView, Text, View} from 'react-native';
+import {Pressable, SafeAreaView, ScrollView, Text} from 'react-native';
 import AppHeader from '~/components/common/AppHeader';
 import userSlice from '~/slices/userSlice';
 import {useAppDispatch} from '~/store';
-
 const Menu = () => {
   const dispatch = useAppDispatch();
   const resetName = () => {

@@ -1,8 +1,8 @@
 import {NavigationContainer} from '@react-navigation/native';
 import AuthStacks from '~/navigation/auth/AuthStacks';
-import RootDrawer from '~/navigation/RootDrawer';
 import {useAppSelector} from '~/store';
-import {StatusBar, View} from 'react-native';
+import {StatusBar} from 'react-native';
+import RootStack from '~/navigation/RootStack';
 
 const AppNavigation = () => {
   const characterName = useAppSelector(state => state.user.characterName);
@@ -15,7 +15,7 @@ const AppNavigation = () => {
         barStyle={'light-content'}
         translucent={true}
       />
-      {characterName?.name && character?.name ? <RootDrawer /> : <AuthStacks />}
+      {characterName?.name && character?.name ? <RootStack /> : <AuthStacks />}
     </NavigationContainer>
   );
 };

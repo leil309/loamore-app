@@ -24,6 +24,15 @@ const RankingCard = ({
     require('assets/default-character.png'),
   );
 
+  const imageTop =
+    className === '도화가'
+      ? -62
+      : className === '리퍼'
+      ? -13
+      : className === '기상술사'
+      ? -62
+      : -25;
+
   return (
     <View style={[baseCard, {flexDirection: 'row', marginBottom: 10}]}>
       <View
@@ -44,7 +53,7 @@ const RankingCard = ({
             uri: imageUri,
           }}
           style={{
-            top: -25,
+            top: imageTop,
             width: 50,
             height: 250,
             resizeMode: 'cover',

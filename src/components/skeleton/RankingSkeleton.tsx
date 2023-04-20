@@ -15,7 +15,7 @@ const RankingSkeleton = () => {
           alignItems="center"
           width={'100%'}
           borderRadius={25}
-          padding={10}>
+          padding={14}>
           <SkeletonPlaceholder.Item
             width={50}
             height={50}
@@ -23,10 +23,10 @@ const RankingSkeleton = () => {
             borderWidth={0.5}
             borderColor={'#FFFFFF'}
           />
-          <SkeletonPlaceholder.Item marginLeft={15} width={'100%'}>
-            <SkeletonPlaceholder.Item width={90} height={15} />
-            <SkeletonPlaceholder.Item marginTop={6} width={70} height={15} />
-            <SkeletonPlaceholder.Item marginTop={6} width={50} height={15} />
+          <SkeletonPlaceholder.Item marginLeft={10} width={'100%'}>
+            <SkeletonPlaceholder.Item width={90} height={17} />
+            <SkeletonPlaceholder.Item marginTop={6} width={70} height={17} />
+            <SkeletonPlaceholder.Item marginTop={6} width={50} height={17} />
           </SkeletonPlaceholder.Item>
         </SkeletonPlaceholder.Item>
       </SkeletonPlaceholder>

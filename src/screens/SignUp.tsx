@@ -12,23 +12,37 @@ import {useState} from 'react';
 import {useAppDispatch} from '../store';
 import userSlice from '../slices/userSlice';
 import {baseCard, baseText, mainContainer} from '~/components/styles';
+import {useUpsertCharacterMutation} from '~/gql/generated/graphql';
 
 const SignUp = () => {
   const dispatch = useAppDispatch();
 
   const [charName, setCharName] = useState('');
+  const {mutate} = useUpsertCharacterMutation();
   const onSubmit = () => {
     if (charName.trim()) {
-      dispatch(userSlice.actions.setCharacter({name: charName.trim()}));
-      dispatch(
-        userSlice.actions.setCharacterInfo({
-          name: charName.trim(),
-          server: '',
-          guild: '',
-          level: '',
-          uri: '',
-          job: '',
-        }),
+      mutate(
+        {
+          name: charName,
+        },
+        {
+          onSuccess: () => {
+            dispatch(userSlice.actions.setCharacter({name: charName.trim()}));
+            dispatch(
+              userSlice.actions.setCharacterInfo({
+                name: charName.trim(),
+                server: '',
+                guild: '',
+                level: '',
+                uri: '',
+                job: '',
+              }),
+            );
+          },
+          onError: (e: any) => {
+            console.log(e);
+          },
+        },
       );
     }
   };

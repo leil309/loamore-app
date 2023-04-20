@@ -1,11 +1,13 @@
 import {
-  useInfiniteQuery,
-  UseInfiniteQueryOptions,
+  useMutation,
   useQuery,
+  useInfiniteQuery,
+  UseMutationOptions,
   UseQueryOptions,
+  UseInfiniteQueryOptions,
+  QueryFunctionContext,
 } from 'react-query';
 import {axiosFetcher} from './fetcher';
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends {[key: string]: unknown}> = {[K in keyof T]: T[K]};
@@ -282,6 +284,12 @@ export enum IUseYn {
   Y = 'Y',
 }
 
+export type IUpsertCharacterMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+export type IUpsertCharacterMutation = {upsert: boolean};
+
 export type IFindCharacterQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
@@ -425,6 +433,36 @@ export type IFindCharacterRankingQuery = {
   }>;
 };
 
+export const UpsertCharacterDocument = `
+    mutation UpsertCharacter($name: String!) {
+  upsert(name: $name)
+}
+    `;
+export const useUpsertCharacterMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    IUpsertCharacterMutation,
+    TError,
+    IUpsertCharacterMutationVariables,
+    TContext
+  >,
+) =>
+  useMutation<
+    IUpsertCharacterMutation,
+    TError,
+    IUpsertCharacterMutationVariables,
+    TContext
+  >(
+    ['UpsertCharacter'],
+    (variables?: IUpsertCharacterMutationVariables) =>
+      axiosFetcher<IUpsertCharacterMutation, IUpsertCharacterMutationVariables>(
+        UpsertCharacterDocument,
+        variables,
+      )(),
+    options,
+  );
 export const FindCharacterDocument = `
     query FindCharacter($name: String!) {
   findCharacter(name: $name) {

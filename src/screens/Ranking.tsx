@@ -1,13 +1,13 @@
 import {SafeAreaView} from 'react-native';
 import {mainContainer} from '~/components/styles';
-import AppHeader from '~/components/common/AppHeader';
 import RankingList from '~/components/RankingList';
+import AppSearchHeader from '~/components/common/AppSearchHeader';
 
 const Ranking = () => {
   return (
     <SafeAreaView style={mainContainer}>
       <RankingList />
-      <AppHeader />
+      <AppSearchHeader />
     </SafeAreaView>
   );
 };

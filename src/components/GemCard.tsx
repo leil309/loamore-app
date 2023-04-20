@@ -1,4 +1,4 @@
-import {Image, Text, View} from 'react-native';
+import {Dimensions, Image, Text, View} from 'react-native';
 import {baseCard, mainContainer} from '~/components/styles';
 import {ICharacterGem} from '~/@types';
 
@@ -9,9 +9,20 @@ interface IGemCard {
 const GemCard = ({gemList}: IGemCard) => {
   const gemTypeRegex = /\s(홍|멸)/;
 
+  const windowHeight = Dimensions.get('window').height;
+  const windowWidth = Dimensions.get('window').width;
+
   return (
     <View style={[mainContainer, {marginTop: 15}]}>
-      <View style={[baseCard, {flexDirection: 'row'}]}>
+      <View
+        style={[
+          baseCard,
+          {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          },
+        ]}>
         {gemList
           ? gemList.map(x => (
               <View
@@ -27,9 +38,8 @@ const GemCard = ({gemList}: IGemCard) => {
                     uri: `https://cdn-lostark.game.onstove.com/${x.item.image_uri}`,
                   }}
                   style={{
-                    width: 25,
-                    height: 25,
-                    resizeMode: 'cover',
+                    height: 24,
+                    resizeMode: 'contain',
                   }}
                 />
                 <Image
@@ -38,9 +48,8 @@ const GemCard = ({gemList}: IGemCard) => {
                   }}
                   style={{
                     borderRadius: 10,
-                    width: 24,
                     height: 24,
-                    resizeMode: 'cover',
+                    resizeMode: 'contain',
                   }}
                 />
                 <View
@@ -57,6 +66,7 @@ const GemCard = ({gemList}: IGemCard) => {
                     style={[
                       {
                         color: '#FFFFFF',
+                        fontSize: 12,
                       },
                     ]}>
                     {x.level}
