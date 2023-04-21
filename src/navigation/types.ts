@@ -1,4 +1,5 @@
 import {NavigatorScreenParams} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
   Root: NavigatorScreenParams<HomeTabParamList>;
@@ -36,10 +37,15 @@ export type MarketStackParamList = {
 
 export type RankingStackParamList = {
   Ranking: undefined;
-  RankingDetail: undefined;
+  RankingDetail: {
+    name: string;
+  };
 };
 
 export type MenuStackParamList = {
   Menu: undefined;
   MenuDetail: undefined;
 };
+
+export type RankingStackScreenProps<T extends keyof RankingStackParamList> =
+  NativeStackScreenProps<RankingStackParamList, T>;

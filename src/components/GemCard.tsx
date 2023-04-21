@@ -1,4 +1,4 @@
-import {Dimensions, Image, Text, View} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import {baseCard, mainContainer} from '~/components/styles';
 import {ICharacterGem} from '~/@types';
 
@@ -9,9 +9,6 @@ interface IGemCard {
 const GemCard = ({gemList}: IGemCard) => {
   const gemTypeRegex = /\s(홍|멸)/;
 
-  const windowHeight = Dimensions.get('window').height;
-  const windowWidth = Dimensions.get('window').width;
-
   return (
     <View style={[mainContainer, {marginTop: 15}]}>
       <View
@@ -19,7 +16,8 @@ const GemCard = ({gemList}: IGemCard) => {
           baseCard,
           {
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent:
+              gemList?.length === 11 ? 'space-between' : 'flex-start',
             alignItems: 'center',
           },
         ]}>
@@ -39,7 +37,8 @@ const GemCard = ({gemList}: IGemCard) => {
                   }}
                   style={{
                     height: 24,
-                    resizeMode: 'contain',
+                    width: 24,
+                    resizeMode: 'cover',
                   }}
                 />
                 <Image
@@ -49,13 +48,15 @@ const GemCard = ({gemList}: IGemCard) => {
                   style={{
                     borderRadius: 10,
                     height: 24,
-                    resizeMode: 'contain',
+                    width: 24,
+                    resizeMode: 'cover',
                   }}
                 />
                 <View
                   style={{
                     backgroundColor: 'rgba(0,0,0,0.5)',
                     width: '100%',
+                    height: 20,
                     borderRadius: 10,
                     borderTopStartRadius: 0,
                     borderTopEndRadius: 0,
@@ -67,6 +68,7 @@ const GemCard = ({gemList}: IGemCard) => {
                       {
                         color: '#FFFFFF',
                         fontSize: 12,
+                        textAlign: 'center',
                       },
                     ]}>
                     {x.level}

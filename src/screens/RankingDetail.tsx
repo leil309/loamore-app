@@ -1,20 +1,21 @@
-import {SafeAreaView, ScrollView} from 'react-native';
-import {useAppSelector} from '~/store';
-import {useCallback, useEffect, useState} from 'react';
-import CharacterCard from '~/components/CharacterCard';
+import {SafeAreaView, ScrollView, Text, View} from 'react-native';
 import {contentContainer, mainContainer} from '~/components/styles';
+import AppSearchHeader from '~/components/common/AppSearchHeader';
+import CharacterCard from '~/components/CharacterCard';
+import {useCallback, useEffect, useState} from 'react';
+import {ICharacter} from '~/@types';
 import {
   useFindCharacterQuery,
   useUpsertCharacterMutation,
 } from '~/gql/generated/graphql';
-import {ICharacter} from '~/@types';
-import BattleStatsCard from '~/components/BattleStatsCard';
-import GemCard from '~/components/GemCard';
-import AppSearchHeader from '~/components/common/AppSearchHeader';
 import {useFocusEffect} from '@react-navigation/native';
+import {RankingStackScreenProps} from '~/navigation/types';
+import AppHeader from '~/components/common/AppHeader';
+import GemCard from '~/components/GemCard';
+import BattleStatsCard from '~/components/BattleStatsCard';
 
-const Home = () => {
-  const characterName = useAppSelector(state => state.user.characterName)?.name;
+const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
+  const {name: characterName} = route.params;
   const [character, setCharacter] = useState<ICharacter>();
 
   const {data, isLoadingError} = useFindCharacterQuery(
@@ -70,8 +71,8 @@ const Home = () => {
           </>
         ) : null}
       </ScrollView>
-      <AppSearchHeader />
+      <AppHeader canBack={true} />
     </SafeAreaView>
   );
 };
-export default Home;
+export default RankingDetail;

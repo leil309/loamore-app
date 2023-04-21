@@ -66,8 +66,8 @@ export type IItemCount = {
 };
 
 export type IMutation = {
-  /** character 가져오기 */
-  upsert: Scalars['Boolean'];
+  /** character 최신정보 조회 */
+  upsert: ICharacter;
 };
 
 export type IMutationUpsertArgs = {
@@ -75,7 +75,7 @@ export type IMutationUpsertArgs = {
 };
 
 export type IQuery = {
-  /** character 조회 */
+  /** character 빠른 조회 */
   findCharacter: ICharacter;
   /** ranking 조회 */
   findCharacterRanking: Array<ICharacterRankOutput>;
@@ -86,6 +86,7 @@ export type IQueryFindCharacterArgs = {
 };
 
 export type IQueryFindCharacterRankingArgs = {
+  className?: InputMaybe<Scalars['String']>;
   cursor?: InputMaybe<Scalars['BigInt']>;
   take?: InputMaybe<Scalars['Int']>;
 };
@@ -288,7 +289,123 @@ export type IUpsertCharacterMutationVariables = Exact<{
   name: Scalars['String'];
 }>;
 
-export type IUpsertCharacterMutation = {upsert: boolean};
+export type IUpsertCharacterMutation = {
+  upsert: {
+    attack_power: number;
+    charisma: number;
+    class: string;
+    courage: number;
+    critical: number;
+    domination: number;
+    endurance: number;
+    expertise: number;
+    guild_name?: string | null;
+    id: any;
+    image_uri: string;
+    ins_date: any;
+    item_level: number;
+    kindness: number;
+    level: number;
+    max_health: number;
+    name: string;
+    server_name: string;
+    specialization: number;
+    swiftness: number;
+    upd_date: any;
+    wisdom: number;
+    character_accessory?: Array<{
+      additional_effect?: string | null;
+      base_effect?: string | null;
+      bracelet_effect?: string | null;
+      engraving?: string | null;
+      id: any;
+      quality?: number | null;
+      slot: number;
+      item: {
+        name: string;
+        image_uri: string;
+        grade?: number | null;
+        set_name?: string | null;
+        tier?: number | null;
+        id: any;
+      };
+    }> | null;
+    character_engraving?: Array<{
+      id: any;
+      level: number;
+      slot: number;
+      engraving: {
+        class_yn: IClassYn;
+        id: any;
+        image_uri: string;
+        info: string;
+        name: string;
+      };
+    }> | null;
+    character_gear?: Array<{
+      base_effect?: string | null;
+      honing: number;
+      id: any;
+      quality: number;
+      slot: number;
+      additional_effect?: string | null;
+      item: {
+        id: any;
+        image_uri: string;
+        name: string;
+        set_name?: string | null;
+        tier?: number | null;
+        grade?: number | null;
+      };
+    }> | null;
+    character_gem?: Array<{
+      direction: string;
+      effect_type: string;
+      id: any;
+      level: number;
+      rate: number;
+      skill_id: any;
+      slot: number;
+      skill: {image_uri: string; name: string; id: any};
+      item: {
+        id: any;
+        grade?: number | null;
+        image_uri: string;
+        name: string;
+        set_name?: string | null;
+        tier?: number | null;
+      };
+    }> | null;
+    character_skill?: Array<{
+      attack_type?: string | null;
+      counter_yn: ICharacterSkillCounterYn;
+      id: any;
+      level?: number | null;
+      rune_id?: any | null;
+      stagger_value?: string | null;
+      super_armor?: string | null;
+      weak_point?: number | null;
+      character_skill_tripod?: Array<{
+        level?: number | null;
+        selected_yn: ISelectedYn;
+        tripod: {name: string; image_uri: string; slot: number; tier: number};
+      }> | null;
+      skill: {
+        class: string;
+        id: any;
+        image_uri: string;
+        name: string;
+        tripod?: Array<{
+          id: any;
+          image_uri: string;
+          name: string;
+          slot: number;
+          tier: number;
+        }> | null;
+      };
+    }> | null;
+  };
+};
 
 export type IFindCharacterQueryVariables = Exact<{
   name: Scalars['String'];
@@ -435,7 +552,130 @@ export type IFindCharacterRankingQuery = {
 
 export const UpsertCharacterDocument = `
     mutation UpsertCharacter($name: String!) {
-  upsert(name: $name)
+  upsert(name: $name) {
+    attack_power
+    character_accessory {
+      additional_effect
+      base_effect
+      bracelet_effect
+      engraving
+      id
+      item {
+        name
+        image_uri
+        grade
+        set_name
+        tier
+        id
+      }
+      quality
+      slot
+    }
+    character_engraving {
+      engraving {
+        class_yn
+        id
+        image_uri
+        info
+        name
+      }
+      id
+      level
+      slot
+    }
+    character_gear {
+      base_effect
+      honing
+      id
+      item {
+        id
+        image_uri
+        name
+        set_name
+        tier
+        grade
+      }
+      quality
+      slot
+      additional_effect
+    }
+    character_gem {
+      direction
+      effect_type
+      id
+      level
+      rate
+      skill {
+        image_uri
+        name
+        id
+      }
+      skill_id
+      slot
+      item {
+        id
+        grade
+        image_uri
+        name
+        set_name
+        tier
+      }
+    }
+    character_skill {
+      attack_type
+      character_skill_tripod {
+        level
+        selected_yn
+        tripod {
+          name
+          image_uri
+          slot
+          tier
+        }
+      }
+      counter_yn
+      id
+      level
+      rune_id
+      skill {
+        class
+        id
+        image_uri
+        name
+        tripod {
+          id
+          image_uri
+          name
+          slot
+          tier
+        }
+      }
+      stagger_value
+      super_armor
+      weak_point
+    }
+    charisma
+    class
+    courage
+    critical
+    domination
+    endurance
+    expertise
+    guild_name
+    id
+    image_uri
+    ins_date
+    item_level
+    kindness
+    level
+    max_health
+    name
+    server_name
+    specialization
+    swiftness
+    upd_date
+    wisdom
+  }
 }
     `;
 export const useUpsertCharacterMutation = <

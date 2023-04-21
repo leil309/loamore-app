@@ -9,8 +9,12 @@ import {
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {useNavigation} from '@react-navigation/native';
 import {BlurView} from '@react-native-community/blur';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const AppHeader = () => {
+interface IAppHeader {
+  canBack: boolean;
+}
+const AppHeader = ({canBack = false}: IAppHeader) => {
   const navigation = useNavigation();
   const osHeight = Platform.OS === 'ios' ? 40 : 44;
   const statusBarHeight =
@@ -45,9 +49,13 @@ const AppHeader = () => {
       )}
       <View
         style={[styles.wrapper, {marginTop: StatusBar?.currentHeight || 0}]}>
-        <Pressable onPress={() => navigation.goBack()}>
+        {!canBack ? (
           <Text style={styles.headerText}>LoaMore</Text>
-        </Pressable>
+        ) : (
+          <Pressable onPress={() => navigation.goBack()}>
+            <MaterialIcons name="arrow-back" color={'#707375'} size={30} />
+          </Pressable>
+        )}
       </View>
     </View>
   );

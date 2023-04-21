@@ -16,11 +16,6 @@ interface ICharacterName {
 }
 interface ICharacter {
   name: string;
-  server: string;
-  guild: string;
-  level: string;
-  uri: string;
-  job: string;
 }
 
 const initialState: IUserState = {
@@ -45,11 +40,6 @@ const userSlice = createSlice({
       state.character = action.payload;
       console.log('SET_INFO');
       AsyncStorage.setItem('character_name', action.payload.name);
-      AsyncStorage.setItem('character_server', action.payload.server);
-      AsyncStorage.setItem('character_guild', action.payload.guild);
-      AsyncStorage.setItem('character_level', action.payload.level);
-      AsyncStorage.setItem('character_uri', action.payload.uri);
-      AsyncStorage.setItem('character_job', action.payload.job);
     },
     reset() {
       return {...initialState};

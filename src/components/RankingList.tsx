@@ -6,7 +6,7 @@ import RankingCard from '~/components/RankingCard';
 import React, {useCallback} from 'react';
 
 const RankingList = () => {
-  const PAGE_SIZE = 10;
+  const PAGE_SIZE = 20;
 
   const {data, isLoadingError, fetchNextPage, hasNextPage} =
     useInfiniteFindCharacterRankingQuery(
@@ -60,7 +60,7 @@ const RankingList = () => {
             ListFooterComponent={() => <View />}
             onEndReached={onEndReached}
             keyExtractor={(item: any) => item.id}
-            onEndReachedThreshold={0.7}
+            onEndReachedThreshold={0.5}
             refreshing={false}
             data={data?.pages?.flatMap(page => page.findCharacterRanking)}
             renderItem={({item, index}) => (
@@ -82,4 +82,4 @@ const RankingList = () => {
     </View>
   );
 };
-export default RankingList;
+export default React.memo(RankingList);

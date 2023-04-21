@@ -31,11 +31,6 @@ const SignUp = () => {
             dispatch(
               userSlice.actions.setCharacterInfo({
                 name: charName.trim(),
-                server: '',
-                guild: '',
-                level: '',
-                uri: '',
-                job: '',
               }),
             );
           },

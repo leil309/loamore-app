@@ -13,7 +13,11 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {BlurView} from '@react-native-community/blur';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useState} from 'react';
-import {baseText} from '~/components/styles';
+import userSlice from '~/slices/userSlice';
+import {useUpsertCharacterMutation} from '~/gql/generated/graphql';
+import {useAppDispatch} from '~/store';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {HomeTabParamList} from '~/navigation/types';
 const AppSearchHeader = () => {
   const statusBarHeight =
     Platform.OS === 'ios'
@@ -25,20 +29,48 @@ const AppSearchHeader = () => {
   const [showHeader, setShowHeader] = useState<boolean>(false);
   const [characterName, setCharacterName] = useState('');
   const windowHeight = Dimensions.get('window').height;
-  const toggleHeight = () => {
-    setShowFilter(!showFilter);
-    setTimeout(
-      () => {
-        setHeaderHeight(headerHeight === osHeight ? windowHeight : osHeight);
-      },
-      showFilter ? 250 : 10,
-    );
-    setTimeout(
-      () => {
-        setShowHeader(!showHeader);
-      },
-      showFilter ? 250 : 0,
-    );
+  const showModal = () => {
+    setShowHeader(true);
+    setHeaderHeight(windowHeight);
+    setShowFilter(true);
+  };
+  const hideModal = () => {
+    setShowFilter(false);
+    setTimeout(() => {
+      setHeaderHeight(osHeight);
+      setShowHeader(false);
+    }, 250);
+  };
+
+  const {mutate} = useUpsertCharacterMutation();
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation<NavigationProp<HomeTabParamList>>();
+
+  const onSubmit = () => {
+    if (characterName) {
+      mutate(
+        {
+          name: characterName,
+        },
+        {
+          onSuccess: () => {
+            dispatch(userSlice.actions.setCharacter({name: characterName}));
+            dispatch(
+              userSlice.actions.setCharacterInfo({
+                name: characterName,
+              }),
+            );
+            navigation.navigate('HomeStack', {
+              screen: 'Home',
+            });
+            hideModal();
+          },
+          onError: (e: any) => {
+            console.log(e);
+          },
+        },
+      );
+    }
   };
 
   return (
@@ -77,7 +109,7 @@ const AppSearchHeader = () => {
             <Text style={styles.headerText}>LoaMore</Text>
             <Pressable
               style={{flexDirection: 'row'}}
-              onPress={() => toggleHeight()}>
+              onPress={() => showModal()}>
               <MaterialIcons
                 name={'search'}
                 size={30}
@@ -93,7 +125,7 @@ const AppSearchHeader = () => {
           animationInTiming={500}
           backdropOpacity={0}
           isVisible={showFilter}
-          onBackdropPress={() => toggleHeight()}>
+          onBackdropPress={() => hideModal()}>
           <View
             style={{
               flexDirection: 'row',
@@ -106,16 +138,7 @@ const AppSearchHeader = () => {
               <TextInput
                 autoFocus={true}
                 focusable={showFilter}
-                style={[
-                  styles.input,
-                  {
-                    borderColor: '#FFFFFF',
-                    color: '#FFFFFF',
-                    position: 'relative',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  },
-                ]}
+                style={styles.input}
                 onChangeText={newText => setCharacterName(newText.trim())}
                 placeholder={'캐릭터 검색'}
                 placeholderTextColor={'#FFFFFF'}
@@ -123,8 +146,16 @@ const AppSearchHeader = () => {
                 autoCapitalize={'none'}
                 importantForAutofill="yes"
                 maxLength={20}
+                onSubmitEditing={() => onSubmit()}
               />
-              <Text style={baseText}>123123</Text>
+              <Pressable
+                style={{
+                  position: 'absolute',
+                  right: 5,
+                }}
+                onPress={() => onSubmit()}>
+                <MaterialIcons name={'search'} size={30} color={'#8c9093'} />
+              </Pressable>
             </View>
           </View>
         </Modal>
@@ -162,6 +193,9 @@ const styles = StyleSheet.create({
   inputWrapper: {
     marginVertical: 10,
     width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 50,
   },
   text: {
     color: '#FFFFFF',
@@ -176,6 +210,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 10,
     borderWidth: 1,
+    height: 40,
+    flex: 1,
+    borderColor: '#FFFFFF',
+    color: '#FFFFFF',
+    alignItems: 'center',
   },
   title: {
     fontSize: 20,
