@@ -36,7 +36,6 @@ const RankingList = () => {
 
   const onEndReached = useCallback(async () => {
     if (hasNextPage) {
-      console.log(hasNextPage);
       await fetchNextPage().catch(e => console.log(e));
     }
   }, [fetchNextPage, hasNextPage]);
@@ -60,7 +59,7 @@ const RankingList = () => {
             ListFooterComponent={() => <View />}
             onEndReached={onEndReached}
             keyExtractor={(item: any) => item.id}
-            onEndReachedThreshold={0.5}
+            onEndReachedThreshold={0.7}
             refreshing={false}
             data={data?.pages?.flatMap(page => page.findCharacterRanking)}
             renderItem={({item, index}) => (

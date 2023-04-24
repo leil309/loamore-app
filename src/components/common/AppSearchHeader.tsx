@@ -12,11 +12,15 @@ import Modal from 'react-native-modal';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {BlurView} from '@react-native-community/blur';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import userSlice from '~/slices/userSlice';
 import {useUpsertCharacterMutation} from '~/gql/generated/graphql';
 import {useAppDispatch} from '~/store';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {
+  NavigationProp,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import {HomeTabParamList} from '~/navigation/types';
 const AppSearchHeader = () => {
   const statusBarHeight =
@@ -34,13 +38,13 @@ const AppSearchHeader = () => {
     setHeaderHeight(windowHeight);
     setShowFilter(true);
   };
-  const hideModal = () => {
+  const hideModal = useCallback(() => {
     setShowFilter(false);
     setTimeout(() => {
       setHeaderHeight(osHeight);
       setShowHeader(false);
     }, 250);
-  };
+  }, [osHeight]);
 
   const {mutate} = useUpsertCharacterMutation();
   const dispatch = useAppDispatch();
@@ -72,6 +76,8 @@ const AppSearchHeader = () => {
       );
     }
   };
+
+  const isFocused = useIsFocused();
 
   return (
     <View
@@ -124,7 +130,7 @@ const AppSearchHeader = () => {
           animationIn={'fadeIn'}
           animationInTiming={500}
           backdropOpacity={0}
-          isVisible={showFilter}
+          isVisible={showFilter && isFocused}
           onBackdropPress={() => hideModal()}>
           <View
             style={{

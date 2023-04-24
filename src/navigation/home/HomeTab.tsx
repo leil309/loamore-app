@@ -42,6 +42,7 @@ const HomeTab = () => {
     <Tab.Navigator
       tabBar={props => <CustomTabBar {...props} />}
       screenOptions={{
+        tabBarHideOnKeyboard: true,
         headerShown: false,
         tabBarActiveTintColor: 'white',
         tabBarLabelStyle: {marginBottom: 5},
