@@ -3,25 +3,23 @@ import {FlatList, View} from 'react-native';
 import {useInfiniteFindCharacterRankingQuery} from '~/gql/generated/graphql';
 import RankingSkeleton from '~/components/skeleton/RankingSkeleton';
 import RankingCard from '~/components/RankingCard';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
-const RankingList = () => {
+interface IRankingList {
+  selectedClass?: Array<string>;
+}
+const RankingList = ({selectedClass}: IRankingList) => {
   const PAGE_SIZE = 20;
-
-  const {data, isLoadingError, fetchNextPage, hasNextPage} =
+  const {data, refetch, isLoadingError, fetchNextPage, hasNextPage} =
     useInfiniteFindCharacterRankingQuery(
       {
         take: PAGE_SIZE,
         cursor: 0,
+        className: selectedClass,
       },
       {
         getNextPageParam: lastPage => {
           if (lastPage.findCharacterRanking.length === PAGE_SIZE) {
-            console.log(
-              lastPage.findCharacterRanking[
-                lastPage.findCharacterRanking.length - 1
-              ].id,
-            );
             return {
               cursor:
                 lastPage.findCharacterRanking[
@@ -33,6 +31,13 @@ const RankingList = () => {
         keepPreviousData: true,
       },
     );
+
+  useEffect(() => {
+    console.log(selectedClass);
+    if (selectedClass) {
+      refetch();
+    }
+  }, [refetch, selectedClass]);
 
   const onEndReached = useCallback(async () => {
     if (hasNextPage) {

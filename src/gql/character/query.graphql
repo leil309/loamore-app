@@ -125,8 +125,8 @@ query FindCharacter($name: String!) {
     }
 }
 
-query FindCharacterRanking($cursor: BigInt, $take: Int) {
-    findCharacterRanking(cursor: $cursor, take: $take) {
+query FindCharacterRanking($cursor: BigInt, $take: Int, $className: [String!]) {
+    findCharacterRanking(cursor: $cursor, take: $take, className: $className) {
         classEngraving
         className
         guildName

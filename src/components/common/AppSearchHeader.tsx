@@ -30,17 +30,12 @@ import * as _ from 'lodash';
 
 interface IAppSearchHeader {
   rankingFilter?: boolean;
+  setSelectedClass?: Function;
 }
-interface IClassFilter {
-  id: any;
-  name: string;
-  image_uri?: string | null;
-  type: string;
-  engraving?: Array<{name: string; id: any; image_uri: string}> | null;
-  selected: boolean;
-}
-
-const AppSearchHeader = ({rankingFilter = false}: IAppSearchHeader) => {
+const AppSearchHeader = ({
+  rankingFilter = false,
+  setSelectedClass,
+}: IAppSearchHeader) => {
   const statusBarHeight =
     Platform.OS === 'ios'
       ? getStatusBarHeight(true)
@@ -49,7 +44,6 @@ const AppSearchHeader = ({rankingFilter = false}: IAppSearchHeader) => {
   const [headerHeight, setHeaderHeight] = useState<number>(osHeight);
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const [showHeader, setShowHeader] = useState<boolean>(false);
-  const [selectedClass, setSelectedClass] = useState<Array<string>>([]);
   const [characterName, setCharacterName] = useState('');
   const windowHeight = Dimensions.get('window').height;
 
@@ -129,7 +123,9 @@ const AppSearchHeader = ({rankingFilter = false}: IAppSearchHeader) => {
       return x;
     });
     setClassFilter(aaa);
-    setSelectedClass(selected);
+    if (setSelectedClass) {
+      setSelectedClass(selected);
+    }
   };
 
   return (

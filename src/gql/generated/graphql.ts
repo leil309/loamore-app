@@ -94,7 +94,7 @@ export type IQueryFindCharacterArgs = {
 };
 
 export type IQueryFindCharacterRankingArgs = {
-  className?: InputMaybe<Scalars['String']>;
+  className?: InputMaybe<Array<Scalars['String']>>;
   cursor?: InputMaybe<Scalars['BigInt']>;
   take?: InputMaybe<Scalars['Int']>;
 };
@@ -552,6 +552,7 @@ export type IFindCharacterQuery = {
 export type IFindCharacterRankingQueryVariables = Exact<{
   cursor?: InputMaybe<Scalars['BigInt']>;
   take?: InputMaybe<Scalars['Int']>;
+  className?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
 }>;
 
 export type IFindCharacterRankingQuery = {
@@ -897,8 +898,8 @@ export const useInfiniteFindCharacterQuery = <
 };
 
 export const FindCharacterRankingDocument = `
-    query FindCharacterRanking($cursor: BigInt, $take: Int) {
-  findCharacterRanking(cursor: $cursor, take: $take) {
+    query FindCharacterRanking($cursor: BigInt, $take: Int, $className: [String!]) {
+  findCharacterRanking(cursor: $cursor, take: $take, className: $className) {
     classEngraving
     className
     guildName
