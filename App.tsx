@@ -5,6 +5,7 @@ import {Provider} from 'react-redux';
 import UserLoader from '~/components/auth/UserLoader';
 import {useEffect} from 'react';
 import SplashScreen from 'react-native-splash-screen';
+import FilterLoader from '~/components/filter/FilterLoader';
 
 const queryClient = new QueryClient({defaultOptions: {queries: {retry: 1}}});
 
@@ -19,6 +20,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
         <UserLoader />
+        <FilterLoader />
         <AppNavigation />
       </Provider>
     </QueryClientProvider>

@@ -7,7 +7,7 @@ const Ranking = () => {
   return (
     <SafeAreaView style={mainContainer}>
       <RankingList />
-      <AppSearchHeader />
+      <AppSearchHeader rankingFilter={true} />
     </SafeAreaView>
   );
 };

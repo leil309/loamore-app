@@ -12,7 +12,7 @@ import {BlurView} from '@react-native-community/blur';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 interface IAppHeader {
-  canBack: boolean;
+  canBack?: boolean;
 }
 const AppHeader = ({canBack = false}: IAppHeader) => {
   const navigation = useNavigation();
@@ -21,8 +21,6 @@ const AppHeader = ({canBack = false}: IAppHeader) => {
     Platform.OS === 'ios'
       ? getStatusBarHeight(true)
       : StatusBar?.currentHeight || 0;
-
-  console.log(StatusBar.currentHeight);
 
   return (
     <View style={[{height: osHeight + statusBarHeight}, styles.blurContainer]}>

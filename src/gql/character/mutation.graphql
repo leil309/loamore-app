@@ -1,5 +1,5 @@
 mutation UpsertCharacter($name: String!) {
-    upsert(name: $name) {
+    upsertCharacter(name: $name) {
         attack_power
         character_accessory {
             additional_effect

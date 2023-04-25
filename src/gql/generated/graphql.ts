@@ -54,6 +54,10 @@ export type ICharacterSkillCount = {
   character_skill_tripod: Scalars['Int'];
 };
 
+export type IClassJobCount = {
+  engraving: Scalars['Int'];
+};
+
 export type IEngravingCount = {
   character_engraving: Scalars['Int'];
 };
@@ -67,10 +71,12 @@ export type IItemCount = {
 
 export type IMutation = {
   /** character 최신정보 조회 */
-  upsert: ICharacter;
+  upsertCharacter: ICharacter;
+  /** class 추출 */
+  upsertClass: Array<IClassJob>;
 };
 
-export type IMutationUpsertArgs = {
+export type IMutationUpsertCharacterArgs = {
   name: Scalars['String'];
 };
 
@@ -79,6 +85,8 @@ export type IQuery = {
   findCharacter: ICharacter;
   /** ranking 조회 */
   findCharacterRanking: Array<ICharacterRankOutput>;
+  /** class 목록 조회 */
+  findClass: Array<IClassJob>;
 };
 
 export type IQueryFindCharacterArgs = {
@@ -223,6 +231,16 @@ export type ICharacterSkillTripod = {
   use_yn: IUseYn;
 };
 
+/** This model has been renamed to 'classJob' during introspection, because the original name 'class' is reserved. */
+export type IClassJob = {
+  _count: IClassJobCount;
+  engraving?: Maybe<Array<IEngraving>>;
+  id: Scalars['BigInt'];
+  image_uri?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  type: Scalars['String'];
+};
+
 export enum IClassYn {
   N = 'N',
   Y = 'Y',
@@ -231,6 +249,8 @@ export enum IClassYn {
 export type IEngraving = {
   _count: IEngravingCount;
   character_engraving?: Maybe<Array<ICharacterEngraving>>;
+  classJob?: Maybe<IClassJob>;
+  class_id?: Maybe<Scalars['BigInt']>;
   class_yn: IClassYn;
   id: Scalars['BigInt'];
   image_uri: Scalars['String'];
@@ -290,7 +310,7 @@ export type IUpsertCharacterMutationVariables = Exact<{
 }>;
 
 export type IUpsertCharacterMutation = {
-  upsert: {
+  upsertCharacter: {
     attack_power: number;
     charisma: number;
     class: string;
@@ -550,9 +570,21 @@ export type IFindCharacterRankingQuery = {
   }>;
 };
 
+export type IFindClassQueryVariables = Exact<{[key: string]: never}>;
+
+export type IFindClassQuery = {
+  findClass: Array<{
+    id: any;
+    name: string;
+    image_uri?: string | null;
+    type: string;
+    engraving?: Array<{name: string; id: any; image_uri: string}> | null;
+  }>;
+};
+
 export const UpsertCharacterDocument = `
     mutation UpsertCharacter($name: String!) {
-  upsert(name: $name) {
+  upsertCharacter(name: $name) {
     attack_power
     character_accessory {
       additional_effect
@@ -917,6 +949,53 @@ export const useInfiniteFindCharacterRankingQuery = <
         ...variables,
         ...(metaData.pageParam ?? {}),
       })(),
+    options,
+  );
+};
+
+export const FindClassDocument = `
+    query FindClass {
+  findClass {
+    id
+    engraving {
+      name
+      id
+      image_uri
+    }
+    name
+    image_uri
+    type
+  }
+}
+    `;
+export const useFindClassQuery = <TData = IFindClassQuery, TError = unknown>(
+  variables?: IFindClassQueryVariables,
+  options?: UseQueryOptions<IFindClassQuery, TError, TData>,
+) =>
+  useQuery<IFindClassQuery, TError, TData>(
+    variables === undefined ? ['FindClass'] : ['FindClass', variables],
+    axiosFetcher<IFindClassQuery, IFindClassQueryVariables>(
+      FindClassDocument,
+      variables,
+    ),
+    options,
+  );
+export const useInfiniteFindClassQuery = <
+  TData = IFindClassQuery,
+  TError = unknown,
+>(
+  variables?: IFindClassQueryVariables,
+  options?: UseInfiniteQueryOptions<IFindClassQuery, TError, TData>,
+) => {
+  return useInfiniteQuery<IFindClassQuery, TError, TData>(
+    variables === undefined
+      ? ['FindClass.infinite']
+      : ['FindClass.infinite', variables],
+    metaData =>
+      axiosFetcher<IFindClassQuery, IFindClassQueryVariables>(
+        FindClassDocument,
+        {...variables, ...(metaData.pageParam ?? {})},
+      )(),
     options,
   );
 };

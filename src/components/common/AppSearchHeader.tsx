@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import Modal from 'react-native-modal';
@@ -22,7 +23,24 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import {HomeTabParamList} from '~/navigation/types';
-const AppSearchHeader = () => {
+import {baseText} from '~/components/styles';
+import {useSelector} from 'react-redux';
+import {RootState} from '~/store/reducder';
+import * as _ from 'lodash';
+
+interface IAppSearchHeader {
+  rankingFilter?: boolean;
+}
+interface IClassFilter {
+  id: any;
+  name: string;
+  image_uri?: string | null;
+  type: string;
+  engraving?: Array<{name: string; id: any; image_uri: string}> | null;
+  selected: boolean;
+}
+
+const AppSearchHeader = ({rankingFilter = false}: IAppSearchHeader) => {
   const statusBarHeight =
     Platform.OS === 'ios'
       ? getStatusBarHeight(true)
@@ -31,8 +49,10 @@ const AppSearchHeader = () => {
   const [headerHeight, setHeaderHeight] = useState<number>(osHeight);
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const [showHeader, setShowHeader] = useState<boolean>(false);
+  const [selectedClass, setSelectedClass] = useState<Array<string>>([]);
   const [characterName, setCharacterName] = useState('');
   const windowHeight = Dimensions.get('window').height;
+
   const showModal = () => {
     setShowHeader(true);
     setHeaderHeight(windowHeight);
@@ -49,6 +69,21 @@ const AppSearchHeader = () => {
   const {mutate} = useUpsertCharacterMutation();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<HomeTabParamList>>();
+  const findClass = useSelector((state: RootState) => state.filter.findClass);
+
+  const [classFilter, setClassFilter] = useState(
+    Object.entries(
+      _.groupBy(
+        findClass.map(x => {
+          return {
+            ...x,
+            selected: false,
+          };
+        }),
+        'type',
+      ),
+    ),
+  );
 
   const onSubmit = () => {
     if (characterName) {
@@ -78,6 +113,24 @@ const AppSearchHeader = () => {
   };
 
   const isFocused = useIsFocused();
+
+  const onPressClass = (classData: any) => {
+    const selected: Array<string> = [];
+    const aaa = classFilter.map(x => {
+      x[1] = x[1].map(y => {
+        if (y.name && y.name.trim() === classData.name.trim()) {
+          y.selected = !y.selected;
+        }
+        if (y.selected) {
+          selected.push(y.name);
+        }
+        return y;
+      });
+      return x;
+    });
+    setClassFilter(aaa);
+    setSelectedClass(selected);
+  };
 
   return (
     <View
@@ -134,8 +187,7 @@ const AppSearchHeader = () => {
           onBackdropPress={() => hideModal()}>
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
+              flexDirection: 'column',
               marginTop: 50,
               width: '100%',
               height: '100%',
@@ -163,6 +215,57 @@ const AppSearchHeader = () => {
                 <MaterialIcons name={'search'} size={30} color={'#8c9093'} />
               </Pressable>
             </View>
+            {showFilter && rankingFilter && !!classFilter ? (
+              <View style={[styles.filterWrapper, {height: windowHeight}]}>
+                {classFilter.map((cf, index: number) => {
+                  return (
+                    <View
+                      key={index}
+                      style={{
+                        flexDirection: 'column',
+                      }}>
+                      <View style={styles.filterRowWrapper}>
+                        <Text style={[baseText, {fontSize: 12}]}>{cf[0]}</Text>
+                      </View>
+                      <View
+                        style={[styles.filterRowWrapper, {flexWrap: 'wrap'}]}>
+                        {
+                          // @ts-ignore
+                          cf[1].map(classData => (
+                            <TouchableOpacity
+                              key={classData.name}
+                              onPress={() => onPressClass(classData)}
+                              style={{
+                                borderWidth: 0.5,
+                                borderColor: '#FFFFFF',
+                                borderRadius: 10,
+                                backgroundColor: classData.selected
+                                  ? '#e8e8e8'
+                                  : 'rgba(0,0,0,0.0)',
+                                padding: 3,
+                                margin: 2.5,
+                              }}>
+                              <Text
+                                style={[
+                                  baseText,
+                                  {
+                                    fontSize: 12,
+                                    color: classData.selected
+                                      ? '#232323'
+                                      : '#e8e8e8',
+                                  },
+                                ]}>
+                                {classData.name}
+                              </Text>
+                            </TouchableOpacity>
+                          ))
+                        }
+                      </View>
+                    </View>
+                  );
+                })}
+              </View>
+            ) : null}
           </View>
         </Modal>
       </View>
@@ -203,6 +306,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 50,
   },
+  filterWrapper: {
+    marginVertical: 5,
+    alignItems: 'flex-start',
+  },
+  filterRowWrapper: {
+    marginVertical: 2.5,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
   text: {
     color: '#FFFFFF',
   },
@@ -220,7 +332,6 @@ const styles = StyleSheet.create({
     flex: 1,
     borderColor: '#FFFFFF',
     color: '#FFFFFF',
-    alignItems: 'center',
   },
   title: {
     fontSize: 20,

@@ -1,0 +1,13 @@
+query FindClass {
+    findClass {
+        id
+        engraving {
+            name
+            id
+            image_uri
+        }
+        name
+        image_uri
+        type
+    }
+}
