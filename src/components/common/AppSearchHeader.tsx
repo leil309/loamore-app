@@ -1,5 +1,6 @@
 import {
   Dimensions,
+  Image,
   Platform,
   Pressable,
   StatusBar,
@@ -32,6 +33,11 @@ interface IAppSearchHeader {
   rankingFilter?: boolean;
   setSelectedClass?: Function;
 }
+
+interface IEngravingFilter {
+  image_uri: string;
+  name: string;
+}
 const AppSearchHeader = ({
   rankingFilter = false,
   setSelectedClass,
@@ -46,7 +52,9 @@ const AppSearchHeader = ({
   const [showHeader, setShowHeader] = useState<boolean>(false);
   const [characterName, setCharacterName] = useState('');
   const windowHeight = Dimensions.get('window').height;
-
+  const defaultImg = Image.resolveAssetSource(
+    require('assets/default-character.png'),
+  );
   const showModal = () => {
     setShowHeader(true);
     setHeaderHeight(windowHeight);
@@ -64,7 +72,6 @@ const AppSearchHeader = ({
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<HomeTabParamList>>();
   const findClass = useSelector((state: RootState) => state.filter.findClass);
-
   const [classFilter, setClassFilter] = useState(
     Object.entries(
       _.groupBy(
@@ -79,8 +86,12 @@ const AppSearchHeader = ({
     ),
   );
 
+  const [engravingFilter, setEngravingFilter] = useState<
+    Array<IEngravingFilter>
+  >([]);
+
   const onSubmit = () => {
-    if (characterName) {
+    if (characterName.trim()) {
       mutate(
         {
           name: characterName,
@@ -110,22 +121,28 @@ const AppSearchHeader = ({
 
   const onPressClass = (classData: any) => {
     const selected: Array<string> = [];
-    const aaa = classFilter.map(x => {
-      x[1] = x[1].map(y => {
-        if (y.name && y.name.trim() === classData.name.trim()) {
-          y.selected = !y.selected;
-        }
-        if (y.selected) {
-          selected.push(y.name);
-        }
-        return y;
-      });
-      return x;
-    });
-    setClassFilter(aaa);
+    const engravingFt: Array<IEngravingFilter> = [];
+    setClassFilter(
+      classFilter.map(x => {
+        x[1] = x[1].map(y => {
+          if (y.name && y.name.trim() === classData.name.trim()) {
+            y.selected = !y.selected;
+          }
+          if (y.selected) {
+            selected.push(y.name);
+            y.engraving?.map(eng => {
+              engravingFt.push({name: eng.name, image_uri: eng.image_uri});
+            });
+          }
+          return y;
+        });
+        return x;
+      }),
+    );
     if (setSelectedClass) {
       setSelectedClass(selected);
     }
+    setEngravingFilter(engravingFt);
   };
 
   return (
@@ -175,6 +192,11 @@ const AppSearchHeader = ({
           </View>
         ) : null}
         <Modal
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+          }}
           animationOut={'fadeOut'}
           animationIn={'fadeIn'}
           animationInTiming={500}
@@ -185,8 +207,6 @@ const AppSearchHeader = ({
             style={{
               flexDirection: 'column',
               marginTop: 50,
-              width: '100%',
-              height: '100%',
             }}>
             <View style={styles.inputWrapper}>
               <TextInput
@@ -211,17 +231,12 @@ const AppSearchHeader = ({
                 <MaterialIcons name={'search'} size={30} color={'#8c9093'} />
               </Pressable>
             </View>
-            {showFilter && rankingFilter && !!classFilter ? (
-              <View style={[styles.filterWrapper, {height: windowHeight}]}>
-                {classFilter.map((cf, index: number) => {
+            {showFilter && rankingFilter && !!classFilter
+              ? classFilter.map((cf, index: number) => {
                   return (
-                    <View
-                      key={index}
-                      style={{
-                        flexDirection: 'column',
-                      }}>
+                    <View key={index}>
                       <View style={styles.filterRowWrapper}>
-                        <Text style={[baseText, {fontSize: 12}]}>{cf[0]}</Text>
+                        <Text style={[baseText, {fontSize: 13}]}>{cf[0]}</Text>
                       </View>
                       <View
                         style={[styles.filterRowWrapper, {flexWrap: 'wrap'}]}>
@@ -259,7 +274,46 @@ const AppSearchHeader = ({
                       </View>
                     </View>
                   );
-                })}
+                })
+              : null}
+            {showFilter && rankingFilter && engravingFilter.length > 0 ? (
+              <View>
+                <View>
+                  <Text style={[baseText]}>직업각인</Text>
+                </View>
+                <View style={[styles.filterRowWrapper, {flexWrap: 'wrap'}]}>
+                  {engravingFilter.map((ef, index: number) => {
+                    return (
+                      <View key={index}>
+                        <TouchableOpacity
+                          style={{
+                            flexDirection: 'row',
+                            marginRight: 10,
+                            alignItems: 'center',
+                          }}>
+                          <Image
+                            defaultSource={defaultImg}
+                            source={{
+                              uri: ef.image_uri
+                                ? `https://cdn-lostark.game.onstove.com/${ef.image_uri}`
+                                : defaultImg.uri,
+                            }}
+                            style={{
+                              borderRadius: 99,
+                              borderColor: '#AAAAAA',
+                              borderWidth: 0.5,
+                              width: 25,
+                              height: 25,
+                              marginBottom: 1.5,
+                            }}
+                            resizeMode={'contain'}
+                          />
+                          <Text style={baseText}>{ef.name}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })}
+                </View>
               </View>
             ) : null}
           </View>

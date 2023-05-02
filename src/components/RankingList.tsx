@@ -3,7 +3,7 @@ import {FlatList, View} from 'react-native';
 import {useInfiniteFindCharacterRankingQuery} from '~/gql/generated/graphql';
 import RankingSkeleton from '~/components/skeleton/RankingSkeleton';
 import RankingCard from '~/components/RankingCard';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
 interface IRankingList {
   selectedClass?: Array<string>;
@@ -33,7 +33,6 @@ const RankingList = ({selectedClass}: IRankingList) => {
     );
 
   useEffect(() => {
-    console.log(selectedClass);
     if (selectedClass) {
       refetch();
     }
