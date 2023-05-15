@@ -140,3 +140,11 @@ query FindCharacterRanking($cursor: BigInt, $take: Int, $className: [String!]) {
         updDate
     }
 }
+
+query AnalyzeCharacter($name: String!) {
+    analyzeCharacter(name: $name) {
+        name
+        countByLevel
+        imageUri
+    }
+}

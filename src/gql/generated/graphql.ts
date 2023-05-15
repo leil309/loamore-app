@@ -1,13 +1,13 @@
 import {
-  useMutation,
-  useQuery,
   useInfiniteQuery,
-  UseMutationOptions,
-  UseQueryOptions,
   UseInfiniteQueryOptions,
-  QueryFunctionContext,
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+  UseQueryOptions,
 } from 'react-query';
 import {axiosFetcher} from './fetcher';
+
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends {[key: string]: unknown}> = {[K in keyof T]: T[K]};
@@ -36,6 +36,35 @@ export type ICharacterCount = {
   character_skill: Scalars['Int'];
 };
 
+export type ICharacterEngravingEngravingInput = {
+  class_yn: IClassYn;
+  id: Scalars['BigInt'];
+  image_uri: Scalars['String'];
+  info: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type ICharacterEngravingInput = {
+  engraving: ICharacterEngravingEngravingInput;
+  id: Scalars['BigInt'];
+  level: Scalars['Float'];
+  slot: Scalars['Float'];
+};
+
+export type ICharacterGemInput = {
+  class: Scalars['String'];
+  direction: Scalars['String'];
+  effectType: Scalars['String'];
+  imageUri: Scalars['String'];
+  level: Scalars['Float'];
+  name: Scalars['String'];
+  rate: Scalars['Float'];
+  skill: Scalars['String'];
+  skillIcon: Scalars['String'];
+  slot: Scalars['Float'];
+  tier: Scalars['Float'];
+};
+
 export type ICharacterRankOutput = {
   classEngraving?: Maybe<Array<Scalars['String']>>;
   className: Scalars['String'];
@@ -50,12 +79,51 @@ export type ICharacterRankOutput = {
   updDate: Scalars['DateTime'];
 };
 
+export type ICharacterStatsBasicInput = {
+  attack_power: Scalars['Float'];
+  max_health: Scalars['Float'];
+};
+
+export type ICharacterStatsBattleInput = {
+  critical: Scalars['Float'];
+  domination: Scalars['Float'];
+  endurance: Scalars['Float'];
+  expertise: Scalars['Float'];
+  specialization: Scalars['Float'];
+  swiftness: Scalars['Float'];
+};
+
+export type ICharacterStatsEngravingInput = {
+  level: Scalars['Float'];
+  name: Scalars['String'];
+};
+
+export type ICharacterStatsInput = {
+  basic: ICharacterStatsBasicInput;
+  battle: ICharacterStatsBattleInput;
+  engraving?: InputMaybe<Array<ICharacterStatsEngravingInput>>;
+  virtues: ICharacterStatsVirtuesInput;
+};
+
+export type ICharacterStatsVirtuesInput = {
+  charisma: Scalars['Float'];
+  courage: Scalars['Float'];
+  kindness: Scalars['Float'];
+  wisdom: Scalars['Float'];
+};
+
 export type ICharacterSkillCount = {
   character_skill_tripod: Scalars['Int'];
 };
 
 export type IClassJobCount = {
   engraving: Scalars['Int'];
+};
+
+export type ICompareEngravingOutput = {
+  countByLevel: Scalars['String'];
+  imageUri?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
 };
 
 export type IEngravingCount = {
@@ -77,16 +145,31 @@ export type IMutation = {
 };
 
 export type IMutationUpsertCharacterArgs = {
-  name: Scalars['String'];
+  class?: InputMaybe<Scalars['String']>;
+  engraving?: InputMaybe<Array<ICharacterEngravingInput>>;
+  gemList?: InputMaybe<Array<ICharacterGemInput>>;
+  guildName?: InputMaybe<Scalars['String']>;
+  imageUri?: InputMaybe<Scalars['String']>;
+  itemLevel?: InputMaybe<Scalars['Float']>;
+  level?: InputMaybe<Scalars['Float']>;
+  serverName?: InputMaybe<Scalars['String']>;
+  stats?: InputMaybe<ICharacterStatsInput>;
+  userName: Scalars['String'];
 };
 
 export type IQuery = {
+  /** character 분석 정보 조회 */
+  analyzeCharacter: Array<ICompareEngravingOutput>;
   /** character 빠른 조회 */
   findCharacter: ICharacter;
   /** ranking 조회 */
   findCharacterRanking: Array<ICharacterRankOutput>;
   /** class 목록 조회 */
   findClass: Array<IClassJob>;
+};
+
+export type IQueryAnalyzeCharacterArgs = {
+  name: Scalars['String'];
 };
 
 export type IQueryFindCharacterArgs = {
@@ -96,6 +179,7 @@ export type IQueryFindCharacterArgs = {
 export type IQueryFindCharacterRankingArgs = {
   className?: InputMaybe<Array<Scalars['String']>>;
   cursor?: InputMaybe<Scalars['BigInt']>;
+  engravingIds?: InputMaybe<Array<Scalars['BigInt']>>;
   take?: InputMaybe<Scalars['Int']>;
 };
 
@@ -306,7 +390,18 @@ export enum IUseYn {
 }
 
 export type IUpsertCharacterMutationVariables = Exact<{
-  name: Scalars['String'];
+  userName: Scalars['String'];
+  stats?: InputMaybe<ICharacterStatsInput>;
+  class?: InputMaybe<Scalars['String']>;
+  engraving?: InputMaybe<
+    Array<ICharacterEngravingInput> | ICharacterEngravingInput
+  >;
+  gemList?: InputMaybe<Array<ICharacterGemInput> | ICharacterGemInput>;
+  guildName?: InputMaybe<Scalars['String']>;
+  imageUri?: InputMaybe<Scalars['String']>;
+  itemLevel?: InputMaybe<Scalars['Float']>;
+  level?: InputMaybe<Scalars['Float']>;
+  serverName?: InputMaybe<Scalars['String']>;
 }>;
 
 export type IUpsertCharacterMutation = {
@@ -571,6 +666,18 @@ export type IFindCharacterRankingQuery = {
   }>;
 };
 
+export type IAnalyzeCharacterQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+export type IAnalyzeCharacterQuery = {
+  analyzeCharacter: Array<{
+    name: string;
+    countByLevel: string;
+    imageUri?: string | null;
+  }>;
+};
+
 export type IFindClassQueryVariables = Exact<{[key: string]: never}>;
 
 export type IFindClassQuery = {
@@ -584,8 +691,19 @@ export type IFindClassQuery = {
 };
 
 export const UpsertCharacterDocument = `
-    mutation UpsertCharacter($name: String!) {
-  upsertCharacter(name: $name) {
+    mutation UpsertCharacter($userName: String!, $stats: CharacterStatsInput, $class: String, $engraving: [CharacterEngravingInput!], $gemList: [CharacterGemInput!], $guildName: String, $imageUri: String, $itemLevel: Float, $level: Float, $serverName: String) {
+  upsertCharacter(
+    userName: $userName
+    stats: $stats
+    class: $class
+    engraving: $engraving
+    gemList: $gemList
+    guildName: $guildName
+    imageUri: $imageUri
+    itemLevel: $itemLevel
+    level: $level
+    serverName: $serverName
+  ) {
     attack_power
     character_accessory {
       additional_effect
@@ -950,6 +1068,48 @@ export const useInfiniteFindCharacterRankingQuery = <
         ...variables,
         ...(metaData.pageParam ?? {}),
       })(),
+    options,
+  );
+};
+
+export const AnalyzeCharacterDocument = `
+    query AnalyzeCharacter($name: String!) {
+  analyzeCharacter(name: $name) {
+    name
+    countByLevel
+    imageUri
+  }
+}
+    `;
+export const useAnalyzeCharacterQuery = <
+  TData = IAnalyzeCharacterQuery,
+  TError = unknown,
+>(
+  variables: IAnalyzeCharacterQueryVariables,
+  options?: UseQueryOptions<IAnalyzeCharacterQuery, TError, TData>,
+) =>
+  useQuery<IAnalyzeCharacterQuery, TError, TData>(
+    ['AnalyzeCharacter', variables],
+    axiosFetcher<IAnalyzeCharacterQuery, IAnalyzeCharacterQueryVariables>(
+      AnalyzeCharacterDocument,
+      variables,
+    ),
+    options,
+  );
+export const useInfiniteAnalyzeCharacterQuery = <
+  TData = IAnalyzeCharacterQuery,
+  TError = unknown,
+>(
+  variables: IAnalyzeCharacterQueryVariables,
+  options?: UseInfiniteQueryOptions<IAnalyzeCharacterQuery, TError, TData>,
+) => {
+  return useInfiniteQuery<IAnalyzeCharacterQuery, TError, TData>(
+    ['AnalyzeCharacter.infinite', variables],
+    metaData =>
+      axiosFetcher<IAnalyzeCharacterQuery, IAnalyzeCharacterQueryVariables>(
+        AnalyzeCharacterDocument,
+        {...variables, ...(metaData.pageParam ?? {})},
+      )(),
     options,
   );
 };

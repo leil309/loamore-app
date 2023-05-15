@@ -11,8 +11,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {BlurView} from '@react-native-community/blur';
 import {Platform, View} from 'react-native';
 import CompareStack from '~/navigation/home/CompareStack';
-import MarketStack from '~/navigation/home/MarketStack';
-import Ranking from '~/screens/Ranking';
 import RankingStack from '~/navigation/home/RankingStack';
 import MenuStack from '~/navigation/home/MenuStack';
 
@@ -90,26 +88,6 @@ const HomeTab = () => {
               name={focused ? 'person' : 'person-outline'}
               color={color}
               size={30}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name={'MarketStack'}
-        component={MarketStack}
-        listeners={{
-          tabPress: () =>
-            navigation.navigate('MarketStack', {
-              screen: 'Market',
-            }),
-        }}
-        options={{
-          tabBarLabel: '경매장',
-          tabBarIcon: ({color, focused}) => (
-            <MaterialIcons
-              name={focused ? 'gavel' : 'gavel'}
-              color={color}
-              size={26}
             />
           ),
         }}

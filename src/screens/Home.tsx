@@ -12,28 +12,45 @@ import BattleStatsCard from '~/components/BattleStatsCard';
 import GemCard from '~/components/GemCard';
 import AppSearchHeader from '~/components/common/AppSearchHeader';
 import {useFocusEffect} from '@react-navigation/native';
+import {getCharacter} from '~/components/common/GetCharacter';
 
 const Home = () => {
   const characterName = useAppSelector(state => state.user.characterName)?.name;
   const [character, setCharacter] = useState<ICharacter>();
 
+  const [cName, setCName] = useState<string>('');
+
   const {data, isLoadingError} = useFindCharacterQuery(
-    {name: characterName || ''},
-    {enabled: !!characterName},
+    {name: cName || ''},
+    {enabled: !!cName},
   );
 
   const {mutate} = useUpsertCharacterMutation();
 
   useFocusEffect(
     useCallback(() => {
-      mutate({
-        name: characterName || '최고성능의가드',
+      getCharacter({name: characterName || '최고성능의가드'}).then(res => {
+        setCName(JSON.stringify(res));
+        if (res) {
+          mutate({
+            userName: res.userName,
+          });
+        }
       });
     }, [characterName, mutate]),
   );
 
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     mutate({
+  //       name: cName || 'undefined',
+  //     });
+  //   }, [cName, mutate]),
+  // );
+
   useEffect(() => {
     if (data?.findCharacter) {
+      console.log(data.findCharacter.name);
       setCharacter(data.findCharacter);
     }
   }, [data]);
