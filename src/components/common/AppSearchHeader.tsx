@@ -25,13 +25,12 @@ import {
 } from '@react-navigation/native';
 import {HomeTabParamList} from '~/navigation/types';
 import {baseText} from '~/components/styles';
-import {useSelector} from 'react-redux';
-import {RootState} from '~/store/reducder';
-import * as _ from 'lodash';
-
+import {getCharacter} from '~/components/common/GetCharacter';
 interface IAppSearchHeader {
   rankingFilter?: boolean;
   setSelectedClass?: Function;
+  setClassFilter?: Function;
+  classFilter?: Array<any>;
 }
 
 interface IEngravingFilter {
@@ -41,6 +40,8 @@ interface IEngravingFilter {
 const AppSearchHeader = ({
   rankingFilter = false,
   setSelectedClass,
+  setClassFilter,
+  classFilter,
 }: IAppSearchHeader) => {
   const statusBarHeight =
     Platform.OS === 'ios'
@@ -71,20 +72,6 @@ const AppSearchHeader = ({
   const {mutate} = useUpsertCharacterMutation();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<HomeTabParamList>>();
-  const findClass = useSelector((state: RootState) => state.filter.findClass);
-  const [classFilter, setClassFilter] = useState(
-    Object.entries(
-      _.groupBy(
-        findClass.map(x => {
-          return {
-            ...x,
-            selected: false,
-          };
-        }),
-        'type',
-      ),
-    ),
-  );
 
   const [engravingFilter, setEngravingFilter] = useState<
     Array<IEngravingFilter>
@@ -92,28 +79,32 @@ const AppSearchHeader = ({
 
   const onSubmit = () => {
     if (characterName.trim()) {
-      mutate(
-        {
-          name: characterName,
-        },
-        {
-          onSuccess: () => {
-            dispatch(userSlice.actions.setCharacter({name: characterName}));
-            dispatch(
-              userSlice.actions.setCharacterInfo({
-                name: characterName,
-              }),
-            );
-            navigation.navigate('HomeStack', {
-              screen: 'Home',
-            });
-            hideModal();
-          },
-          onError: (e: any) => {
-            console.log(e);
-          },
-        },
-      );
+      getCharacter({name: characterName}).then(res => {
+        if (res) {
+          mutate(
+            {
+              args: JSON.stringify(res),
+            },
+            {
+              onSuccess: () => {
+                dispatch(userSlice.actions.setCharacter({name: characterName}));
+                dispatch(
+                  userSlice.actions.setCharacterInfo({
+                    name: characterName,
+                  }),
+                );
+                navigation.navigate('HomeStack', {
+                  screen: 'Home',
+                });
+                hideModal();
+              },
+              onError: (e: any) => {
+                console.log(e);
+              },
+            },
+          );
+        }
+      });
     }
   };
 
@@ -122,23 +113,25 @@ const AppSearchHeader = ({
   const onPressClass = (classData: any) => {
     const selected: Array<string> = [];
     const engravingFt: Array<IEngravingFilter> = [];
-    setClassFilter(
-      classFilter.map(x => {
-        x[1] = x[1].map(y => {
-          if (y.name && y.name.trim() === classData.name.trim()) {
-            y.selected = !y.selected;
-          }
-          if (y.selected) {
-            selected.push(y.name);
-            y.engraving?.map(eng => {
-              engravingFt.push({name: eng.name, image_uri: eng.image_uri});
-            });
-          }
-          return y;
-        });
-        return x;
-      }),
-    );
+    if (setClassFilter && classFilter) {
+      setClassFilter(
+        classFilter.map(x => {
+          x[1] = x[1].map(y => {
+            if (y.name && y.name.trim() === classData.name.trim()) {
+              y.selected = !y.selected;
+            }
+            if (y.selected) {
+              selected.push(y.name);
+              y.engraving?.map(eng => {
+                engravingFt.push({name: eng.name, image_uri: eng.image_uri});
+              });
+            }
+            return y;
+          });
+          return x;
+        }),
+      );
+    }
     if (setSelectedClass) {
       setSelectedClass(selected);
     }

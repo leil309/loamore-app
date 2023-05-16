@@ -1,6 +1,5 @@
-import {SafeAreaView, ScrollView, Text, View} from 'react-native';
+import {SafeAreaView, ScrollView} from 'react-native';
 import {contentContainer, mainContainer} from '~/components/styles';
-import AppSearchHeader from '~/components/common/AppSearchHeader';
 import CharacterCard from '~/components/CharacterCard';
 import {useCallback, useEffect, useState} from 'react';
 import {ICharacter} from '~/@types';
@@ -13,6 +12,7 @@ import {RankingStackScreenProps} from '~/navigation/types';
 import AppHeader from '~/components/common/AppHeader';
 import GemCard from '~/components/GemCard';
 import BattleStatsCard from '~/components/BattleStatsCard';
+import {getCharacter} from '~/components/common/GetCharacter';
 
 const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
   const {name: characterName} = route.params;
@@ -27,9 +27,15 @@ const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
 
   useFocusEffect(
     useCallback(() => {
-      mutate({
-        name: characterName || '최고성능의가드',
-      });
+      if (characterName) {
+        getCharacter({name: characterName}).then(res => {
+          if (res) {
+            mutate({
+              args: JSON.stringify(res),
+            });
+          }
+        });
+      }
     }, [characterName, mutate]),
   );
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
-import _ from 'lodash';
 import {
+  CounterYn,
   IAccessory,
   ICrawCharacter,
   IGear,
@@ -9,6 +9,7 @@ import {
   ITripod,
   SelectedYn,
 } from '~/@types';
+import _ from 'lodash';
 
 interface IGetCharacter {
   name: string;
@@ -18,24 +19,58 @@ const cheerio = require('react-native-cheerio');
 
 export const getCharacter = async ({name}: IGetCharacter) => {
   const reg = /<[^>]*>?/g;
-  const dt = await axios(
+  return await axios(
     `https://lostark.game.onstove.com/Profile/Character/${name}`,
     {
       method: 'get',
     },
   )
-    .then(response => response.data)
+    .then(response => {
+      return response.data;
+    })
     .then(html => {
       const $ = cheerio.load(html);
       let character: ICrawCharacter = {
+        accessoryList: undefined,
+        avatarList: undefined,
+        cardList: undefined,
+        elixir: undefined,
+        ownUserName: undefined,
+        skillList: [
+          {
+            name: '',
+            class: '',
+            imageUri: '',
+            level: 0,
+            counterYn: CounterYn.N,
+            superArmor: '',
+            weakPoint: 0,
+            staggerValue: '',
+            attackType: '',
+            tripods: [
+              {
+                name: '',
+                skillName: '',
+                imageUri: '',
+                level: 0,
+                tier: 0,
+                slot: 0,
+                selected: SelectedYn.N,
+              },
+            ],
+            rune: null,
+          },
+        ],
         userName: '',
         class: '',
-        level: undefined,
-        itemLevel: undefined,
-        guildName: '',
-        serverName: '',
+        engraving: undefined,
+        gearList: undefined,
+        gemList: undefined,
+        guildName: undefined,
         imageUri: '',
-        engraving: [],
+        itemLevel: 0,
+        level: 0,
+        serverName: '',
         stats: {
           basic: {
             attack_power: 0,
@@ -43,29 +78,20 @@ export const getCharacter = async ({name}: IGetCharacter) => {
           },
           battle: {
             critical: 0,
-            specialization: 0,
             domination: 0,
-            swiftness: 0,
             endurance: 0,
             expertise: 0,
+            specialization: 0,
+            swiftness: 0,
           },
+          engraving: undefined,
           virtues: {
-            wisdom: 0,
-            courage: 0,
             charisma: 0,
+            courage: 0,
             kindness: 0,
+            wisdom: 0,
           },
-          engraving: [],
         },
-        skillList: [],
-        skillAdditionalInfo: [],
-        gearList: [],
-        accessoryList: [],
-        gemList: [],
-        avatarList: [],
-        cardList: [],
-        elixir: [],
-        ownUserName: [],
       };
 
       // 닉네임
@@ -153,15 +179,14 @@ export const getCharacter = async ({name}: IGetCharacter) => {
         const counterYnMatch = counterYnRegex.exec(data);
         const superArmorMatch = superArmorRegex.exec(data);
 
-        const skill = {
+        return {
           name: nameMatch ? nameMatch[1].trim() : '',
           class: character.class,
           imageUri: imageUriMatch ? imageUriMatch[1].trim() : '',
           level: levelMatch ? parseInt(levelMatch[1].trim()) : 0,
           counterYn: counterYnMatch ? 'Y' : 'N',
           superArmor: superArmorMatch
-            ? // @ts-ignore
-              superArmorRegex.exec(data)[1].replace('카운터 : 가능', '').trim()
+            ? superArmorMatch[1].replace('카운터 : 가능', '').trim()
             : '',
           weakPoint: weakPointMatch ? parseInt(weakPointMatch[1].trim()) : 0,
           staggerValue: staggerValueMatch ? staggerValueMatch[1].trim() : '',
@@ -169,7 +194,6 @@ export const getCharacter = async ({name}: IGetCharacter) => {
           tripods: null,
           rune: null,
         };
-        return skill;
       });
 
       const tripodList = $(
@@ -266,16 +290,20 @@ export const getCharacter = async ({name}: IGetCharacter) => {
           return gem;
         });
 
-      // @ts-ignore
-      character.gemList = gemList.map(x => {
-        const aa = scriptJson.GemSkillEffect.find(y => y.SkillName === x.skill);
-        if (aa) {
-          return {
-            ...x,
-            skillIcon: aa.SkillIcon,
-          };
-        }
-      });
+      if (gemList) {
+        // @ts-ignore
+        character.gemList = gemList.map(x => {
+          const gem = scriptJson.GemSkillEffect.find(
+            (y: {SkillName: string}) => y.SkillName === x.skill,
+          );
+          if (gem) {
+            return {
+              ...x,
+              skillIcon: gem.SkillIcon,
+            };
+          }
+        });
+      }
 
       character.gearList = Object.entries(scriptJson.Equip)
         .filter(obj => !obj[0].match('Gem'))
@@ -447,25 +475,26 @@ export const getCharacter = async ({name}: IGetCharacter) => {
         };
 
         if (isClassMatch) {
+          // @ts-ignore
           res.classYn = isClassMatch[1] === '직업' ? 'Y' : 'N';
         }
         if (classMatch) {
+          // @ts-ignore
           res.className = classMatch[1].replace(' 전용', '');
         }
 
         return res;
       });
 
+      // @ts-ignore
       character.engraving = _.values(
         _.merge(
           _.keyBy(character.stats.engraving, 'name'),
           _.keyBy(engravingInfo, 'name'),
         ),
       );
-
       return character;
     });
-  return dt;
 };
 
 const basicStats = ($: any) => {
@@ -476,6 +505,7 @@ const basicStats = ($: any) => {
       )
         .text()
         .trim(),
+      10,
     ),
     max_health: parseInt(
       $(
@@ -483,6 +513,7 @@ const basicStats = ($: any) => {
       )
         .text()
         .trim(),
+      10,
     ),
   };
 };
@@ -494,6 +525,7 @@ const battleStats = ($: any) => {
       )
         .text()
         .trim(),
+      10,
     ),
     specialization: parseInt(
       $(
@@ -501,6 +533,7 @@ const battleStats = ($: any) => {
       )
         .text()
         .trim(),
+      10,
     ),
     domination: parseInt(
       $(
@@ -508,6 +541,7 @@ const battleStats = ($: any) => {
       )
         .text()
         .trim(),
+      10,
     ),
     swiftness: parseInt(
       $(
@@ -515,6 +549,7 @@ const battleStats = ($: any) => {
       )
         .text()
         .trim(),
+      10,
     ),
     endurance: parseInt(
       $(
@@ -522,6 +557,7 @@ const battleStats = ($: any) => {
       )
         .text()
         .trim(),
+      10,
     ),
     expertise: parseInt(
       $(
@@ -529,6 +565,7 @@ const battleStats = ($: any) => {
       )
         .text()
         .trim(),
+      10,
     ),
   };
 };
@@ -538,10 +575,10 @@ const virtues = ($: any) => {
   const match = data.match(regex);
 
   return {
-    wisdom: parseInt(match[1]),
-    courage: parseInt(match[2]),
-    charisma: parseInt(match[3]),
-    kindness: parseInt(match[4]),
+    wisdom: parseInt(match[1], 10),
+    courage: parseInt(match[2], 10),
+    charisma: parseInt(match[3], 10),
+    kindness: parseInt(match[4], 10),
   };
 };
 const engraving = ($: any) => {
@@ -555,7 +592,7 @@ const engraving = ($: any) => {
   while ((match = regex.exec(data)) !== null) {
     engravings.push({
       name: match[1].trim(),
-      level: parseInt(match[2]),
+      level: parseInt(match[2], 10),
     });
   }
 

@@ -9,6 +9,7 @@ const FilterLoader = () => {
 
   useEffect(() => {
     if (data && !isLoadingError) {
+      console.log('asdasdasdasdsad');
       dispatch(filterSlice.actions.setFilter(data));
     }
   }, [data, dispatch, isLoadingError]);

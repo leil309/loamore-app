@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView} from 'react-native';
+import {ActivityIndicator, SafeAreaView, ScrollView, View} from 'react-native';
 import {useAppSelector} from '~/store';
 import {useCallback, useEffect, useState} from 'react';
 import CharacterCard from '~/components/CharacterCard';
@@ -15,78 +15,81 @@ import {useFocusEffect} from '@react-navigation/native';
 import {getCharacter} from '~/components/common/GetCharacter';
 
 const Home = () => {
-  const characterName = useAppSelector(state => state.user.characterName)?.name;
+  const characterName =
+    useAppSelector(state => state.user.characterName)?.name || '최고성능의가드';
   const [character, setCharacter] = useState<ICharacter>();
 
-  const [cName, setCName] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {data, isLoadingError} = useFindCharacterQuery(
-    {name: cName || ''},
-    {enabled: !!cName},
+    {name: characterName},
+    {enabled: !!characterName},
   );
 
   const {mutate} = useUpsertCharacterMutation();
 
   useFocusEffect(
     useCallback(() => {
-      getCharacter({name: characterName || '최고성능의가드'}).then(res => {
-        setCName(JSON.stringify(res));
-        if (res) {
-          mutate({
-            userName: res.userName,
-          });
-        }
-      });
+      if (characterName) {
+        console.log('start');
+        setLoading(true);
+        getCharacter({name: characterName}).then(res => {
+          console.log('end');
+          setLoading(false);
+          if (res) {
+            mutate({
+              args: JSON.stringify(res),
+            });
+          }
+        });
+      }
     }, [characterName, mutate]),
   );
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     mutate({
-  //       name: cName || 'undefined',
-  //     });
-  //   }, [cName, mutate]),
-  // );
-
   useEffect(() => {
     if (data?.findCharacter) {
-      console.log(data.findCharacter.name);
       setCharacter(data.findCharacter);
     }
   }, [data]);
 
   return (
     <SafeAreaView style={mainContainer}>
-      <ScrollView
-        contentContainerStyle={[contentContainer, {paddingBottom: 135}]}>
-        {!isLoadingError && character ? (
-          <>
-            <CharacterCard
-              imageUri={character.image_uri}
-              name={character.name}
-              level={character.level}
-              item_level={character.item_level}
-              server={character.server_name}
-              guild={character.guild_name}
-              job={character.class}
-            />
-            <GemCard gemList={character.character_gem} />
-            <BattleStatsCard
-              critical={character.critical}
-              domination={character.domination}
-              specialization={character.specialization}
-              swiftness={character.swiftness}
-              endurance={character.endurance}
-              expertise={character.expertise}
-              wisdom={character.wisdom}
-              courage={character.courage}
-              charisma={character.charisma}
-              kindness={character.kindness}
-              engraving={character.character_engraving}
-            />
-          </>
-        ) : null}
-      </ScrollView>
+      {loading && !data ? (
+        <View style={{height: '100%', justifyContent: 'center'}}>
+          <ActivityIndicator size={'large'} color={'#FFFFFF'} />
+        </View>
+      ) : (
+        <ScrollView
+          contentContainerStyle={[contentContainer, {paddingBottom: 135}]}>
+          {!isLoadingError && character ? (
+            <>
+              <CharacterCard
+                imageUri={character.image_uri}
+                name={character.name}
+                level={character.level}
+                item_level={character.item_level}
+                server={character.server_name}
+                guild={character.guild_name}
+                job={character.class}
+              />
+              <GemCard gemList={character.character_gem} />
+              <BattleStatsCard
+                critical={character.critical}
+                domination={character.domination}
+                specialization={character.specialization}
+                swiftness={character.swiftness}
+                endurance={character.endurance}
+                expertise={character.expertise}
+                wisdom={character.wisdom}
+                courage={character.courage}
+                charisma={character.charisma}
+                kindness={character.kindness}
+                engraving={character.character_engraving}
+              />
+            </>
+          ) : null}
+        </ScrollView>
+      )}
       <AppSearchHeader />
     </SafeAreaView>
   );

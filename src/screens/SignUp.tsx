@@ -13,6 +13,7 @@ import {useAppDispatch} from '../store';
 import userSlice from '../slices/userSlice';
 import {baseCard, baseText, mainContainer} from '~/components/styles';
 import {useUpsertCharacterMutation} from '~/gql/generated/graphql';
+import {getCharacter} from '~/components/common/GetCharacter';
 
 const SignUp = () => {
   const dispatch = useAppDispatch();
@@ -21,24 +22,26 @@ const SignUp = () => {
   const {mutate} = useUpsertCharacterMutation();
   const onSubmit = () => {
     if (charName.trim()) {
-      mutate(
-        {
-          name: charName,
-        },
-        {
-          onSuccess: () => {
-            dispatch(userSlice.actions.setCharacter({name: charName.trim()}));
-            dispatch(
-              userSlice.actions.setCharacterInfo({
-                name: charName.trim(),
-              }),
-            );
+      getCharacter({name: charName}).then(res => {
+        mutate(
+          {
+            args: JSON.stringify(res),
           },
-          onError: (e: any) => {
-            console.log(e);
+          {
+            onSuccess: () => {
+              dispatch(userSlice.actions.setCharacter({name: charName.trim()}));
+              dispatch(
+                userSlice.actions.setCharacterInfo({
+                  name: charName.trim(),
+                }),
+              );
+            },
+            onError: (e: any) => {
+              console.log(e);
+            },
           },
-        },
-      );
+        );
+      });
     }
   };
 

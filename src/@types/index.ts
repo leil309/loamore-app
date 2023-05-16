@@ -1,4 +1,7 @@
 import {
+  ICharacterEngravingInput,
+  ICharacterGearInput,
+  ICharacterGemInput,
   ICharacterSkillCounterYn,
   ICharacterStatsInput,
   IClassYn,
@@ -173,11 +176,7 @@ export interface IGem {
   rate: number;
   effectType: string;
   direction: string;
-  EquipGemSlotIndex?: number | undefined | null;
-  SkillDesc?: string | undefined | null;
-  SkillIcon?: string | undefined | null;
-  SkillName?: string | undefined | null;
-  SkillSlotIndex?: number | undefined | null;
+  skillIcon?: string | undefined | null;
 }
 
 export interface IGear {
@@ -261,18 +260,41 @@ export interface ICrawCharacter {
   userName: string;
   level: any;
   itemLevel: any;
-  guildName: string;
+  guildName?: string;
   serverName: string;
-  stats: ICharacterStatsInput;
+  stats: {
+    basic: {
+      attack_power: number;
+      max_health: number;
+    };
+    battle: {
+      critical: number;
+      specialization: number;
+      domination: number;
+      swiftness: number;
+      endurance: number;
+      expertise: number;
+    };
+    virtues: {
+      wisdom: number;
+      courage: number;
+      charisma: number;
+      kindness: number;
+    };
+    engraving?: Array<IStatsEngraving> | undefined | null;
+  };
   imageUri: string;
-  engraving: Array<IEngraving>;
-  gemList: Array<IGem>;
-  gearList: Array<IGear>;
-  accessoryList: Array<IAccessory>;
+  engraving?: Array<IEngraving>;
+  gemList?: Array<IGem>;
+  gearList?: Array<IGear>;
+  accessoryList?: Array<IAccessory>;
   skillList: Array<ISkill>;
-  skillAdditionalInfo: Array<ISkillAdd>;
-  avatarList: Array<any>;
-  cardList: Array<any>;
-  elixir: Array<any>;
-  ownUserName: Array<any>;
+  avatarList?: Array<any>;
+  cardList?: Array<any>;
+  elixir?: Array<any>;
+  ownUserName?: Array<any>;
+}
+export interface IStatsEngraving {
+  name: string;
+  level: number;
 }

@@ -1,5 +1,5 @@
-mutation UpsertCharacter($userName: String!, $stats: CharacterStatsInput, $class: String, $engraving: [CharacterEngravingInput!], $gemList: [CharacterGemInput!], $guildName: String, $imageUri: String, $itemLevel: Float, $level: Float, $serverName: String) {
-    upsertCharacter(userName: $userName, stats: $stats, class: $class, engraving: $engraving, gemList: $gemList, guildName: $guildName, imageUri: $imageUri, itemLevel: $itemLevel, level: $level, serverName: $serverName) {
+mutation UpsertCharacter($args: String!) {
+    upsertCharacter(args: $args) {
         attack_power
         character_accessory {
             additional_effect

@@ -1,13 +1,13 @@
 import {
-  useInfiniteQuery,
-  UseInfiniteQueryOptions,
   useMutation,
-  UseMutationOptions,
   useQuery,
+  useInfiniteQuery,
+  UseMutationOptions,
   UseQueryOptions,
+  UseInfiniteQueryOptions,
+  QueryFunctionContext,
 } from 'react-query';
 import {axiosFetcher} from './fetcher';
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends {[key: string]: unknown}> = {[K in keyof T]: T[K]};
@@ -36,35 +36,6 @@ export type ICharacterCount = {
   character_skill: Scalars['Int'];
 };
 
-export type ICharacterEngravingEngravingInput = {
-  class_yn: IClassYn;
-  id: Scalars['BigInt'];
-  image_uri: Scalars['String'];
-  info: Scalars['String'];
-  name: Scalars['String'];
-};
-
-export type ICharacterEngravingInput = {
-  engraving: ICharacterEngravingEngravingInput;
-  id: Scalars['BigInt'];
-  level: Scalars['Float'];
-  slot: Scalars['Float'];
-};
-
-export type ICharacterGemInput = {
-  class: Scalars['String'];
-  direction: Scalars['String'];
-  effectType: Scalars['String'];
-  imageUri: Scalars['String'];
-  level: Scalars['Float'];
-  name: Scalars['String'];
-  rate: Scalars['Float'];
-  skill: Scalars['String'];
-  skillIcon: Scalars['String'];
-  slot: Scalars['Float'];
-  tier: Scalars['Float'];
-};
-
 export type ICharacterRankOutput = {
   classEngraving?: Maybe<Array<Scalars['String']>>;
   className: Scalars['String'];
@@ -77,39 +48,6 @@ export type ICharacterRankOutput = {
   serverName: Scalars['String'];
   setItem?: Maybe<Array<Scalars['String']>>;
   updDate: Scalars['DateTime'];
-};
-
-export type ICharacterStatsBasicInput = {
-  attack_power: Scalars['Float'];
-  max_health: Scalars['Float'];
-};
-
-export type ICharacterStatsBattleInput = {
-  critical: Scalars['Float'];
-  domination: Scalars['Float'];
-  endurance: Scalars['Float'];
-  expertise: Scalars['Float'];
-  specialization: Scalars['Float'];
-  swiftness: Scalars['Float'];
-};
-
-export type ICharacterStatsEngravingInput = {
-  level: Scalars['Float'];
-  name: Scalars['String'];
-};
-
-export type ICharacterStatsInput = {
-  basic: ICharacterStatsBasicInput;
-  battle: ICharacterStatsBattleInput;
-  engraving?: InputMaybe<Array<ICharacterStatsEngravingInput>>;
-  virtues: ICharacterStatsVirtuesInput;
-};
-
-export type ICharacterStatsVirtuesInput = {
-  charisma: Scalars['Float'];
-  courage: Scalars['Float'];
-  kindness: Scalars['Float'];
-  wisdom: Scalars['Float'];
 };
 
 export type ICharacterSkillCount = {
@@ -145,16 +83,7 @@ export type IMutation = {
 };
 
 export type IMutationUpsertCharacterArgs = {
-  class?: InputMaybe<Scalars['String']>;
-  engraving?: InputMaybe<Array<ICharacterEngravingInput>>;
-  gemList?: InputMaybe<Array<ICharacterGemInput>>;
-  guildName?: InputMaybe<Scalars['String']>;
-  imageUri?: InputMaybe<Scalars['String']>;
-  itemLevel?: InputMaybe<Scalars['Float']>;
-  level?: InputMaybe<Scalars['Float']>;
-  serverName?: InputMaybe<Scalars['String']>;
-  stats?: InputMaybe<ICharacterStatsInput>;
-  userName: Scalars['String'];
+  args: Scalars['String'];
 };
 
 export type IQuery = {
@@ -390,18 +319,7 @@ export enum IUseYn {
 }
 
 export type IUpsertCharacterMutationVariables = Exact<{
-  userName: Scalars['String'];
-  stats?: InputMaybe<ICharacterStatsInput>;
-  class?: InputMaybe<Scalars['String']>;
-  engraving?: InputMaybe<
-    Array<ICharacterEngravingInput> | ICharacterEngravingInput
-  >;
-  gemList?: InputMaybe<Array<ICharacterGemInput> | ICharacterGemInput>;
-  guildName?: InputMaybe<Scalars['String']>;
-  imageUri?: InputMaybe<Scalars['String']>;
-  itemLevel?: InputMaybe<Scalars['Float']>;
-  level?: InputMaybe<Scalars['Float']>;
-  serverName?: InputMaybe<Scalars['String']>;
+  args: Scalars['String'];
 }>;
 
 export type IUpsertCharacterMutation = {
@@ -691,19 +609,8 @@ export type IFindClassQuery = {
 };
 
 export const UpsertCharacterDocument = `
-    mutation UpsertCharacter($userName: String!, $stats: CharacterStatsInput, $class: String, $engraving: [CharacterEngravingInput!], $gemList: [CharacterGemInput!], $guildName: String, $imageUri: String, $itemLevel: Float, $level: Float, $serverName: String) {
-  upsertCharacter(
-    userName: $userName
-    stats: $stats
-    class: $class
-    engraving: $engraving
-    gemList: $gemList
-    guildName: $guildName
-    imageUri: $imageUri
-    itemLevel: $itemLevel
-    level: $level
-    serverName: $serverName
-  ) {
+    mutation UpsertCharacter($args: String!) {
+  upsertCharacter(args: $args) {
     attack_power
     character_accessory {
       additional_effect
