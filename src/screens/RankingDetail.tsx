@@ -1,7 +1,7 @@
 import {SafeAreaView, ScrollView} from 'react-native';
 import {contentContainer, mainContainer} from '~/components/styles';
 import CharacterCard from '~/components/CharacterCard';
-import {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ICharacter} from '~/@types';
 import {
   useFindCharacterQuery,
@@ -17,26 +17,40 @@ import {getCharacter} from '~/components/common/GetCharacter';
 const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
   const {name: characterName} = route.params;
   const [character, setCharacter] = useState<ICharacter>();
-
   const {data, isLoadingError} = useFindCharacterQuery(
     {name: characterName || ''},
-    {enabled: !!characterName},
+    {enabled: !!characterName, cacheTime: 0},
   );
 
   const {mutate} = useUpsertCharacterMutation();
-
   useFocusEffect(
     useCallback(() => {
       if (characterName) {
-        getCharacter({name: characterName}).then(res => {
-          if (res) {
-            mutate({
-              args: JSON.stringify(res),
-            });
-          }
-        });
+        const min = character
+          ? (new Date().getTime() - Date.parse(character.upd_date)) / 1000 / 60
+          : 0;
+        console.log(character?.name);
+        console.log(min);
+        if (min > 3) {
+          console.log('start');
+          getCharacter({name: characterName}).then(res => {
+            console.log('end');
+            if (res) {
+              mutate(
+                {
+                  args: JSON.stringify(res),
+                },
+                {
+                  onSuccess: result => {
+                    setCharacter(result.upsertCharacter);
+                  },
+                },
+              );
+            }
+          });
+        }
       }
-    }, [characterName, mutate]),
+    }, [character, characterName, mutate]),
   );
 
   useEffect(() => {

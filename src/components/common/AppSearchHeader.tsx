@@ -116,18 +116,20 @@ const AppSearchHeader = ({
     if (setClassFilter && classFilter) {
       setClassFilter(
         classFilter.map(x => {
-          x[1] = x[1].map(y => {
-            if (y.name && y.name.trim() === classData.name.trim()) {
-              y.selected = !y.selected;
-            }
-            if (y.selected) {
-              selected.push(y.name);
-              y.engraving?.map(eng => {
-                engravingFt.push({name: eng.name, image_uri: eng.image_uri});
-              });
-            }
-            return y;
-          });
+          x[1] = x[1].map(
+            (y: {name: string; selected: boolean; engraving: any[]}) => {
+              if (y.name && y.name.trim() === classData.name.trim()) {
+                y.selected = !y.selected;
+              }
+              if (y.selected) {
+                selected.push(y.name);
+                y.engraving?.map(eng => {
+                  engravingFt.push({name: eng.name, image_uri: eng.image_uri});
+                });
+              }
+              return y;
+            },
+          );
           return x;
         }),
       );

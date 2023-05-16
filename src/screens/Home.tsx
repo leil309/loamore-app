@@ -23,27 +23,43 @@ const Home = () => {
 
   const {data, isLoadingError} = useFindCharacterQuery(
     {name: characterName},
-    {enabled: !!characterName},
+    {enabled: !!characterName, cacheTime: 0},
   );
 
   const {mutate} = useUpsertCharacterMutation();
-
   useFocusEffect(
     useCallback(() => {
       if (characterName) {
-        console.log('start');
-        setLoading(true);
-        getCharacter({name: characterName}).then(res => {
-          console.log('end');
-          setLoading(false);
-          if (res) {
-            mutate({
-              args: JSON.stringify(res),
+        const min = character
+          ? (new Date().getTime() - Date.parse(character.upd_date)) / 1000 / 60
+          : 0;
+        console.log(character?.name);
+        console.log(min);
+        if (min > 3) {
+          console.log('start');
+          setLoading(true);
+          getCharacter({name: characterName})
+            .then(res => {
+              console.log('end');
+              if (res) {
+                mutate(
+                  {
+                    args: JSON.stringify(res),
+                  },
+                  {
+                    onSuccess: result => {
+                      setCharacter(result.upsertCharacter);
+                    },
+                  },
+                );
+              }
+            })
+            .finally(() => {
+              setLoading(false);
             });
-          }
-        });
+        }
       }
-    }, [characterName, mutate]),
+    }, [character, characterName, mutate]),
   );
 
   useEffect(() => {
