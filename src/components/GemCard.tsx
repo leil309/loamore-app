@@ -7,7 +7,7 @@ interface IGemCard {
 }
 
 const GemCard = ({gemList}: IGemCard) => {
-  const gemTypeRegex = /\s(홍|멸)/;
+  const gemTypeRegex = /\s(홍|멸|청|원)/;
 
   return (
     <View style={[mainContainer, {marginTop: 15}]}>

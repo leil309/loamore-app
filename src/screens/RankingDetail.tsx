@@ -17,6 +17,7 @@ import {getCharacter} from '~/components/common/GetCharacter';
 const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
   const {name: characterName} = route.params;
   const [character, setCharacter] = useState<ICharacter>();
+  const [loading, setLoading] = useState<boolean>(false);
   const {data, isLoadingError} = useFindCharacterQuery(
     {name: characterName || ''},
     {enabled: !!characterName, cacheTime: 0},
@@ -29,25 +30,26 @@ const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
         const min = character
           ? (new Date().getTime() - Date.parse(character.upd_date)) / 1000 / 60
           : 0;
-        console.log(character?.name);
-        console.log(min);
         if (min > 3) {
-          console.log('start');
-          getCharacter({name: characterName}).then(res => {
-            console.log('end');
-            if (res) {
-              mutate(
-                {
-                  args: JSON.stringify(res),
-                },
-                {
-                  onSuccess: result => {
-                    setCharacter(result.upsertCharacter);
+          setLoading(true);
+          getCharacter({name: characterName})
+            .then(res => {
+              if (res) {
+                mutate(
+                  {
+                    args: JSON.stringify(res),
                   },
-                },
-              );
-            }
-          });
+                  {
+                    onSuccess: result => {
+                      setCharacter(result.upsertCharacter);
+                    },
+                  },
+                );
+              }
+            })
+            .finally(() => {
+              setLoading(false);
+            });
         }
       }
     }, [character, characterName, mutate]),
@@ -66,6 +68,7 @@ const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
         {!isLoadingError && character ? (
           <>
             <CharacterCard
+              isLoading={loading}
               imageUri={character.image_uri}
               name={character.name}
               level={character.level}
