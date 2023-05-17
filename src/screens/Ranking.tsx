@@ -7,8 +7,11 @@ import {useFocusEffect} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {RootState} from '~/store/reducder';
 import * as _ from 'lodash';
+
 const Ranking = () => {
   const [selectedClass, setSelectedClass] = useState<string[]>([]);
+  const [selectedEngraving, setSelectedEngraving] = useState<number[]>([]);
+
   const findClass = useSelector((state: RootState) => state.filter.findClass);
   const [classFilter, setClassFilter] = useState(
     Object.entries(
@@ -45,10 +48,14 @@ const Ranking = () => {
 
   return (
     <SafeAreaView style={mainContainer}>
-      <RankingList selectedClass={selectedClass} />
+      <RankingList
+        selectedClass={selectedClass}
+        selectedEngraving={selectedEngraving}
+      />
       <AppSearchHeader
         rankingFilter={true}
         setSelectedClass={setSelectedClass}
+        setSelectedEngraving={setSelectedEngraving}
         setClassFilter={setClassFilter}
         classFilter={classFilter}
       />

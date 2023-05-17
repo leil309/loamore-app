@@ -1,8 +1,7 @@
 import axios from 'axios';
-import Config from 'react-native-config';
 
 export const baseInstance = axios.create({
-  baseURL: Config.API_URL,
+  baseURL: 'http://127.0.0.1:4001/graphql', //Config.API_URL,
   timeout: 5000,
 });
 baseInstance.interceptors.request.use(

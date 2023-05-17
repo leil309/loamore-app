@@ -1,8 +1,16 @@
-import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {Colors} from '~/components/common/Colors';
 import {baseText, mainContainer} from '~/components/styles';
 
 interface ICharacterCard {
+  isLoading: boolean;
   imageUri?: string;
   name: string;
   level: number;
@@ -12,6 +20,7 @@ interface ICharacterCard {
   job: string;
 }
 const CharacterCard = ({
+  isLoading,
   imageUri,
   name,
   level,
@@ -59,6 +68,13 @@ const CharacterCard = ({
               styles.image,
             ]}
           />
+          {isLoading ? (
+            <ActivityIndicator
+              style={{position: 'absolute', right: 0}}
+              size={'large'}
+              color={'#FFFFFF'}
+            />
+          ) : null}
           <Text
             style={[
               baseText,

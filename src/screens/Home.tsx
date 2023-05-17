@@ -80,6 +80,7 @@ const Home = () => {
           {!isLoadingError && character ? (
             <>
               <CharacterCard
+                isLoading={loading}
                 imageUri={character.image_uri}
                 name={character.name}
                 level={character.level}

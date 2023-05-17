@@ -20,26 +20,32 @@ import {useUpsertCharacterMutation} from '~/gql/generated/graphql';
 import {useAppDispatch} from '~/store';
 import {
   NavigationProp,
+  useFocusEffect,
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
 import {HomeTabParamList} from '~/navigation/types';
 import {baseText} from '~/components/styles';
 import {getCharacter} from '~/components/common/GetCharacter';
+
 interface IAppSearchHeader {
   rankingFilter?: boolean;
   setSelectedClass?: Function;
+  setSelectedEngraving?: Function;
   setClassFilter?: Function;
   classFilter?: Array<any>;
 }
 
 interface IEngravingFilter {
+  id: number;
   image_uri: string;
   name: string;
+  selected: boolean;
 }
 const AppSearchHeader = ({
   rankingFilter = false,
   setSelectedClass,
+  setSelectedEngraving,
   setClassFilter,
   classFilter,
 }: IAppSearchHeader) => {
@@ -76,6 +82,22 @@ const AppSearchHeader = ({
   const [engravingFilter, setEngravingFilter] = useState<
     Array<IEngravingFilter>
   >([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (setSelectedClass) {
+        setEngravingFilter([]);
+        setSelectedClass([]);
+      }
+    }, [setSelectedClass]),
+  );
+  useFocusEffect(
+    useCallback(() => {
+      if (setSelectedEngraving) {
+        setSelectedEngraving([]);
+      }
+    }, [setSelectedEngraving]),
+  );
 
   const onSubmit = () => {
     if (characterName.trim()) {
@@ -124,7 +146,12 @@ const AppSearchHeader = ({
               if (y.selected) {
                 selected.push(y.name);
                 y.engraving?.map(eng => {
-                  engravingFt.push({name: eng.name, image_uri: eng.image_uri});
+                  engravingFt.push({
+                    id: eng.id,
+                    name: eng.name,
+                    image_uri: eng.image_uri,
+                    selected: false,
+                  });
                 });
               }
               return y;
@@ -138,6 +165,21 @@ const AppSearchHeader = ({
       setSelectedClass(selected);
     }
     setEngravingFilter(engravingFt);
+  };
+
+  const onPressEngraving = (engravingData: IEngravingFilter) => {
+    const selected: Array<number> = [];
+    if (engravingFilter) {
+      engravingFilter.map(x => {
+        if (x.id && x.id === engravingData.id) {
+          x.selected = !x.selected;
+          selected.push(x.id);
+        }
+      });
+    }
+    if (setSelectedEngraving) {
+      setSelectedEngraving(selected);
+    }
   };
 
   return (
@@ -281,10 +323,18 @@ const AppSearchHeader = ({
                     return (
                       <View key={index}>
                         <TouchableOpacity
+                          onPress={() => onPressEngraving(ef)}
                           style={{
                             flexDirection: 'row',
                             marginRight: 10,
                             alignItems: 'center',
+                            borderWidth: 0.5,
+                            borderColor: '#FFFFFF',
+                            borderRadius: 10,
+                            padding: 2,
+                            backgroundColor: ef.selected
+                              ? '#e8e8e8'
+                              : 'rgba(0,0,0,0.0)',
                           }}>
                           <Image
                             defaultSource={defaultImg}
@@ -303,7 +353,15 @@ const AppSearchHeader = ({
                             }}
                             resizeMode={'contain'}
                           />
-                          <Text style={baseText}>{ef.name}</Text>
+                          <Text
+                            style={[
+                              baseText,
+                              {
+                                color: ef.selected ? '#232323' : '#e8e8e8',
+                              },
+                            ]}>
+                            {ef.name}
+                          </Text>
                         </TouchableOpacity>
                       </View>
                     );

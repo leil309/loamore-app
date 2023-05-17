@@ -3,13 +3,15 @@ import {FlatList, View} from 'react-native';
 import {useInfiniteFindCharacterRankingQuery} from '~/gql/generated/graphql';
 import RankingSkeleton from '~/components/skeleton/RankingSkeleton';
 import RankingCard from '~/components/RankingCard';
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 
 interface IRankingList {
   selectedClass?: Array<string>;
+  selectedEngraving?: Array<number>;
 }
-const RankingList = ({selectedClass}: IRankingList) => {
+
+const RankingList = ({selectedClass, selectedEngraving}: IRankingList) => {
   const PAGE_SIZE = 20;
   const {data, refetch, isLoadingError, fetchNextPage, hasNextPage} =
     useInfiniteFindCharacterRankingQuery(
