@@ -1,9 +1,5 @@
 import {
-  ICharacterEngravingInput,
-  ICharacterGearInput,
-  ICharacterGemInput,
   ICharacterSkillCounterYn,
-  ICharacterStatsInput,
   IClassYn,
   ISelectedYn,
 } from '~/gql/generated/graphql';

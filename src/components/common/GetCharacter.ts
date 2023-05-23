@@ -19,12 +19,9 @@ const cheerio = require('react-native-cheerio');
 
 export const getCharacter = async ({name}: IGetCharacter) => {
   const reg = /<[^>]*>?/g;
-  return await axios(
-    `https://lostark.game.onstove.com/Profile/Character/${name}`,
-    {
-      method: 'get',
-    },
-  )
+  return axios(`https://lostark.game.onstove.com/Profile/Character/${name}`, {
+    method: 'get',
+  })
     .then(response => {
       return response.data;
     })

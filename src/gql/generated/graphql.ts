@@ -28,6 +28,11 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type IAverageEngravingOutput = {
+  count: Scalars['Int'];
+  engraving: Array<IEngravingOutput>;
+};
+
 export type ICharacterCount = {
   character_accessory: Scalars['Int'];
   character_engraving: Scalars['Int'];
@@ -58,14 +63,16 @@ export type IClassJobCount = {
   engraving: Scalars['Int'];
 };
 
-export type ICompareEngravingOutput = {
-  countByLevel: Scalars['String'];
-  imageUri?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-};
-
 export type IEngravingCount = {
   character_engraving: Scalars['Int'];
+};
+
+export type IEngravingOutput = {
+  class_yn: IClassYn;
+  id: Scalars['BigInt'];
+  image_uri: Scalars['String'];
+  level: Scalars['Int'];
+  name: Scalars['String'];
 };
 
 export type IItemCount = {
@@ -87,8 +94,8 @@ export type IMutationUpsertCharacterArgs = {
 };
 
 export type IQuery = {
-  /** character 분석 정보 조회 */
-  analyzeCharacter: Array<ICompareEngravingOutput>;
+  /** 평균 각인 정보 조회 */
+  findAverageEngraving: Array<IAverageEngravingOutput>;
   /** character 빠른 조회 */
   findCharacter: ICharacter;
   /** ranking 조회 */
@@ -97,7 +104,7 @@ export type IQuery = {
   findClass: Array<IClassJob>;
 };
 
-export type IQueryAnalyzeCharacterArgs = {
+export type IQueryFindAverageEngravingArgs = {
   name: Scalars['String'];
 };
 
@@ -584,15 +591,20 @@ export type IFindCharacterRankingQuery = {
   }>;
 };
 
-export type IAnalyzeCharacterQueryVariables = Exact<{
+export type IFindAverageEngravingQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
 
-export type IAnalyzeCharacterQuery = {
-  analyzeCharacter: Array<{
-    name: string;
-    countByLevel: string;
-    imageUri?: string | null;
+export type IFindAverageEngravingQuery = {
+  findAverageEngraving: Array<{
+    count: number;
+    engraving: Array<{
+      name: string;
+      image_uri: string;
+      id: any;
+      class_yn: IClassYn;
+      level: number;
+    }>;
   }>;
 };
 
@@ -979,44 +991,52 @@ export const useInfiniteFindCharacterRankingQuery = <
   );
 };
 
-export const AnalyzeCharacterDocument = `
-    query AnalyzeCharacter($name: String!) {
-  analyzeCharacter(name: $name) {
-    name
-    countByLevel
-    imageUri
+export const FindAverageEngravingDocument = `
+    query FindAverageEngraving($name: String!) {
+  findAverageEngraving(name: $name) {
+    count
+    engraving {
+      name
+      image_uri
+      id
+      class_yn
+      level
+    }
   }
 }
     `;
-export const useAnalyzeCharacterQuery = <
-  TData = IAnalyzeCharacterQuery,
+export const useFindAverageEngravingQuery = <
+  TData = IFindAverageEngravingQuery,
   TError = unknown,
 >(
-  variables: IAnalyzeCharacterQueryVariables,
-  options?: UseQueryOptions<IAnalyzeCharacterQuery, TError, TData>,
+  variables: IFindAverageEngravingQueryVariables,
+  options?: UseQueryOptions<IFindAverageEngravingQuery, TError, TData>,
 ) =>
-  useQuery<IAnalyzeCharacterQuery, TError, TData>(
-    ['AnalyzeCharacter', variables],
-    axiosFetcher<IAnalyzeCharacterQuery, IAnalyzeCharacterQueryVariables>(
-      AnalyzeCharacterDocument,
-      variables,
-    ),
+  useQuery<IFindAverageEngravingQuery, TError, TData>(
+    ['FindAverageEngraving', variables],
+    axiosFetcher<
+      IFindAverageEngravingQuery,
+      IFindAverageEngravingQueryVariables
+    >(FindAverageEngravingDocument, variables),
     options,
   );
-export const useInfiniteAnalyzeCharacterQuery = <
-  TData = IAnalyzeCharacterQuery,
+export const useInfiniteFindAverageEngravingQuery = <
+  TData = IFindAverageEngravingQuery,
   TError = unknown,
 >(
-  variables: IAnalyzeCharacterQueryVariables,
-  options?: UseInfiniteQueryOptions<IAnalyzeCharacterQuery, TError, TData>,
+  variables: IFindAverageEngravingQueryVariables,
+  options?: UseInfiniteQueryOptions<IFindAverageEngravingQuery, TError, TData>,
 ) => {
-  return useInfiniteQuery<IAnalyzeCharacterQuery, TError, TData>(
-    ['AnalyzeCharacter.infinite', variables],
+  return useInfiniteQuery<IFindAverageEngravingQuery, TError, TData>(
+    ['FindAverageEngraving.infinite', variables],
     metaData =>
-      axiosFetcher<IAnalyzeCharacterQuery, IAnalyzeCharacterQueryVariables>(
-        AnalyzeCharacterDocument,
-        {...variables, ...(metaData.pageParam ?? {})},
-      )(),
+      axiosFetcher<
+        IFindAverageEngravingQuery,
+        IFindAverageEngravingQueryVariables
+      >(FindAverageEngravingDocument, {
+        ...variables,
+        ...(metaData.pageParam ?? {}),
+      })(),
     options,
   );
 };

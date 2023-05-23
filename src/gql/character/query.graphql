@@ -141,10 +141,15 @@ query FindCharacterRanking($cursor: BigInt, $take: Int, $className: [String!]) {
     }
 }
 
-query AnalyzeCharacter($name: String!) {
-    analyzeCharacter(name: $name) {
-        name
-        countByLevel
-        imageUri
+query FindAverageEngraving($name: String!) {
+    findAverageEngraving(name: $name) {
+        count
+        engraving {
+            name
+            image_uri
+            id
+            class_yn
+            level
+        }
     }
 }
