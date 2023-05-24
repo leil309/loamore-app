@@ -3,6 +3,7 @@ import {baseCard, baseText, mainContainer} from '~/components/styles';
 import {IEngraving} from '~/@types';
 import {IClassYn} from '~/gql/generated/graphql';
 import {EngravingList} from '~/components/EngravingList';
+import {useEffect, useState} from 'react';
 
 interface IBattleStats {
   critical: number;
@@ -50,6 +51,9 @@ const BattleStatsCard = ({
     {value: kindness, name: '친절'},
   ];
 
+  const [normalEngraving, setNormalEngraving] = useState<Array<IEngraving>>();
+  const [classEngraving, setClassEngraving] = useState<Array<IEngraving>>();
+
   const mainStats = battleStats
     .filter(x => x.value >= 150)
     .sort((a, b) => {
@@ -57,12 +61,16 @@ const BattleStatsCard = ({
     });
   const elseStats = battleStats.filter(x => x.value < 150);
 
-  const classEngraving = engraving?.filter(
-    x => x.engraving.class_yn === IClassYn.Y,
-  );
-  const normalEngraving = engraving?.filter(
-    x => x.engraving.class_yn === IClassYn.N,
-  );
+  useEffect(() => {
+    if (engraving) {
+      setClassEngraving(
+        engraving?.filter(x => x.engraving.class_yn === IClassYn.Y),
+      );
+      setNormalEngraving(
+        engraving?.filter(x => x.engraving.class_yn === IClassYn.N),
+      );
+    }
+  }, [engraving]);
 
   return (
     <View
