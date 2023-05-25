@@ -56,7 +56,15 @@ const Compare = () => {
   return (
     <SafeAreaView style={mainContainer}>
       <ScrollView contentContainerStyle={contentContainer}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={baseCard}>
+          <Text style={baseText}>내 세팅</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 20,
+          }}>
           <View style={[baseCard, {width: '48%'}]}>
             <Text style={baseText}>내 각인</Text>
             <EngravingList
@@ -70,6 +78,32 @@ const Compare = () => {
               classEngraving={classEngraving}
               battleEngraving={averageEngraving}
             />
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 20,
+          }}>
+          <View style={[baseCard, {width: '48%'}]}>
+            <Text style={baseText}>내 보석</Text>
+          </View>
+          <View style={[baseCard, {width: '48%'}]}>
+            <Text style={baseText}>평균 보석</Text>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 20,
+          }}>
+          <View style={[baseCard, {width: '48%'}]}>
+            <Text style={baseText}>내 스탯</Text>
+          </View>
+          <View style={[baseCard, {width: '48%'}]}>
+            <Text style={baseText}>평균 스탯</Text>
           </View>
         </View>
       </ScrollView>

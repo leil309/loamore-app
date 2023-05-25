@@ -62,7 +62,8 @@ const BattleStatsCard = ({
   const elseStats = battleStats.filter(x => x.value < 150);
 
   useEffect(() => {
-    if (engraving) {
+    if (engraving?.length) {
+      console.log(engraving.map(x => x.engraving.name));
       setClassEngraving(
         engraving?.filter(x => x.engraving.class_yn === IClassYn.Y),
       );

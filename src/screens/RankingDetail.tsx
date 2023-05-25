@@ -18,7 +18,7 @@ const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
   const {name: characterName} = route.params;
   const [character, setCharacter] = useState<ICharacter>();
   const [loading, setLoading] = useState<boolean>(false);
-  const {data, isLoadingError} = useFindCharacterQuery(
+  const {data, isLoadingError, refetch} = useFindCharacterQuery(
     {name: characterName || ''},
     {enabled: !!characterName, cacheTime: 0},
   );
@@ -42,6 +42,7 @@ const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
                   {
                     onSuccess: result => {
                       setCharacter(result.upsertCharacter);
+                      refetch();
                     },
                   },
                 );
@@ -52,7 +53,7 @@ const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
             });
         }
       }
-    }, [character, characterName, mutate]),
+    }, [character, characterName, mutate, refetch]),
   );
 
   useEffect(() => {

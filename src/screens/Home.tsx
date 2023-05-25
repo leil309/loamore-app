@@ -21,7 +21,7 @@ const Home = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const {data, isLoadingError} = useFindCharacterQuery(
+  const {data, isLoadingError, refetch} = useFindCharacterQuery(
     {name: characterName},
     {enabled: !!characterName, cacheTime: 0},
   );
@@ -49,6 +49,7 @@ const Home = () => {
                   {
                     onSuccess: result => {
                       setCharacter(result.upsertCharacter);
+                      refetch();
                     },
                   },
                 );
@@ -59,7 +60,7 @@ const Home = () => {
             });
         }
       }
-    }, [character, characterName, mutate]),
+    }, [character, characterName, mutate, refetch]),
   );
 
   useEffect(() => {
