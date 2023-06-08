@@ -1,13 +1,13 @@
 import {
-  useMutation,
-  useQuery,
   useInfiniteQuery,
-  UseMutationOptions,
-  UseQueryOptions,
   UseInfiniteQueryOptions,
-  QueryFunctionContext,
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+  UseQueryOptions,
 } from 'react-query';
 import {axiosFetcher} from './fetcher';
+
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends {[key: string]: unknown}> = {[K in keyof T]: T[K]};
@@ -96,6 +96,8 @@ export type IMutationUpsertCharacterArgs = {
 export type IQuery = {
   /** 평균 각인 정보 조회 */
   findAverageEngraving: Array<IAverageEngravingOutput>;
+  /** 평균 보석 정보 조회 */
+  findAverageGem: Array<IAverageEngravingOutput>;
   /** character 빠른 조회 */
   findCharacter: ICharacter;
   /** ranking 조회 */
@@ -105,6 +107,10 @@ export type IQuery = {
 };
 
 export type IQueryFindAverageEngravingArgs = {
+  name: Scalars['String'];
+};
+
+export type IQueryFindAverageGemArgs = {
   name: Scalars['String'];
 };
 
@@ -573,6 +579,7 @@ export type IFindCharacterRankingQueryVariables = Exact<{
   cursor?: InputMaybe<Scalars['BigInt']>;
   take?: InputMaybe<Scalars['Int']>;
   className?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  engravingIds?: InputMaybe<Array<Scalars['BigInt']> | Scalars['BigInt']>;
 }>;
 
 export type IFindCharacterRankingQuery = {
@@ -935,8 +942,13 @@ export const useInfiniteFindCharacterQuery = <
 };
 
 export const FindCharacterRankingDocument = `
-    query FindCharacterRanking($cursor: BigInt, $take: Int, $className: [String!]) {
-  findCharacterRanking(cursor: $cursor, take: $take, className: $className) {
+    query FindCharacterRanking($cursor: BigInt, $take: Int, $className: [String!], $engravingIds: [BigInt!]) {
+  findCharacterRanking(
+    cursor: $cursor
+    take: $take
+    className: $className
+    engravingIds: $engravingIds
+  ) {
     classEngraving
     className
     guildName

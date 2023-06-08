@@ -4,7 +4,6 @@ import {useInfiniteFindCharacterRankingQuery} from '~/gql/generated/graphql';
 import RankingSkeleton from '~/components/skeleton/RankingSkeleton';
 import RankingCard from '~/components/RankingCard';
 import React, {useCallback} from 'react';
-import {useFocusEffect} from '@react-navigation/native';
 
 interface IRankingList {
   selectedClass?: Array<string>;
@@ -13,12 +12,13 @@ interface IRankingList {
 
 const RankingList = ({selectedClass, selectedEngraving}: IRankingList) => {
   const PAGE_SIZE = 20;
-  const {data, refetch, isLoadingError, fetchNextPage, hasNextPage} =
+  const {data, isLoadingError, fetchNextPage, hasNextPage} =
     useInfiniteFindCharacterRankingQuery(
       {
         take: PAGE_SIZE,
         cursor: 0,
         className: selectedClass,
+        engravingIds: selectedEngraving,
       },
       {
         getNextPageParam: lastPage => {
@@ -34,14 +34,6 @@ const RankingList = ({selectedClass, selectedEngraving}: IRankingList) => {
         keepPreviousData: true,
       },
     );
-
-  useFocusEffect(
-    useCallback(() => {
-      if (selectedClass) {
-        refetch();
-      }
-    }, [refetch, selectedClass]),
-  );
 
   const onEndReached = useCallback(async () => {
     if (hasNextPage) {

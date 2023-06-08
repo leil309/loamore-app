@@ -62,6 +62,10 @@ const AppSearchHeader = ({
   const defaultImg = Image.resolveAssetSource(
     require('assets/default-character.png'),
   );
+
+  const [tmpClass, setTmpClass] = useState<string[]>();
+  const [tmpEngraving, setTmpEngraving] = useState<number[]>();
+
   const showModal = () => {
     setShowHeader(true);
     setHeaderHeight(windowHeight);
@@ -70,10 +74,22 @@ const AppSearchHeader = ({
   const hideModal = useCallback(() => {
     setShowFilter(false);
     setTimeout(() => {
+      if (setSelectedClass) {
+        setSelectedClass(tmpClass);
+        if (setSelectedEngraving) {
+          setSelectedEngraving(tmpEngraving);
+        }
+      }
       setHeaderHeight(osHeight);
       setShowHeader(false);
     }, 250);
-  }, [osHeight]);
+  }, [
+    osHeight,
+    setSelectedClass,
+    setSelectedEngraving,
+    tmpClass,
+    tmpEngraving,
+  ]);
 
   const {mutate} = useUpsertCharacterMutation();
   const dispatch = useAppDispatch();
@@ -88,8 +104,9 @@ const AppSearchHeader = ({
       if (setSelectedClass) {
         setEngravingFilter([]);
         setSelectedClass([]);
+        setTmpClass([]);
       }
-    }, [setSelectedClass]),
+    }, [setSelectedClass, setTmpClass]),
   );
   useFocusEffect(
     useCallback(() => {
@@ -162,23 +179,30 @@ const AppSearchHeader = ({
       );
     }
     if (setSelectedClass) {
-      setSelectedClass(selected);
+      setTmpClass(selected);
     }
+    setTmpEngraving([]);
     setEngravingFilter(engravingFt);
   };
 
   const onPressEngraving = (engravingData: IEngravingFilter) => {
     const selected: Array<number> = [];
     if (engravingFilter) {
-      engravingFilter.map(x => {
-        if (x.id && x.id === engravingData.id) {
-          x.selected = !x.selected;
-          selected.push(x.id);
-        }
-      });
+      setEngravingFilter(
+        engravingFilter.map(x => {
+          if (x.id && x.id === engravingData.id) {
+            x.selected = !x.selected;
+          }
+          if (x.selected) {
+            selected.push(x.id);
+          }
+          return x;
+        }),
+      );
     }
     if (setSelectedEngraving) {
-      setSelectedEngraving(selected);
+      console.log(selected);
+      setTmpEngraving(selected);
     }
   };
 
@@ -240,10 +264,19 @@ const AppSearchHeader = ({
           backdropOpacity={0}
           isVisible={showFilter && isFocused}
           onBackdropPress={() => hideModal()}>
+          <View>
+            <Pressable
+              style={{
+                marginTop: 28,
+                marginRight: 10,
+              }}
+              onPress={() => hideModal()}>
+              <MaterialIcons name={'close'} size={30} color={'#8c9093'} />
+            </Pressable>
+          </View>
           <View
             style={{
               flexDirection: 'column',
-              marginTop: 50,
             }}>
             <View style={styles.inputWrapper}>
               <TextInput
@@ -408,6 +441,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 50,
+  },
+  closeWrapper: {
+    marginVertical: 10,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   filterWrapper: {
     marginVertical: 5,
