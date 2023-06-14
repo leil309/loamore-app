@@ -159,8 +159,10 @@ const AppSearchHeader = ({
             (y: {name: string; selected: boolean; engraving: any[]}) => {
               if (y.name && y.name.trim() === classData.name.trim()) {
                 y.selected = !y.selected;
+              } else {
+                y.selected = false;
               }
-              if (y.selected) {
+              if (y.selected && y.name.trim() === classData.name.trim()) {
                 selected.push(y.name);
                 y.engraving?.map(eng => {
                   engravingFt.push({
@@ -305,9 +307,6 @@ const AppSearchHeader = ({
               ? classFilter.map((cf, index: number) => {
                   return (
                     <View key={index}>
-                      <View style={styles.filterRowWrapper}>
-                        <Text style={[baseText, {fontSize: 13}]}>{cf[0]}</Text>
-                      </View>
                       <View
                         style={[styles.filterRowWrapper, {flexWrap: 'wrap'}]}>
                         {
