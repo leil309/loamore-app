@@ -58,7 +58,7 @@ const AppSearchHeader = ({
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const [showHeader, setShowHeader] = useState<boolean>(false);
   const [characterName, setCharacterName] = useState('');
-  const windowHeight = Dimensions.get('window').height;
+  const windowHeight = Math.floor(Dimensions.get('screen').height);
   const defaultImg = Image.resolveAssetSource(
     require('assets/default-character.png'),
   );

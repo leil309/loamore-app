@@ -33,7 +33,7 @@ const CharacterCard = ({
     require('assets/default-character.png'),
   );
 
-  const width = Dimensions.get('screen').width;
+  const width = Math.floor(Dimensions.get('screen').width);
   const height = defaultImg.height * (width / defaultImg.width);
 
   const source = imageUri

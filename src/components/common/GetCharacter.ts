@@ -10,6 +10,7 @@ import {
   SelectedYn,
 } from '~/@types';
 import _ from 'lodash';
+import * as Sentry from '@sentry/react-native';
 
 interface IGetCharacter {
   name: string;
@@ -368,78 +369,83 @@ export const getCharacter = async ({name}: IGetCharacter) => {
           return gear;
         });
 
-      character.accessoryList = Object.entries(scriptJson.Equip)
-        .filter(obj => !obj[0].match('Gem'))
-        .filter(obj => {
-          const num = parseInt(obj[0].split('_')[1]);
-          return [6, 7, 8, 9, 10, 11, 26].includes(num);
-        })
-        .map((obj, index) => {
-          const data: string = JSON.stringify(obj[1]).replace(reg, '');
+      try {
+        character.accessoryList = Object.entries(scriptJson.Equip)
+          .filter(obj => !obj[0].match('Gem'))
+          .filter(obj => {
+            const num = parseInt(obj[0].split('_')[1]);
+            return [6, 7, 8, 9, 10, 11, 26].includes(num);
+          })
+          .map((obj, index) => {
+            const data: string = JSON.stringify(obj[1]).replace(reg, '');
 
-          const nameRegex = /"type":"NameTagBox","value":"([^"]+)"/;
-          const imageUriRegex = /"iconPath":"(.*?)"/;
-          const qualityRegex = /"qualityValue":(\d+)/;
-          const itemTierRegex = /"아이템 티어 (\d+)"/;
-          const baseEffectRegex =
-            /"Element_000":"기본 효과","Element_001":"([^"]+)"/;
-          const additionalEffectRegex = /"추가 효과","[^"]+":"([^"]+)"/;
-          const engravingRegex = /"contentStr":"\[(.+?)\] 활성도 \+(\d+)"/g;
-          const braceletEffectRegex = /"팔찌 효과","Element_001":"\s*(.+?)\s*"/;
+            const nameRegex = /"type":"NameTagBox","value":"([^"]+)"/;
+            const imageUriRegex = /"iconPath":"(.*?)"/;
+            const qualityRegex = /"qualityValue":(\d+)/;
+            const itemTierRegex = /"아이템 티어 (\d+)"/;
+            const baseEffectRegex =
+              /"Element_000":"기본 효과","Element_001":"([^"]+)"/;
+            const additionalEffectRegex = /"추가 효과","[^"]+":"([^"]+)"/;
+            const engravingRegex = /"contentStr":"\[(.+?)\] 활성도 \+(\d+)"/g;
+            const braceletEffectRegex =
+              /"팔찌 효과","Element_001":"\s*(.+?)\s*"/;
 
-          const basicStatsRegex =
-            /(?:체력|힘|지력|민첩|신속|치명|특화|제압|숙련|인내)\s*\+\d+/g;
-          const specialAbilitiesRegex = /\[([^\]]+)\].*?\./g;
+            const basicStatsRegex =
+              /(?:체력|힘|지력|민첩|신속|치명|특화|제압|숙련|인내)\s*\+\d+/g;
+            const specialAbilitiesRegex = /\[([^\]]+)\].*?\./g;
 
-          const nameMatch = nameRegex.exec(data);
-          const imageMatch = imageUriRegex.exec(data);
-          const tierMatch = itemTierRegex.exec(data);
-          const qualityMatch = qualityRegex.exec(data);
-          const baseEffectMatch = baseEffectRegex.exec(data);
-          const additionalEffectMatch = additionalEffectRegex.exec(data);
-          const braceletMatch = braceletEffectRegex.exec(data);
+            const nameMatch = nameRegex.exec(data);
+            const imageMatch = imageUriRegex.exec(data);
+            const tierMatch = itemTierRegex.exec(data);
+            const qualityMatch = qualityRegex.exec(data);
+            const baseEffectMatch = baseEffectRegex.exec(data);
+            const additionalEffectMatch = additionalEffectRegex.exec(data);
+            const braceletMatch = braceletEffectRegex.exec(data);
 
-          let braceletEffect: any[] = [];
-          if (braceletMatch) {
-            const basicStats = braceletMatch[1].match(basicStatsRegex);
-            const specialAbilities = braceletMatch[1].match(
-              specialAbilitiesRegex,
-            )
-              ? // @ts-ignore
-                braceletMatch[1]
-                  .match(specialAbilitiesRegex)
-                  .map(ability => ability.slice(0, -1))
-              : [];
-            braceletEffect = basicStats
-              ? basicStats.concat(specialAbilities)
-              : [];
-          }
-          let match;
-          const engravingEffect = [];
-          while ((match = engravingRegex.exec(data)) !== null) {
-            engravingEffect.push({
-              name: match[1],
-              points: parseInt(match[2], 10),
-            });
-          }
+            let braceletEffect: any[] = [];
+            if (braceletMatch) {
+              const basicStats = braceletMatch[1].match(basicStatsRegex);
+              const specialAbilities = braceletMatch[1].match(
+                specialAbilitiesRegex,
+              )
+                ? // @ts-ignore
+                  braceletMatch[1]
+                    .match(specialAbilitiesRegex)
+                    .map(ability => ability.slice(0, -1))
+                : [];
+              braceletEffect = basicStats
+                ? basicStats.concat(specialAbilities)
+                : [];
+            }
+            let match;
+            const engravingEffect = [];
+            while ((match = engravingRegex.exec(data)) !== null) {
+              engravingEffect.push({
+                name: match[1],
+                points: parseInt(match[2], 10),
+              });
+            }
 
-          const accessory: IAccessory = {
-            name: nameMatch ? nameMatch[1] : '',
-            imageUri: imageMatch ? imageMatch[1] : '',
-            slot: index,
-            tier: tierMatch ? parseInt(tierMatch[1]) : -1,
-            quality: qualityMatch ? parseInt(qualityMatch[1]) : -1,
-            baseEffect: baseEffectMatch
-              ? baseEffectMatch[1].split(/(?<=\d)(?=[가-힣]+)/)
-              : [],
-            additionalEffect: additionalEffectMatch
-              ? additionalEffectMatch[1].split(/(?<=\d)(?=[가-힣]+)/)
-              : [],
-            braceletEffect: braceletEffect,
-            engraving: engravingEffect,
-          };
-          return accessory;
-        });
+            const accessory: IAccessory = {
+              name: nameMatch ? nameMatch[1] : '',
+              imageUri: imageMatch ? imageMatch[1] : '',
+              slot: index,
+              tier: tierMatch ? parseInt(tierMatch[1]) : -1,
+              quality: qualityMatch ? parseInt(qualityMatch[1]) : -1,
+              baseEffect: baseEffectMatch
+                ? baseEffectMatch[1].split(/(?<=\d)(?=[가-힣]+)/)
+                : [],
+              additionalEffect: additionalEffectMatch
+                ? additionalEffectMatch[1].split(/(?<=\d)(?=[가-힣]+)/)
+                : [],
+              braceletEffect: braceletEffect,
+              engraving: engravingEffect,
+            };
+            return accessory;
+          });
+      } catch (err) {
+        Sentry.captureException(err);
+      }
 
       const engravingInfo = Object.entries(scriptJson.Engrave).map(obj => {
         const data: string = JSON.stringify(obj[1]).replace(reg, '');
