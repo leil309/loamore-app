@@ -37,7 +37,22 @@ const GearCard = ({gearList}: IGearCard) => {
                   height: 40,
                   width: 40,
                   resizeMode: 'cover',
-                  backgroundColor: x.item.grade === 1 ? '#FFFFFF' : '#333333',
+                  backgroundColor:
+                    x.item.grade === 7
+                      ? '#288d8d'
+                      : 6
+                      ? '#b7a68d'
+                      : 5
+                      ? '#703116'
+                      : 4
+                      ? '#705116'
+                      : 3
+                      ? '#3e1670'
+                      : 2
+                      ? '#164b70'
+                      : 1
+                      ? '#2d7016'
+                      : '#313131',
                 }}
               />
               <Text
@@ -50,7 +65,7 @@ const GearCard = ({gearList}: IGearCard) => {
                         : x.quality >= 90
                         ? '#b92bd0'
                         : x.quality >= 70
-                        ? '#2a48a9'
+                        ? '#3361b6'
                         : x.quality >= 30
                         ? '#5ea91b'
                         : x.quality >= 10
@@ -61,7 +76,6 @@ const GearCard = ({gearList}: IGearCard) => {
                 {x.quality}
               </Text>
               <Text style={baseText}>{x.item.set_name}</Text>
-              <Text style={baseText}>{x.item.grade}</Text>
             </View>
           );
         })}

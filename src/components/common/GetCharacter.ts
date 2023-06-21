@@ -320,7 +320,7 @@ export const getCharacter = async ({name}: IGetCharacter) => {
           const baseEffectRegex = /"기본 효과","[^"]+":"([^"]+)"/;
           const additionalEffectRegex = /"추가 효과","[^"]+":"([^"]+)"/;
           const imageUriRegex = /"iconPath":"(.*?)"/;
-
+          const iconGrade = /"iconGrade":(\d)/;
           const setNameRegex = /"topStr":"([가-힣\s]+)"},"Element_001"/;
           const setEffectRegex =
             /"bPoint":(true|false),"contentStr":"[^}]*?([^}]*?)}},"topStr":"(\d) 세트 효과/g;
@@ -345,6 +345,7 @@ export const getCharacter = async ({name}: IGetCharacter) => {
           const tierMatch = data.match(itemTierRegex);
           const baseEffectMatch = baseEffectRegex.exec(data);
           const additionalEffectMatch = additionalEffectRegex.exec(data);
+          const iconGradeMatch = iconGrade.exec(data);
 
           let gear: IGear = {
             name: nameMatch ? nameMatch[2] : '',
@@ -362,7 +363,7 @@ export const getCharacter = async ({name}: IGetCharacter) => {
             additionalEffect: additionalEffectMatch
               ? additionalEffectMatch[1].split(/(?<=\d)(?=[가-힣])/)
               : [],
-            grade: 0,
+            grade: iconGradeMatch ? parseInt(iconGradeMatch[1]) : 0,
           };
           return gear;
         });

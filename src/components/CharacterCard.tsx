@@ -75,38 +75,69 @@ const CharacterCard = ({
               color={'#FFFFFF'}
             />
           ) : null}
-          <Text
-            style={[
-              baseText,
-              {
-                borderRadius: 10,
-                alignSelf: 'flex-start',
-                padding: 5,
-                fontSize: 15,
-                textAlign: 'left',
-                justifyContent: 'center',
+
+          <View
+            style={{
+              flexDirection: 'row',
+            }}>
+            <View
+              style={{
+                padding: 7,
+                borderRadius: 20,
                 backgroundColor: 'rgba(180,225,255,0.1)',
-              },
-            ]}>
-            {server}
-          </Text>
-          {guild !== '-' ? (
-            <Text
-              style={[
-                baseText,
-                {
-                  borderRadius: 10,
-                  alignSelf: 'flex-start',
-                  padding: 5,
-                  fontSize: 15,
-                  textAlign: 'left',
-                  justifyContent: 'center',
-                  backgroundColor: 'rgba(180,225,255,0.1)',
-                },
-              ]}>
-              {guild}
-            </Text>
-          ) : null}
+              }}>
+              <Text
+                style={[
+                  baseText,
+                  {
+                    justifyContent: 'center',
+                  },
+                ]}>
+                {server}
+              </Text>
+            </View>
+            <View
+              style={{
+                marginLeft: 10,
+                padding: 7,
+                borderRadius: 20,
+                backgroundColor: 'rgba(180,225,255,0.1)',
+              }}>
+              <Text
+                style={[
+                  baseText,
+                  {
+                    justifyContent: 'center',
+                  },
+                ]}>
+                {job}
+              </Text>
+            </View>
+            {guild !== '-' ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <View
+                  style={{
+                    marginLeft: 10,
+                    padding: 7,
+                    borderRadius: 20,
+                    backgroundColor: 'rgba(180,225,255,0.1)',
+                  }}>
+                  <Text
+                    style={[
+                      baseText,
+                      {
+                        justifyContent: 'center',
+                      },
+                    ]}>
+                    {guild}
+                  </Text>
+                </View>
+              </View>
+            ) : null}
+          </View>
           <Text
             style={[
               baseText,
@@ -129,7 +160,7 @@ const CharacterCard = ({
                 padding: 5,
               },
             ]}>
-            {job + ' Lv.' + level}
+            {'전투 Lv.' + level}
           </Text>
           <Text
             style={[
