@@ -139,6 +139,23 @@ export interface ICharacterGem {
   };
 }
 
+export interface ICharacterGear {
+  base_effect?: string | null;
+  honing: number;
+  id: any;
+  quality: number;
+  slot: number;
+  additional_effect?: string | null;
+  item: {
+    id: any;
+    image_uri: string;
+    name: string;
+    set_name?: string | null;
+    tier?: number | null;
+    grade?: number | null;
+  };
+}
+
 export interface IEngraving {
   id: any;
   level: number;
@@ -184,6 +201,7 @@ export interface IGear {
   level: number;
   quality: number;
   setName: string;
+  grade: number;
   setEffect: Array<any>;
   baseEffect: Array<string>;
   additionalEffect: Array<string>;

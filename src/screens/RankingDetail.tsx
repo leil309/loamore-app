@@ -13,6 +13,7 @@ import AppHeader from '~/components/common/AppHeader';
 import GemCard from '~/components/GemCard';
 import BattleStatsCard from '~/components/BattleStatsCard';
 import {getCharacter} from '~/components/common/GetCharacter';
+import GearCard from '~/components/GearCard';
 
 const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
   const {name: characterName} = route.params;
@@ -79,6 +80,7 @@ const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
               job={character.class}
             />
             <GemCard gemList={character.character_gem} />
+            <GearCard gearList={character.character_gear} />
             <BattleStatsCard
               critical={character.critical}
               domination={character.domination}

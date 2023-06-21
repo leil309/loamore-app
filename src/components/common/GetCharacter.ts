@@ -362,6 +362,7 @@ export const getCharacter = async ({name}: IGetCharacter) => {
             additionalEffect: additionalEffectMatch
               ? additionalEffectMatch[1].split(/(?<=\d)(?=[가-힣])/)
               : [],
+            grade: 0,
           };
           return gear;
         });

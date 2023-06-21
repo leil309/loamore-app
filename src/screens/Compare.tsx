@@ -32,12 +32,12 @@ const Compare = () => {
         x => x.engraving.class_yn === IClassYn.Y,
       )
     : null;
-  const normalEngraving = data?.findCharacter.character_engraving
+  const myEngraving = data?.findCharacter.character_engraving
     ? data?.findCharacter.character_engraving
         .filter(x => x.engraving.class_yn === IClassYn.N)
         .sort((a, b) => a.engraving.id - b.engraving.id)
     : null;
-  const averageEngraving: Array<IEngraving> | null | undefined =
+  const rankerEngraving: Array<IEngraving> | null | undefined =
     topData?.findAverageEngraving[0].engraving.map(x => {
       return {
         id: x.id,
@@ -69,14 +69,14 @@ const Compare = () => {
             <Text style={baseText}>내 각인</Text>
             <EngravingList
               classEngraving={classEngraving}
-              battleEngraving={normalEngraving}
+              battleEngraving={myEngraving}
             />
           </View>
           <View style={[baseCard, {width: '48%'}]}>
             <Text style={baseText}>평균 각인</Text>
             <EngravingList
               classEngraving={classEngraving}
-              battleEngraving={averageEngraving}
+              battleEngraving={rankerEngraving}
             />
           </View>
         </View>

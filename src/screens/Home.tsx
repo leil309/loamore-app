@@ -13,6 +13,7 @@ import GemCard from '~/components/GemCard';
 import AppSearchHeader from '~/components/common/AppSearchHeader';
 import {useFocusEffect} from '@react-navigation/native';
 import {getCharacter} from '~/components/common/GetCharacter';
+import GearCard from '~/components/GearCard';
 
 const Home = () => {
   const characterName =
@@ -91,6 +92,7 @@ const Home = () => {
                 job={character.class}
               />
               <GemCard gemList={character.character_gem} />
+              <GearCard gearList={character.character_gear} />
               <BattleStatsCard
                 critical={character.critical}
                 domination={character.domination}
