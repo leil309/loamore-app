@@ -28,7 +28,16 @@ const GearCard = ({gearList}: IGearCard) => {
                 borderColor: '#ffb547',
                 borderWidth: 0.5,
               }}>
-              <Text style={baseText}>{x.honing}</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {x.honing && x.honing > 0 ? (
+                  <Text style={baseText}>{x.honing + '+'}</Text>
+                ) : null}
+              </View>
               <Image
                 source={{
                   uri: `https://cdn-lostark.game.onstove.com/${x.item.image_uri}`,
@@ -75,7 +84,9 @@ const GearCard = ({gearList}: IGearCard) => {
                 ]}>
                 {x.quality}
               </Text>
-              <Text style={baseText}>{x.item.set_name}</Text>
+              <Text style={[baseText, {fontSize: 12}]}>
+                {x.item.grade === 7 ? '에스더' : x.item.set_name}
+              </Text>
             </View>
           );
         })}

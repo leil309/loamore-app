@@ -36,7 +36,7 @@ const Home = () => {
           : 0;
         console.log(character?.name);
         console.log(min);
-        if (min > 3) {
+        if (min > 5) {
           console.log('start');
           setLoading(true);
           getCharacter({name: characterName})

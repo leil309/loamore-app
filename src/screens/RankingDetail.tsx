@@ -31,7 +31,7 @@ const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
         const min = character
           ? (new Date().getTime() - Date.parse(character.upd_date)) / 1000 / 60
           : 0;
-        if (min > 3) {
+        if (min > 5) {
           setLoading(true);
           getCharacter({name: characterName})
             .then(res => {
