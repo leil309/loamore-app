@@ -70,9 +70,15 @@ const CharacterCard = ({
           />
           {isLoading ? (
             <ActivityIndicator
-              style={{position: 'absolute', right: 0}}
               size={'large'}
               color={'#FFFFFF'}
+              style={{
+                backgroundColor: 'rgba(0,0,0,0.3)',
+                position: 'absolute',
+                right: 0,
+                borderRadius: 99,
+                padding: 5,
+              }}
             />
           ) : null}
 
@@ -84,7 +90,7 @@ const CharacterCard = ({
               style={{
                 padding: 7,
                 borderRadius: 20,
-                backgroundColor: 'rgba(180,225,255,0.1)',
+                backgroundColor: 'rgba(44,55,61,0.9)',
               }}>
               <Text
                 style={[
@@ -101,7 +107,7 @@ const CharacterCard = ({
                 marginLeft: 10,
                 padding: 7,
                 borderRadius: 20,
-                backgroundColor: 'rgba(180,225,255,0.1)',
+                backgroundColor: 'rgba(44,55,61,0.9)',
               }}>
               <Text
                 style={[
@@ -123,7 +129,7 @@ const CharacterCard = ({
                     marginLeft: 10,
                     padding: 7,
                     borderRadius: 20,
-                    backgroundColor: 'rgba(180,225,255,0.1)',
+                    backgroundColor: 'rgba(44,55,61,0.9)',
                   }}>
                   <Text
                     style={[
