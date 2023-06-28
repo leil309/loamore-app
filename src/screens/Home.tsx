@@ -14,10 +14,14 @@ import AppSearchHeader from '~/components/common/AppSearchHeader';
 import {useFocusEffect} from '@react-navigation/native';
 import {getCharacter} from '~/components/common/GetCharacter';
 import GearCard from '~/components/GearCard';
+import {HomeStackScreenProps} from '~/navigation/types';
 
-const Home = () => {
-  const characterName =
-    useAppSelector(state => state.user.characterName)?.name || '최고성능의가드';
+const Home = ({route}: HomeStackScreenProps<'Home'>) => {
+  const characterName = useAppSelector(state =>
+    route.params?.name
+      ? route.params.name
+      : state.user.characterName?.name || '최고성능의가드',
+  );
   const [character, setCharacter] = useState<ICharacter>();
 
   const [loading, setLoading] = useState<boolean>(false);

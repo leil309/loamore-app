@@ -118,6 +118,13 @@ const AppSearchHeader = ({
 
   const onSubmit = () => {
     if (characterName.trim()) {
+      hideModal();
+      navigation.navigate('HomeStack', {
+        screen: 'Home',
+        params: {
+          name: characterName,
+        },
+      });
       getCharacter({name: characterName}).then(res => {
         if (res) {
           mutate(
@@ -132,10 +139,6 @@ const AppSearchHeader = ({
                     name: characterName,
                   }),
                 );
-                navigation.navigate('HomeStack', {
-                  screen: 'Home',
-                });
-                hideModal();
               },
               onError: (e: any) => {
                 console.log(e);

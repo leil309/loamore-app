@@ -17,7 +17,9 @@ export type HomeTabParamList = {
 };
 
 export type HomeStackParamList = {
-  Home: undefined;
+  Home: {
+    name?: string;
+  };
   GearDetail: undefined;
 };
 
@@ -46,6 +48,9 @@ export type MenuStackParamList = {
   Menu: undefined;
   MenuDetail: undefined;
 };
+
+export type HomeStackScreenProps<T extends keyof HomeStackParamList> =
+  NativeStackScreenProps<HomeStackParamList, T>;
 
 export type RankingStackScreenProps<T extends keyof RankingStackParamList> =
   NativeStackScreenProps<RankingStackParamList, T>;
