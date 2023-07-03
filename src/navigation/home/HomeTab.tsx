@@ -58,6 +58,9 @@ const HomeTab = () => {
           tabPress: () =>
             navigation.navigate('HomeStack', {
               screen: 'Home',
+              params: {
+                name: null,
+              },
             }),
         }}
         options={{

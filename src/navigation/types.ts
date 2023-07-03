@@ -18,7 +18,7 @@ export type HomeTabParamList = {
 
 export type HomeStackParamList = {
   Home: {
-    name?: string;
+    name?: string | null | undefined;
   };
   GearDetail: undefined;
 };
