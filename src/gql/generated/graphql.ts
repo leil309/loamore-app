@@ -33,6 +33,11 @@ export type IAverageEngravingOutput = {
   engraving: Array<IEngravingOutput>;
 };
 
+export type IAverageStatsOutput = {
+  name: Scalars['String'];
+  stats: Array<IStatsOutput>;
+};
+
 export type ICharacterCount = {
   character_accessory: Scalars['Int'];
   character_engraving: Scalars['Int'];
@@ -97,20 +102,28 @@ export type IQuery = {
   /** 평균 각인 정보 조회 */
   findAverageEngraving: Array<IAverageEngravingOutput>;
   /** 평균 보석 정보 조회 */
-  findAverageGem: Array<IAverageEngravingOutput>;
+  findAverageGems: Array<IAverageEngravingOutput>;
+  /** 평균 스탯 정보 조회 */
+  findAverageStats: Array<IAverageStatsOutput>;
   /** character 빠른 조회 */
   findCharacter: ICharacter;
   /** ranking 조회 */
   findCharacterRanking: Array<ICharacterRankOutput>;
   /** class 목록 조회 */
   findClass: Array<IClassJob>;
+  /** 캐릭터 강제 업뎃 */
+  updateForceCharacter: Array<IAverageEngravingOutput>;
 };
 
 export type IQueryFindAverageEngravingArgs = {
   name: Scalars['String'];
 };
 
-export type IQueryFindAverageGemArgs = {
+export type IQueryFindAverageGemsArgs = {
+  name: Scalars['String'];
+};
+
+export type IQueryFindAverageStatsArgs = {
   name: Scalars['String'];
 };
 
@@ -125,10 +138,19 @@ export type IQueryFindCharacterRankingArgs = {
   take?: InputMaybe<Scalars['Int']>;
 };
 
+export type IQueryUpdateForceCharacterArgs = {
+  name: Scalars['String'];
+};
+
 export type ISkillCount = {
   character_gem: Scalars['Int'];
   character_skill: Scalars['Int'];
   tripod: Scalars['Int'];
+};
+
+export type IStatsOutput = {
+  name: Scalars['String'];
+  value: Scalars['Float'];
 };
 
 export type ITripodCount = {
@@ -212,6 +234,7 @@ export type ICharacterGem = {
   direction: Scalars['String'];
   effect_type: Scalars['String'];
   id: Scalars['BigInt'];
+  ins_date: Scalars['DateTime'];
   item: IItem;
   item_id: Scalars['BigInt'];
   level: Scalars['Int'];
@@ -219,6 +242,7 @@ export type ICharacterGem = {
   skill: ISkill;
   skill_id: Scalars['BigInt'];
   slot: Scalars['Int'];
+  upd_date: Scalars['DateTime'];
   use_yn: IUseYn;
 };
 
@@ -612,6 +636,17 @@ export type IFindAverageEngravingQuery = {
       class_yn: IClassYn;
       level: number;
     }>;
+  }>;
+};
+
+export type IFindAverageStatsQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+export type IFindAverageStatsQuery = {
+  findAverageStats: Array<{
+    name: string;
+    stats: Array<{name: string; value: number}>;
   }>;
 };
 
@@ -1049,6 +1084,50 @@ export const useInfiniteFindAverageEngravingQuery = <
         ...variables,
         ...(metaData.pageParam ?? {}),
       })(),
+    options,
+  );
+};
+
+export const FindAverageStatsDocument = `
+    query FindAverageStats($name: String!) {
+  findAverageStats(name: $name) {
+    name
+    stats {
+      name
+      value
+    }
+  }
+}
+    `;
+export const useFindAverageStatsQuery = <
+  TData = IFindAverageStatsQuery,
+  TError = unknown,
+>(
+  variables: IFindAverageStatsQueryVariables,
+  options?: UseQueryOptions<IFindAverageStatsQuery, TError, TData>,
+) =>
+  useQuery<IFindAverageStatsQuery, TError, TData>(
+    ['FindAverageStats', variables],
+    axiosFetcher<IFindAverageStatsQuery, IFindAverageStatsQueryVariables>(
+      FindAverageStatsDocument,
+      variables,
+    ),
+    options,
+  );
+export const useInfiniteFindAverageStatsQuery = <
+  TData = IFindAverageStatsQuery,
+  TError = unknown,
+>(
+  variables: IFindAverageStatsQueryVariables,
+  options?: UseInfiniteQueryOptions<IFindAverageStatsQuery, TError, TData>,
+) => {
+  return useInfiniteQuery<IFindAverageStatsQuery, TError, TData>(
+    ['FindAverageStats.infinite', variables],
+    metaData =>
+      axiosFetcher<IFindAverageStatsQuery, IFindAverageStatsQueryVariables>(
+        FindAverageStatsDocument,
+        {...variables, ...(metaData.pageParam ?? {})},
+      )(),
     options,
   );
 };

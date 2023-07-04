@@ -153,3 +153,13 @@ query FindAverageEngraving($name: String!) {
         }
     }
 }
+
+query FindAverageStats($name: String!) {
+    findAverageStats(name: $name) {
+        name
+        stats {
+            name
+            value
+        }
+    }
+}

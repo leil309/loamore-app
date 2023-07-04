@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const baseInstance = axios.create({
-  baseURL: 'https://loamore-api-6fmu.vercel.app/graphql', //Config.API_URL,
+  baseURL: 'http://127.0.0.1:4001/graphql', //Config.API_URL,
   timeout: 5000,
 });
 baseInstance.interceptors.request.use(

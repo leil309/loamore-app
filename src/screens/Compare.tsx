@@ -10,6 +10,7 @@ import {EngravingList} from '~/components/EngravingList';
 import {
   IClassYn,
   useFindAverageEngravingQuery,
+  useFindAverageStatsQuery,
   useFindCharacterQuery,
 } from '~/gql/generated/graphql';
 import {useAppSelector} from '~/store';
@@ -23,6 +24,11 @@ const Compare = () => {
     {enabled: !!characterName},
   );
   const {data: topData} = useFindAverageEngravingQuery(
+    {name: characterName || ''},
+    {enabled: !!characterName},
+  );
+
+  const {data: topStats} = useFindAverageStatsQuery(
     {name: characterName || ''},
     {enabled: !!characterName},
   );
@@ -104,6 +110,15 @@ const Compare = () => {
           </View>
           <View style={[baseCard, {width: '48%'}]}>
             <Text style={baseText}>평균 스탯</Text>
+            {topStats?.findAverageStats && topStats?.findAverageStats[0]
+              ? topStats?.findAverageStats[0].stats.map(x => {
+                  return (
+                    <View>
+                      <Text style={baseText}>{x.value}</Text>
+                    </View>
+                  );
+                })
+              : null}
           </View>
         </View>
       </ScrollView>
