@@ -1,4 +1,4 @@
-import {Image, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {baseCard, baseText, mainContainer} from '~/components/styles';
 import {IEngraving} from '~/@types';
 import {IClassYn} from '~/gql/generated/graphql';
@@ -18,10 +18,6 @@ interface IBattleStats {
   kindness: number;
   engraving: Array<IEngraving> | undefined | null;
 }
-
-const defaultImg = Image.resolveAssetSource(
-  require('assets/default-character.png'),
-);
 
 const BattleStatsCard = ({
   critical,

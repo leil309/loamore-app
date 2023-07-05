@@ -15,6 +15,7 @@ import {
 } from '~/gql/generated/graphql';
 import {useAppSelector} from '~/store';
 import {IEngraving} from '~/@types';
+import CompareStatsCard from '~/components/CompareStatsCard';
 
 const Compare = () => {
   const characterName = useAppSelector(state => state.user.characterName)?.name;
@@ -58,6 +59,20 @@ const Compare = () => {
         },
       };
     });
+  const battleStats = [
+    {value: data?.findCharacter.critical || 0, name: '치명'},
+    {value: data?.findCharacter.specialization || 0, name: '특화'},
+    {value: data?.findCharacter.domination || 0, name: '제압'},
+    {value: data?.findCharacter.swiftness || 0, name: '신속'},
+    {value: data?.findCharacter.endurance || 0, name: '인내'},
+    {value: data?.findCharacter.expertise || 0, name: '숙련'},
+  ];
+
+  const mainStats = battleStats
+    .filter(x => x.value >= 150)
+    .sort((a, b) => {
+      return b.value - a.value;
+    });
 
   return (
     <SafeAreaView style={mainContainer}>
@@ -93,10 +108,12 @@ const Compare = () => {
             marginTop: 20,
           }}>
           <View style={[baseCard, {width: '48%'}]}>
-            <Text style={baseText}>내 보석</Text>
+            <Text style={baseText}>내 스탯</Text>
+            <CompareStatsCard stats={mainStats} />
           </View>
           <View style={[baseCard, {width: '48%'}]}>
-            <Text style={baseText}>평균 보석</Text>
+            <Text style={baseText}>평균 주스탯</Text>
+            <CompareStatsCard stats={topStats?.findAverageStats[0].stats} />
           </View>
         </View>
         <View
@@ -105,20 +122,8 @@ const Compare = () => {
             justifyContent: 'space-between',
             marginTop: 20,
           }}>
-          <View style={[baseCard, {width: '48%'}]}>
-            <Text style={baseText}>내 스탯</Text>
-          </View>
-          <View style={[baseCard, {width: '48%'}]}>
-            <Text style={baseText}>평균 스탯</Text>
-            {topStats?.findAverageStats && topStats?.findAverageStats[0]
-              ? topStats?.findAverageStats[0].stats.map(x => {
-                  return (
-                    <View>
-                      <Text style={baseText}>{x.value}</Text>
-                    </View>
-                  );
-                })
-              : null}
+          <View style={[baseCard]}>
+            <Text style={baseText}>무기품질</Text>
           </View>
         </View>
       </ScrollView>
