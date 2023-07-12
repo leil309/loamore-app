@@ -12,6 +12,7 @@ import {BlurView} from '@react-native-community/blur';
 import {Platform, View} from 'react-native';
 import CompareStack from '~/navigation/home/CompareStack';
 import RankingStack from '~/navigation/home/RankingStack';
+import {Colors} from '~/components/common/Colors';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
@@ -37,6 +38,7 @@ const HomeTab = () => {
 
   return (
     <Tab.Navigator
+      sceneContainerStyle={{backgroundColor: Colors.imageBackgroundColor}}
       tabBar={props => <CustomTabBar {...props} />}
       screenOptions={{
         tabBarHideOnKeyboard: true,

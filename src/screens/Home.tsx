@@ -26,9 +26,35 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const {data, isLoadingError, refetch} = useFindCharacterQuery(
+  const {data, isLoading, refetch} = useFindCharacterQuery(
     {name: characterName},
-    {enabled: !!characterName, cacheTime: 0},
+    {
+      enabled: !!characterName,
+      cacheTime: 0,
+      onError: () => {
+        setLoading(true);
+        getCharacter({name: characterName})
+          .then(res => {
+            console.log('end');
+            if (res) {
+              mutate(
+                {
+                  args: JSON.stringify(res),
+                },
+                {
+                  onSuccess: result => {
+                    setCharacter(result.upsertCharacter);
+                    refetch();
+                  },
+                },
+              );
+            }
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      },
+    },
   );
 
   const {mutate} = useUpsertCharacterMutation();
@@ -83,7 +109,7 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
       ) : (
         <ScrollView
           contentContainerStyle={[contentContainer, {paddingBottom: 135}]}>
-          {!isLoadingError && character ? (
+          {!isLoading && character ? (
             <>
               <CharacterCard
                 isLoading={loading}
