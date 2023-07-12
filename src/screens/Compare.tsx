@@ -19,6 +19,7 @@ import {IEngraving} from '~/@types';
 import CompareStatsCard from '~/components/CompareStatsCard';
 import {getQualityColor} from '~/components/common/Colors';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import WeaponQualitySkeleton from '~/components/skeleton/WeaponQualitySkeleton';
 
 interface IWeaponQualityBar {
   quality: number;
@@ -41,10 +42,11 @@ const Compare = () => {
     {enabled: !!characterName},
   );
 
-  const {data: aveWeaponQuality} = useFindAverageWeaponQuery(
-    {name: characterName || ''},
-    {enabled: !!characterName},
-  );
+  const {data: aveWeaponQuality, isLoadingError: aveWeapoonLoading} =
+    useFindAverageWeaponQuery(
+      {name: characterName || ''},
+      {enabled: !!characterName},
+    );
 
   const classEngraving = data?.findCharacter.character_engraving
     ? data?.findCharacter.character_engraving.filter(
@@ -170,28 +172,32 @@ const Compare = () => {
             justifyContent: 'space-between',
             marginTop: 20,
           }}>
-          <View style={[baseCard]}>
-            <Text style={baseText}>무기품질</Text>
+          {!aveWeapoonLoading ? (
+            <View style={[baseCard]}>
+              <Text style={baseText}>무기품질</Text>
 
-            {data?.findCharacter.character_gear &&
-            data?.findCharacter.character_gear.length > 0 ? (
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <MaterialIcons name={'person'} color={'#FFFFFF'} size={20} />
-                <WeaponQualityBar
-                  quality={data?.findCharacter.character_gear[0].quality}
-                />
-              </View>
-            ) : null}
+              {data?.findCharacter.character_gear &&
+              data?.findCharacter.character_gear.length > 0 ? (
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <MaterialIcons name={'person'} color={'#FFFFFF'} size={20} />
+                  <WeaponQualityBar
+                    quality={data?.findCharacter.character_gear[0].quality}
+                  />
+                </View>
+              ) : null}
 
-            {aveWeaponQuality ? (
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <MaterialIcons name={'people'} color={'#FFFFFF'} size={20} />
-                <WeaponQualityBar
-                  quality={aveWeaponQuality.findAverageWeapon}
-                />
-              </View>
-            ) : null}
-          </View>
+              {aveWeaponQuality ? (
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <MaterialIcons name={'people'} color={'#FFFFFF'} size={20} />
+                  <WeaponQualityBar
+                    quality={aveWeaponQuality.findAverageWeapon}
+                  />
+                </View>
+              ) : null}
+            </View>
+          ) : (
+            <WeaponQualitySkeleton />
+          )}
         </View>
       </ScrollView>
       <AppHeader />
