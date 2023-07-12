@@ -9,6 +9,7 @@ import FilterLoader from '~/components/filter/FilterLoader';
 
 import * as Sentry from '@sentry/react-native';
 import CodePush from 'react-native-code-push';
+import {LogBox} from 'react-native';
 
 Sentry.init({
   dsn: 'https://f78311925f394803a8481850f393f9a7@o4505267508346880.ingest.sentry.io/4505395851427840',
@@ -22,6 +23,7 @@ const App = () => {
       SplashScreen.hide();
     }, 1000);
   }, []);
+  LogBox.ignoreAllLogs();
 
   return (
     <QueryClientProvider client={queryClient}>
