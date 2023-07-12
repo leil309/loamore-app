@@ -101,10 +101,10 @@ export type IMutationUpsertCharacterArgs = {
 export type IQuery = {
   /** 평균 각인 정보 조회 */
   findAverageEngraving: Array<IAverageEngravingOutput>;
-  /** 평균 보석 정보 조회 */
-  findAverageGems: Array<IAverageEngravingOutput>;
   /** 평균 스탯 정보 조회 */
   findAverageStats: Array<IAverageStatsOutput>;
+  /** 평균 무기품질 조회 */
+  findAverageWeapon: Scalars['Float'];
   /** character 빠른 조회 */
   findCharacter: ICharacter;
   /** ranking 조회 */
@@ -119,11 +119,11 @@ export type IQueryFindAverageEngravingArgs = {
   name: Scalars['String'];
 };
 
-export type IQueryFindAverageGemsArgs = {
+export type IQueryFindAverageStatsArgs = {
   name: Scalars['String'];
 };
 
-export type IQueryFindAverageStatsArgs = {
+export type IQueryFindAverageWeaponArgs = {
   name: Scalars['String'];
 };
 
@@ -650,6 +650,12 @@ export type IFindAverageStatsQuery = {
   }>;
 };
 
+export type IFindAverageWeaponQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+export type IFindAverageWeaponQuery = {findAverageWeapon: number};
+
 export type IFindClassQueryVariables = Exact<{[key: string]: never}>;
 
 export type IFindClassQuery = {
@@ -1126,6 +1132,44 @@ export const useInfiniteFindAverageStatsQuery = <
     metaData =>
       axiosFetcher<IFindAverageStatsQuery, IFindAverageStatsQueryVariables>(
         FindAverageStatsDocument,
+        {...variables, ...(metaData.pageParam ?? {})},
+      )(),
+    options,
+  );
+};
+
+export const FindAverageWeaponDocument = `
+    query FindAverageWeapon($name: String!) {
+  findAverageWeapon(name: $name)
+}
+    `;
+export const useFindAverageWeaponQuery = <
+  TData = IFindAverageWeaponQuery,
+  TError = unknown,
+>(
+  variables: IFindAverageWeaponQueryVariables,
+  options?: UseQueryOptions<IFindAverageWeaponQuery, TError, TData>,
+) =>
+  useQuery<IFindAverageWeaponQuery, TError, TData>(
+    ['FindAverageWeapon', variables],
+    axiosFetcher<IFindAverageWeaponQuery, IFindAverageWeaponQueryVariables>(
+      FindAverageWeaponDocument,
+      variables,
+    ),
+    options,
+  );
+export const useInfiniteFindAverageWeaponQuery = <
+  TData = IFindAverageWeaponQuery,
+  TError = unknown,
+>(
+  variables: IFindAverageWeaponQueryVariables,
+  options?: UseInfiniteQueryOptions<IFindAverageWeaponQuery, TError, TData>,
+) => {
+  return useInfiniteQuery<IFindAverageWeaponQuery, TError, TData>(
+    ['FindAverageWeapon.infinite', variables],
+    metaData =>
+      axiosFetcher<IFindAverageWeaponQuery, IFindAverageWeaponQueryVariables>(
+        FindAverageWeaponDocument,
         {...variables, ...(metaData.pageParam ?? {})},
       )(),
     options,

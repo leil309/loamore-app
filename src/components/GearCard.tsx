@@ -1,6 +1,10 @@
 import {Image, Text, View} from 'react-native';
 import {ICharacterGear} from '~/@types';
 import {baseCard, baseText, mainContainer} from '~/components/styles';
+import {
+  getGradeBackgroundColor,
+  getQualityColor,
+} from '~/components/common/Colors';
 
 interface IGearCard {
   gearList?: Array<ICharacterGear> | undefined | null;
@@ -46,40 +50,14 @@ const GearCard = ({gearList}: IGearCard) => {
                   height: 40,
                   width: 40,
                   resizeMode: 'cover',
-                  backgroundColor:
-                    x.item.grade === 7
-                      ? '#288d8d'
-                      : 6
-                      ? '#b7a68d'
-                      : 5
-                      ? '#703116'
-                      : 4
-                      ? '#705116'
-                      : 3
-                      ? '#3e1670'
-                      : 2
-                      ? '#164b70'
-                      : 1
-                      ? '#2d7016'
-                      : '#313131',
+                  backgroundColor: getGradeBackgroundColor(x.item.grade),
                 }}
               />
               <Text
                 style={[
                   baseText,
                   {
-                    backgroundColor:
-                      x.quality >= 100
-                        ? '#de7016'
-                        : x.quality >= 90
-                        ? '#b92bd0'
-                        : x.quality >= 70
-                        ? '#3361b6'
-                        : x.quality >= 30
-                        ? '#5ea91b'
-                        : x.quality >= 10
-                        ? '#a19911'
-                        : '#980b0b',
+                    backgroundColor: getQualityColor(x.quality),
                   },
                 ]}>
                 {x.quality}

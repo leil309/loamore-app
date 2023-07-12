@@ -163,3 +163,7 @@ query FindAverageStats($name: String!) {
         }
     }
 }
+
+query FindAverageWeapon($name: String!) {
+    findAverageWeapon(name: $name)
+}

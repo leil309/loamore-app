@@ -11,11 +11,18 @@ import {
   IClassYn,
   useFindAverageEngravingQuery,
   useFindAverageStatsQuery,
+  useFindAverageWeaponQuery,
   useFindCharacterQuery,
 } from '~/gql/generated/graphql';
 import {useAppSelector} from '~/store';
 import {IEngraving} from '~/@types';
 import CompareStatsCard from '~/components/CompareStatsCard';
+import {getQualityColor} from '~/components/common/Colors';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+interface IWeaponQualityBar {
+  quality: number;
+}
 
 const Compare = () => {
   const characterName = useAppSelector(state => state.user.characterName)?.name;
@@ -30,6 +37,11 @@ const Compare = () => {
   );
 
   const {data: topStats} = useFindAverageStatsQuery(
+    {name: characterName || ''},
+    {enabled: !!characterName},
+  );
+
+  const {data: aveWeaponQuality} = useFindAverageWeaponQuery(
     {name: characterName || ''},
     {enabled: !!characterName},
   );
@@ -78,7 +90,7 @@ const Compare = () => {
     <SafeAreaView style={mainContainer}>
       <ScrollView contentContainerStyle={contentContainer}>
         <View style={baseCard}>
-          <Text style={baseText}>내 세팅</Text>
+          <Text style={baseText}>주 스펙 비교</Text>
         </View>
         <View
           style={{
@@ -87,14 +99,32 @@ const Compare = () => {
             marginTop: 20,
           }}>
           <View style={[baseCard, {width: '48%'}]}>
-            <Text style={baseText}>내 각인</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              {/*<MaterialIcons name={'person'} color={'#FFFFFF'} size={20} />*/}
+              <Text style={baseText}>내 각인</Text>
+            </View>
             <EngravingList
               classEngraving={classEngraving}
               battleEngraving={myEngraving}
             />
           </View>
           <View style={[baseCard, {width: '48%'}]}>
-            <Text style={baseText}>평균 각인</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              {/*<MaterialIcons name={'people'} color={'#FFFFFF'} size={20} />*/}
+              <Text style={baseText}>평균 각인</Text>
+            </View>
             <EngravingList
               classEngraving={classEngraving}
               battleEngraving={rankerEngraving}
@@ -108,11 +138,29 @@ const Compare = () => {
             marginTop: 20,
           }}>
           <View style={[baseCard, {width: '48%'}]}>
-            <Text style={baseText}>내 스탯</Text>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              {/*<MaterialIcons name={'people'} color={'#FFFFFF'} size={20} />*/}
+              <Text style={baseText}>내 스탯</Text>
+            </View>
             <CompareStatsCard stats={mainStats} />
           </View>
           <View style={[baseCard, {width: '48%'}]}>
-            <Text style={baseText}>평균 주스탯</Text>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              {/*<MaterialIcons name={'people'} color={'#FFFFFF'} size={20} />*/}
+              <Text style={baseText}>평균 스탯</Text>
+            </View>
             <CompareStatsCard stats={topStats?.findAverageStats[0].stats} />
           </View>
         </View>
@@ -124,6 +172,25 @@ const Compare = () => {
           }}>
           <View style={[baseCard]}>
             <Text style={baseText}>무기품질</Text>
+
+            {data?.findCharacter.character_gear &&
+            data?.findCharacter.character_gear.length > 0 ? (
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <MaterialIcons name={'person'} color={'#FFFFFF'} size={20} />
+                <WeaponQualityBar
+                  quality={data?.findCharacter.character_gear[0].quality}
+                />
+              </View>
+            ) : null}
+
+            {aveWeaponQuality ? (
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <MaterialIcons name={'people'} color={'#FFFFFF'} size={20} />
+                <WeaponQualityBar
+                  quality={aveWeaponQuality.findAverageWeapon}
+                />
+              </View>
+            ) : null}
           </View>
         </View>
       </ScrollView>
@@ -131,4 +198,33 @@ const Compare = () => {
     </SafeAreaView>
   );
 };
+
+const WeaponQualityBar = ({quality}: IWeaponQualityBar) => {
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: '#3c3d3f',
+        flexDirection: 'row',
+        borderTopColor: '#050510',
+        borderColor: '#131318',
+        borderBottomColor: '#181825',
+        borderWidth: 3,
+        borderRadius: 20,
+        marginTop: 5,
+      }}>
+      <View
+        style={{
+          width: quality + '%',
+          backgroundColor: getQualityColor(quality),
+          borderRadius: 20,
+        }}>
+        <Text style={[baseText, {marginLeft: 5, textAlign: 'left'}]}>
+          {quality}
+        </Text>
+      </View>
+    </View>
+  );
+};
+
 export default Compare;
