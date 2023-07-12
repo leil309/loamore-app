@@ -1,7 +1,7 @@
 import {View} from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
-const WeaponQualitySkeleton = () => {
+const CompareWeaponQualitySkeleton = () => {
   return (
     <View style={{marginBottom: 0, flex: 1, padding: 0}}>
       <SkeletonPlaceholder
@@ -50,4 +50,4 @@ const WeaponQualitySkeleton = () => {
     </View>
   );
 };
-export default WeaponQualitySkeleton;
+export default CompareWeaponQualitySkeleton;

@@ -19,7 +19,9 @@ import {IEngraving} from '~/@types';
 import CompareStatsCard from '~/components/CompareStatsCard';
 import {getQualityColor} from '~/components/common/Colors';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import WeaponQualitySkeleton from '~/components/skeleton/WeaponQualitySkeleton';
+import CompareWeaponQualitySkeleton from '~/components/skeleton/CompareWeaponQualitySkeleton';
+import CompareStatsSkeleton from '~/components/skeleton/CompareStatsSkeleton';
+import CompareEngravingSkeleton from '~/components/skeleton/CompareEngravingSkeleton';
 
 interface IWeaponQualityBar {
   quality: number;
@@ -32,21 +34,32 @@ const Compare = () => {
     {name: characterName || ''},
     {enabled: !!characterName},
   );
-  const {data: topData} = useFindAverageEngravingQuery(
+  const {
+    data: topData,
+    isLoadingError: aveEngravingLoading,
+    isFetching: aveEngravingFetching,
+  } = useFindAverageEngravingQuery(
     {name: characterName || ''},
     {enabled: !!characterName},
   );
 
-  const {data: topStats} = useFindAverageStatsQuery(
+  const {
+    data: topStats,
+    isLoadingError: topStatsLoading,
+    isFetching: topStatsFetching,
+  } = useFindAverageStatsQuery(
     {name: characterName || ''},
     {enabled: !!characterName},
   );
 
-  const {data: aveWeaponQuality, isLoadingError: aveWeapoonLoading} =
-    useFindAverageWeaponQuery(
-      {name: characterName || ''},
-      {enabled: !!characterName},
-    );
+  const {
+    data: aveWeaponQuality,
+    isLoadingError: aveWeaponLoading,
+    isFetching: aveWeaponFetching,
+  } = useFindAverageWeaponQuery(
+    {name: characterName || ''},
+    {enabled: !!characterName},
+  );
 
   const classEngraving = data?.findCharacter.character_engraving
     ? data?.findCharacter.character_engraving.filter(
@@ -116,22 +129,68 @@ const Compare = () => {
               battleEngraving={myEngraving}
             />
           </View>
-          <View style={[baseCard, {width: '48%'}]}>
-            <View
-              style={{
-                flexDirection: 'row',
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              {/*<MaterialIcons name={'people'} color={'#FFFFFF'} size={20} />*/}
-              <Text style={baseText}>평균 각인</Text>
+          {!aveEngravingLoading && !aveEngravingFetching ? (
+            <View style={[baseCard, {width: '48%'}]}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                {/*<MaterialIcons name={'people'} color={'#FFFFFF'} size={20} />*/}
+                <Text style={baseText}>평균 각인</Text>
+              </View>
+              <EngravingList
+                classEngraving={classEngraving}
+                battleEngraving={rankerEngraving}
+              />
             </View>
-            <EngravingList
-              classEngraving={classEngraving}
-              battleEngraving={rankerEngraving}
-            />
-          </View>
+          ) : (
+            <View style={{width: '48%'}}>
+              <CompareEngravingSkeleton />
+            </View>
+          )}
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 20,
+          }}>
+          {!topStatsLoading && !topStatsFetching ? (
+            <>
+              <View style={[baseCard, {width: '48%'}]}>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  {/*<MaterialIcons name={'people'} color={'#FFFFFF'} size={20} />*/}
+                  <Text style={baseText}>내 스탯</Text>
+                </View>
+                <CompareStatsCard stats={mainStats} />
+              </View>
+              <View style={[baseCard, {width: '48%'}]}>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  {/*<MaterialIcons name={'people'} color={'#FFFFFF'} size={20} />*/}
+                  <Text style={baseText}>평균 스탯</Text>
+                </View>
+                <CompareStatsCard stats={topStats?.findAverageStats[0].stats} />
+              </View>
+            </>
+          ) : (
+            <CompareStatsSkeleton />
+          )}
         </View>
         <View
           style={{
@@ -139,40 +198,7 @@ const Compare = () => {
             justifyContent: 'space-between',
             marginTop: 20,
           }}>
-          <View style={[baseCard, {width: '48%'}]}>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              {/*<MaterialIcons name={'people'} color={'#FFFFFF'} size={20} />*/}
-              <Text style={baseText}>내 스탯</Text>
-            </View>
-            <CompareStatsCard stats={mainStats} />
-          </View>
-          <View style={[baseCard, {width: '48%'}]}>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              {/*<MaterialIcons name={'people'} color={'#FFFFFF'} size={20} />*/}
-              <Text style={baseText}>평균 스탯</Text>
-            </View>
-            <CompareStatsCard stats={topStats?.findAverageStats[0].stats} />
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: 20,
-          }}>
-          {!aveWeapoonLoading ? (
+          {!aveWeaponLoading && !aveWeaponFetching ? (
             <View style={[baseCard]}>
               <Text style={baseText}>무기품질</Text>
 
@@ -196,7 +222,7 @@ const Compare = () => {
               ) : null}
             </View>
           ) : (
-            <WeaponQualitySkeleton />
+            <CompareWeaponQualitySkeleton />
           )}
         </View>
       </ScrollView>
