@@ -1,127 +1,129 @@
 query FindCharacter($name: String!) {
     findCharacter(name: $name) {
-        attack_power
-        character_accessory {
-            additional_effect
-            base_effect
-            bracelet_effect
-            engraving
-            id
-            item {
-                name
-                image_uri
-                grade
-                set_name
-                tier
+        data{
+            attack_power
+            character_accessory {
+                additional_effect
+                base_effect
+                bracelet_effect
+                engraving
                 id
-            }
-            quality
-            slot
-        }
-        character_engraving {
-            engraving {
-                class_yn
-                id
-                image_uri
-                info
-                name
-            }
-            id
-            level
-            slot
-        }
-        character_gear {
-            base_effect
-            honing
-            id
-            item {
-                id
-                image_uri
-                name
-                set_name
-                tier
-                grade
-            }
-            quality
-            slot
-            additional_effect
-        }
-        character_gem {
-            direction
-            effect_type
-            id
-            level
-            rate
-            skill {
-                image_uri
-                name
-                id
-            }
-            skill_id
-            slot
-            item {
-                id
-                grade
-                image_uri
-                name
-                set_name
-                tier
-            }
-        }
-        character_skill {
-            attack_type
-            character_skill_tripod {
-                level
-                selected_yn
-                tripod {
+                item {
                     name
                     image_uri
-                    slot
+                    grade
+                    set_name
                     tier
+                    id
                 }
+                quality
+                slot
             }
-            counter_yn
-            id
-            level
-            rune_id
-            skill {
-                class
+            character_engraving {
+                engraving {
+                    class_yn
+                    id
+                    image_uri
+                    info
+                    name
+                }
                 id
-                image_uri
-                name
-                tripod {
+                level
+                slot
+            }
+            character_gear {
+                base_effect
+                honing
+                id
+                item {
                     id
                     image_uri
                     name
-                    slot
+                    set_name
+                    tier
+                    grade
+                }
+                quality
+                slot
+                additional_effect
+            }
+            character_gem {
+                direction
+                effect_type
+                id
+                level
+                rate
+                skill {
+                    image_uri
+                    name
+                    id
+                }
+                skill_id
+                slot
+                item {
+                    id
+                    grade
+                    image_uri
+                    name
+                    set_name
                     tier
                 }
             }
-            stagger_value
-            super_armor
-            weak_point
+            character_skill {
+                attack_type
+                character_skill_tripod {
+                    level
+                    selected_yn
+                    tripod {
+                        name
+                        image_uri
+                        slot
+                        tier
+                    }
+                }
+                counter_yn
+                id
+                level
+                rune_id
+                skill {
+                    class
+                    id
+                    image_uri
+                    name
+                    tripod {
+                        id
+                        image_uri
+                        name
+                        slot
+                        tier
+                    }
+                }
+                stagger_value
+                super_armor
+                weak_point
+            }
+            charisma
+            class
+            courage
+            critical
+            domination
+            endurance
+            expertise
+            guild_name
+            id
+            image_uri
+            ins_date
+            item_level
+            kindness
+            level
+            max_health
+            name
+            server_name
+            specialization
+            swiftness
+            upd_date
+            wisdom
         }
-        charisma
-        class
-        courage
-        critical
-        domination
-        endurance
-        expertise
-        guild_name
-        id
-        image_uri
-        ins_date
-        item_level
-        kindness
-        level
-        max_health
-        name
-        server_name
-        specialization
-        swiftness
-        upd_date
-        wisdom
     }
 }
 

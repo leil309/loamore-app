@@ -61,13 +61,13 @@ const Compare = () => {
     {enabled: !!characterName},
   );
 
-  const classEngraving = data?.findCharacter.character_engraving
-    ? data?.findCharacter.character_engraving.filter(
+  const classEngraving = data?.findCharacter.data?.character_engraving
+    ? data?.findCharacter.data?.character_engraving.filter(
         x => x.engraving.class_yn === IClassYn.Y,
       )
     : null;
-  const myEngraving = data?.findCharacter.character_engraving
-    ? data?.findCharacter.character_engraving
+  const myEngraving = data?.findCharacter.data?.character_engraving
+    ? data?.findCharacter.data?.character_engraving
         .filter(x => x.engraving.class_yn === IClassYn.N)
         .sort((a, b) => a.engraving.id - b.engraving.id)
     : null;
@@ -87,12 +87,12 @@ const Compare = () => {
       };
     });
   const battleStats = [
-    {value: data?.findCharacter.critical || 0, name: '치명'},
-    {value: data?.findCharacter.specialization || 0, name: '특화'},
-    {value: data?.findCharacter.domination || 0, name: '제압'},
-    {value: data?.findCharacter.swiftness || 0, name: '신속'},
-    {value: data?.findCharacter.endurance || 0, name: '인내'},
-    {value: data?.findCharacter.expertise || 0, name: '숙련'},
+    {value: data?.findCharacter.data?.critical || 0, name: '치명'},
+    {value: data?.findCharacter.data?.specialization || 0, name: '특화'},
+    {value: data?.findCharacter.data?.domination || 0, name: '제압'},
+    {value: data?.findCharacter.data?.swiftness || 0, name: '신속'},
+    {value: data?.findCharacter.data?.endurance || 0, name: '인내'},
+    {value: data?.findCharacter.data?.expertise || 0, name: '숙련'},
   ];
 
   const mainStats = battleStats
@@ -202,12 +202,14 @@ const Compare = () => {
             <View style={[baseCard]}>
               <Text style={baseText}>무기품질</Text>
 
-              {data?.findCharacter.character_gear &&
-              data?.findCharacter.character_gear.length > 0 ? (
+              {data?.findCharacter.data?.character_gear &&
+              data?.findCharacter.data?.character_gear.length > 0 ? (
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <MaterialIcons name={'person'} color={'#FFFFFF'} size={20} />
                   <WeaponQualityBar
-                    quality={data?.findCharacter.character_gear[0].quality}
+                    quality={
+                      data?.findCharacter.data?.character_gear[0].quality
+                    }
                   />
                 </View>
               ) : null}

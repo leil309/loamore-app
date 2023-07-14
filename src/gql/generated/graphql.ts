@@ -1,13 +1,13 @@
 import {
-  useInfiniteQuery,
-  UseInfiniteQueryOptions,
   useMutation,
-  UseMutationOptions,
   useQuery,
+  useInfiniteQuery,
+  UseMutationOptions,
   UseQueryOptions,
+  UseInfiniteQueryOptions,
+  QueryFunctionContext,
 } from 'react-query';
 import {axiosFetcher} from './fetcher';
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends {[key: string]: unknown}> = {[K in keyof T]: T[K]};
@@ -44,6 +44,10 @@ export type ICharacterCount = {
   character_gear: Scalars['Int'];
   character_gem: Scalars['Int'];
   character_skill: Scalars['Int'];
+};
+
+export type ICharacterOutput = {
+  data?: Maybe<ICharacter>;
 };
 
 export type ICharacterRankOutput = {
@@ -89,7 +93,7 @@ export type IItemCount = {
 
 export type IMutation = {
   /** character 최신정보 조회 */
-  upsertCharacter: ICharacter;
+  upsertCharacter: ICharacterOutput;
   /** class 추출 */
   upsertClass: Array<IClassJob>;
 };
@@ -106,7 +110,7 @@ export type IQuery = {
   /** 평균 무기품질 조회 */
   findAverageWeapon: Scalars['Float'];
   /** character 빠른 조회 */
-  findCharacter: ICharacter;
+  findCharacter: ICharacterOutput;
   /** ranking 조회 */
   findCharacterRanking: Array<ICharacterRankOutput>;
   /** class 목록 조회 */
@@ -361,119 +365,121 @@ export type IUpsertCharacterMutationVariables = Exact<{
 
 export type IUpsertCharacterMutation = {
   upsertCharacter: {
-    attack_power: number;
-    charisma: number;
-    class: string;
-    courage: number;
-    critical: number;
-    domination: number;
-    endurance: number;
-    expertise: number;
-    guild_name?: string | null;
-    id: any;
-    image_uri: string;
-    ins_date: any;
-    item_level: number;
-    kindness: number;
-    level: number;
-    max_health: number;
-    name: string;
-    server_name: string;
-    specialization: number;
-    swiftness: number;
-    upd_date: any;
-    wisdom: number;
-    character_accessory?: Array<{
-      additional_effect?: string | null;
-      base_effect?: string | null;
-      bracelet_effect?: string | null;
-      engraving?: string | null;
+    data?: {
+      attack_power: number;
+      charisma: number;
+      class: string;
+      courage: number;
+      critical: number;
+      domination: number;
+      endurance: number;
+      expertise: number;
+      guild_name?: string | null;
       id: any;
-      quality?: number | null;
-      slot: number;
-      item: {
-        name: string;
-        image_uri: string;
-        grade?: number | null;
-        set_name?: string | null;
-        tier?: number | null;
-        id: any;
-      };
-    }> | null;
-    character_engraving?: Array<{
-      id: any;
+      image_uri: string;
+      ins_date: any;
+      item_level: number;
+      kindness: number;
       level: number;
-      slot: number;
-      engraving: {
-        class_yn: IClassYn;
+      max_health: number;
+      name: string;
+      server_name: string;
+      specialization: number;
+      swiftness: number;
+      upd_date: any;
+      wisdom: number;
+      character_accessory?: Array<{
+        additional_effect?: string | null;
+        base_effect?: string | null;
+        bracelet_effect?: string | null;
+        engraving?: string | null;
         id: any;
-        image_uri: string;
-        info: string;
-        name: string;
-      };
-    }> | null;
-    character_gear?: Array<{
-      base_effect?: string | null;
-      honing: number;
-      id: any;
-      quality: number;
-      slot: number;
-      additional_effect?: string | null;
-      item: {
-        id: any;
-        image_uri: string;
-        name: string;
-        set_name?: string | null;
-        tier?: number | null;
-        grade?: number | null;
-      };
-    }> | null;
-    character_gem?: Array<{
-      direction: string;
-      effect_type: string;
-      id: any;
-      level: number;
-      rate: number;
-      skill_id: any;
-      slot: number;
-      skill: {image_uri: string; name: string; id: any};
-      item: {
-        id: any;
-        grade?: number | null;
-        image_uri: string;
-        name: string;
-        set_name?: string | null;
-        tier?: number | null;
-      };
-    }> | null;
-    character_skill?: Array<{
-      attack_type?: string | null;
-      counter_yn: ICharacterSkillCounterYn;
-      id: any;
-      level?: number | null;
-      rune_id?: any | null;
-      stagger_value?: string | null;
-      super_armor?: string | null;
-      weak_point?: number | null;
-      character_skill_tripod?: Array<{
-        level?: number | null;
-        selected_yn: ISelectedYn;
-        tripod: {name: string; image_uri: string; slot: number; tier: number};
+        quality?: number | null;
+        slot: number;
+        item: {
+          name: string;
+          image_uri: string;
+          grade?: number | null;
+          set_name?: string | null;
+          tier?: number | null;
+          id: any;
+        };
       }> | null;
-      skill: {
-        class: string;
+      character_engraving?: Array<{
         id: any;
-        image_uri: string;
-        name: string;
-        tripod?: Array<{
+        level: number;
+        slot: number;
+        engraving: {
+          class_yn: IClassYn;
+          id: any;
+          image_uri: string;
+          info: string;
+          name: string;
+        };
+      }> | null;
+      character_gear?: Array<{
+        base_effect?: string | null;
+        honing: number;
+        id: any;
+        quality: number;
+        slot: number;
+        additional_effect?: string | null;
+        item: {
           id: any;
           image_uri: string;
           name: string;
-          slot: number;
-          tier: number;
+          set_name?: string | null;
+          tier?: number | null;
+          grade?: number | null;
+        };
+      }> | null;
+      character_gem?: Array<{
+        direction: string;
+        effect_type: string;
+        id: any;
+        level: number;
+        rate: number;
+        skill_id: any;
+        slot: number;
+        skill: {image_uri: string; name: string; id: any};
+        item: {
+          id: any;
+          grade?: number | null;
+          image_uri: string;
+          name: string;
+          set_name?: string | null;
+          tier?: number | null;
+        };
+      }> | null;
+      character_skill?: Array<{
+        attack_type?: string | null;
+        counter_yn: ICharacterSkillCounterYn;
+        id: any;
+        level?: number | null;
+        rune_id?: any | null;
+        stagger_value?: string | null;
+        super_armor?: string | null;
+        weak_point?: number | null;
+        character_skill_tripod?: Array<{
+          level?: number | null;
+          selected_yn: ISelectedYn;
+          tripod: {name: string; image_uri: string; slot: number; tier: number};
         }> | null;
-      };
-    }> | null;
+        skill: {
+          class: string;
+          id: any;
+          image_uri: string;
+          name: string;
+          tripod?: Array<{
+            id: any;
+            image_uri: string;
+            name: string;
+            slot: number;
+            tier: number;
+          }> | null;
+        };
+      }> | null;
+    } | null;
   };
 };
 
@@ -483,119 +489,121 @@ export type IFindCharacterQueryVariables = Exact<{
 
 export type IFindCharacterQuery = {
   findCharacter: {
-    attack_power: number;
-    charisma: number;
-    class: string;
-    courage: number;
-    critical: number;
-    domination: number;
-    endurance: number;
-    expertise: number;
-    guild_name?: string | null;
-    id: any;
-    image_uri: string;
-    ins_date: any;
-    item_level: number;
-    kindness: number;
-    level: number;
-    max_health: number;
-    name: string;
-    server_name: string;
-    specialization: number;
-    swiftness: number;
-    upd_date: any;
-    wisdom: number;
-    character_accessory?: Array<{
-      additional_effect?: string | null;
-      base_effect?: string | null;
-      bracelet_effect?: string | null;
-      engraving?: string | null;
+    data?: {
+      attack_power: number;
+      charisma: number;
+      class: string;
+      courage: number;
+      critical: number;
+      domination: number;
+      endurance: number;
+      expertise: number;
+      guild_name?: string | null;
       id: any;
-      quality?: number | null;
-      slot: number;
-      item: {
-        name: string;
-        image_uri: string;
-        grade?: number | null;
-        set_name?: string | null;
-        tier?: number | null;
-        id: any;
-      };
-    }> | null;
-    character_engraving?: Array<{
-      id: any;
+      image_uri: string;
+      ins_date: any;
+      item_level: number;
+      kindness: number;
       level: number;
-      slot: number;
-      engraving: {
-        class_yn: IClassYn;
+      max_health: number;
+      name: string;
+      server_name: string;
+      specialization: number;
+      swiftness: number;
+      upd_date: any;
+      wisdom: number;
+      character_accessory?: Array<{
+        additional_effect?: string | null;
+        base_effect?: string | null;
+        bracelet_effect?: string | null;
+        engraving?: string | null;
         id: any;
-        image_uri: string;
-        info: string;
-        name: string;
-      };
-    }> | null;
-    character_gear?: Array<{
-      base_effect?: string | null;
-      honing: number;
-      id: any;
-      quality: number;
-      slot: number;
-      additional_effect?: string | null;
-      item: {
-        id: any;
-        image_uri: string;
-        name: string;
-        set_name?: string | null;
-        tier?: number | null;
-        grade?: number | null;
-      };
-    }> | null;
-    character_gem?: Array<{
-      direction: string;
-      effect_type: string;
-      id: any;
-      level: number;
-      rate: number;
-      skill_id: any;
-      slot: number;
-      skill: {image_uri: string; name: string; id: any};
-      item: {
-        id: any;
-        grade?: number | null;
-        image_uri: string;
-        name: string;
-        set_name?: string | null;
-        tier?: number | null;
-      };
-    }> | null;
-    character_skill?: Array<{
-      attack_type?: string | null;
-      counter_yn: ICharacterSkillCounterYn;
-      id: any;
-      level?: number | null;
-      rune_id?: any | null;
-      stagger_value?: string | null;
-      super_armor?: string | null;
-      weak_point?: number | null;
-      character_skill_tripod?: Array<{
-        level?: number | null;
-        selected_yn: ISelectedYn;
-        tripod: {name: string; image_uri: string; slot: number; tier: number};
+        quality?: number | null;
+        slot: number;
+        item: {
+          name: string;
+          image_uri: string;
+          grade?: number | null;
+          set_name?: string | null;
+          tier?: number | null;
+          id: any;
+        };
       }> | null;
-      skill: {
-        class: string;
+      character_engraving?: Array<{
         id: any;
-        image_uri: string;
-        name: string;
-        tripod?: Array<{
+        level: number;
+        slot: number;
+        engraving: {
+          class_yn: IClassYn;
+          id: any;
+          image_uri: string;
+          info: string;
+          name: string;
+        };
+      }> | null;
+      character_gear?: Array<{
+        base_effect?: string | null;
+        honing: number;
+        id: any;
+        quality: number;
+        slot: number;
+        additional_effect?: string | null;
+        item: {
           id: any;
           image_uri: string;
           name: string;
-          slot: number;
-          tier: number;
+          set_name?: string | null;
+          tier?: number | null;
+          grade?: number | null;
+        };
+      }> | null;
+      character_gem?: Array<{
+        direction: string;
+        effect_type: string;
+        id: any;
+        level: number;
+        rate: number;
+        skill_id: any;
+        slot: number;
+        skill: {image_uri: string; name: string; id: any};
+        item: {
+          id: any;
+          grade?: number | null;
+          image_uri: string;
+          name: string;
+          set_name?: string | null;
+          tier?: number | null;
+        };
+      }> | null;
+      character_skill?: Array<{
+        attack_type?: string | null;
+        counter_yn: ICharacterSkillCounterYn;
+        id: any;
+        level?: number | null;
+        rune_id?: any | null;
+        stagger_value?: string | null;
+        super_armor?: string | null;
+        weak_point?: number | null;
+        character_skill_tripod?: Array<{
+          level?: number | null;
+          selected_yn: ISelectedYn;
+          tripod: {name: string; image_uri: string; slot: number; tier: number};
         }> | null;
-      };
-    }> | null;
+        skill: {
+          class: string;
+          id: any;
+          image_uri: string;
+          name: string;
+          tripod?: Array<{
+            id: any;
+            image_uri: string;
+            name: string;
+            slot: number;
+            tier: number;
+          }> | null;
+        };
+      }> | null;
+    } | null;
   };
 };
 
@@ -671,128 +679,130 @@ export type IFindClassQuery = {
 export const UpsertCharacterDocument = `
     mutation UpsertCharacter($args: String!) {
   upsertCharacter(args: $args) {
-    attack_power
-    character_accessory {
-      additional_effect
-      base_effect
-      bracelet_effect
-      engraving
-      id
-      item {
-        name
-        image_uri
-        grade
-        set_name
-        tier
+    data {
+      attack_power
+      character_accessory {
+        additional_effect
+        base_effect
+        bracelet_effect
+        engraving
         id
-      }
-      quality
-      slot
-    }
-    character_engraving {
-      engraving {
-        class_yn
-        id
-        image_uri
-        info
-        name
-      }
-      id
-      level
-      slot
-    }
-    character_gear {
-      base_effect
-      honing
-      id
-      item {
-        id
-        image_uri
-        name
-        set_name
-        tier
-        grade
-      }
-      quality
-      slot
-      additional_effect
-    }
-    character_gem {
-      direction
-      effect_type
-      id
-      level
-      rate
-      skill {
-        image_uri
-        name
-        id
-      }
-      skill_id
-      slot
-      item {
-        id
-        grade
-        image_uri
-        name
-        set_name
-        tier
-      }
-    }
-    character_skill {
-      attack_type
-      character_skill_tripod {
-        level
-        selected_yn
-        tripod {
+        item {
           name
           image_uri
-          slot
+          grade
+          set_name
           tier
+          id
         }
+        quality
+        slot
       }
-      counter_yn
-      id
-      level
-      rune_id
-      skill {
-        class
+      character_engraving {
+        engraving {
+          class_yn
+          id
+          image_uri
+          info
+          name
+        }
         id
-        image_uri
-        name
-        tripod {
+        level
+        slot
+      }
+      character_gear {
+        base_effect
+        honing
+        id
+        item {
           id
           image_uri
           name
-          slot
+          set_name
+          tier
+          grade
+        }
+        quality
+        slot
+        additional_effect
+      }
+      character_gem {
+        direction
+        effect_type
+        id
+        level
+        rate
+        skill {
+          image_uri
+          name
+          id
+        }
+        skill_id
+        slot
+        item {
+          id
+          grade
+          image_uri
+          name
+          set_name
           tier
         }
       }
-      stagger_value
-      super_armor
-      weak_point
+      character_skill {
+        attack_type
+        character_skill_tripod {
+          level
+          selected_yn
+          tripod {
+            name
+            image_uri
+            slot
+            tier
+          }
+        }
+        counter_yn
+        id
+        level
+        rune_id
+        skill {
+          class
+          id
+          image_uri
+          name
+          tripod {
+            id
+            image_uri
+            name
+            slot
+            tier
+          }
+        }
+        stagger_value
+        super_armor
+        weak_point
+      }
+      charisma
+      class
+      courage
+      critical
+      domination
+      endurance
+      expertise
+      guild_name
+      id
+      image_uri
+      ins_date
+      item_level
+      kindness
+      level
+      max_health
+      name
+      server_name
+      specialization
+      swiftness
+      upd_date
+      wisdom
     }
-    charisma
-    class
-    courage
-    critical
-    domination
-    endurance
-    expertise
-    guild_name
-    id
-    image_uri
-    ins_date
-    item_level
-    kindness
-    level
-    max_health
-    name
-    server_name
-    specialization
-    swiftness
-    upd_date
-    wisdom
   }
 }
     `;
@@ -824,128 +834,130 @@ export const useUpsertCharacterMutation = <
 export const FindCharacterDocument = `
     query FindCharacter($name: String!) {
   findCharacter(name: $name) {
-    attack_power
-    character_accessory {
-      additional_effect
-      base_effect
-      bracelet_effect
-      engraving
-      id
-      item {
-        name
-        image_uri
-        grade
-        set_name
-        tier
+    data {
+      attack_power
+      character_accessory {
+        additional_effect
+        base_effect
+        bracelet_effect
+        engraving
         id
-      }
-      quality
-      slot
-    }
-    character_engraving {
-      engraving {
-        class_yn
-        id
-        image_uri
-        info
-        name
-      }
-      id
-      level
-      slot
-    }
-    character_gear {
-      base_effect
-      honing
-      id
-      item {
-        id
-        image_uri
-        name
-        set_name
-        tier
-        grade
-      }
-      quality
-      slot
-      additional_effect
-    }
-    character_gem {
-      direction
-      effect_type
-      id
-      level
-      rate
-      skill {
-        image_uri
-        name
-        id
-      }
-      skill_id
-      slot
-      item {
-        id
-        grade
-        image_uri
-        name
-        set_name
-        tier
-      }
-    }
-    character_skill {
-      attack_type
-      character_skill_tripod {
-        level
-        selected_yn
-        tripod {
+        item {
           name
           image_uri
-          slot
+          grade
+          set_name
           tier
+          id
         }
+        quality
+        slot
       }
-      counter_yn
-      id
-      level
-      rune_id
-      skill {
-        class
+      character_engraving {
+        engraving {
+          class_yn
+          id
+          image_uri
+          info
+          name
+        }
         id
-        image_uri
-        name
-        tripod {
+        level
+        slot
+      }
+      character_gear {
+        base_effect
+        honing
+        id
+        item {
           id
           image_uri
           name
-          slot
+          set_name
+          tier
+          grade
+        }
+        quality
+        slot
+        additional_effect
+      }
+      character_gem {
+        direction
+        effect_type
+        id
+        level
+        rate
+        skill {
+          image_uri
+          name
+          id
+        }
+        skill_id
+        slot
+        item {
+          id
+          grade
+          image_uri
+          name
+          set_name
           tier
         }
       }
-      stagger_value
-      super_armor
-      weak_point
+      character_skill {
+        attack_type
+        character_skill_tripod {
+          level
+          selected_yn
+          tripod {
+            name
+            image_uri
+            slot
+            tier
+          }
+        }
+        counter_yn
+        id
+        level
+        rune_id
+        skill {
+          class
+          id
+          image_uri
+          name
+          tripod {
+            id
+            image_uri
+            name
+            slot
+            tier
+          }
+        }
+        stagger_value
+        super_armor
+        weak_point
+      }
+      charisma
+      class
+      courage
+      critical
+      domination
+      endurance
+      expertise
+      guild_name
+      id
+      image_uri
+      ins_date
+      item_level
+      kindness
+      level
+      max_health
+      name
+      server_name
+      specialization
+      swiftness
+      upd_date
+      wisdom
     }
-    charisma
-    class
-    courage
-    critical
-    domination
-    endurance
-    expertise
-    guild_name
-    id
-    image_uri
-    ins_date
-    item_level
-    kindness
-    level
-    max_health
-    name
-    server_name
-    specialization
-    swiftness
-    upd_date
-    wisdom
   }
 }
     `;

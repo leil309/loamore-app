@@ -43,7 +43,9 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
                 },
                 {
                   onSuccess: result => {
-                    setCharacter(result.upsertCharacter);
+                    if (result.upsertCharacter.data) {
+                      setCharacter(result.upsertCharacter.data);
+                    }
                     refetch();
                   },
                 },
@@ -79,7 +81,9 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
                   },
                   {
                     onSuccess: result => {
-                      setCharacter(result.upsertCharacter);
+                      if (result.upsertCharacter.data) {
+                        setCharacter(result.upsertCharacter.data);
+                      }
                       refetch();
                     },
                   },
@@ -95,8 +99,8 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
   );
 
   useEffect(() => {
-    if (data?.findCharacter) {
-      setCharacter(data.findCharacter);
+    if (data?.findCharacter.data) {
+      setCharacter(data.findCharacter.data);
     }
   }, [data]);
 

@@ -504,22 +504,24 @@ export const getCharacter = async ({name}: IGetCharacter) => {
 
 const basicStats = ($: any) => {
   return {
-    attack_power: parseInt(
-      $(
-        '#profile-ability > div.profile-ability-basic > ul > li:nth-child(1) > span:nth-child(2)',
-      )
-        .text()
-        .trim(),
-      10,
-    ),
-    max_health: parseInt(
-      $(
-        '#profile-ability > div.profile-ability-basic > ul > li:nth-child(2) > span:nth-child(2)',
-      )
-        .text()
-        .trim(),
-      10,
-    ),
+    attack_power:
+      parseInt(
+        $(
+          '#profile-ability > div.profile-ability-basic > ul > li:nth-child(1) > span:nth-child(2)',
+        )
+          .text()
+          .trim(),
+        10,
+      ) || 0,
+    max_health:
+      parseInt(
+        $(
+          '#profile-ability > div.profile-ability-basic > ul > li:nth-child(2) > span:nth-child(2)',
+        )
+          .text()
+          .trim(),
+        10,
+      ) || 0,
   };
 };
 const battleStats = ($: any) => {

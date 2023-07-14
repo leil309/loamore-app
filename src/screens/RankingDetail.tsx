@@ -42,7 +42,9 @@ const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
                   },
                   {
                     onSuccess: result => {
-                      setCharacter(result.upsertCharacter);
+                      if (result.upsertCharacter.data) {
+                        setCharacter(result.upsertCharacter.data);
+                      }
                       refetch();
                     },
                   },
@@ -58,8 +60,8 @@ const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
   );
 
   useEffect(() => {
-    if (data?.findCharacter) {
-      setCharacter(data.findCharacter);
+    if (data?.findCharacter.data) {
+      setCharacter(data.findCharacter.data);
     }
   }, [data]);
 

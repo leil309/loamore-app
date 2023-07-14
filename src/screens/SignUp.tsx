@@ -22,7 +22,9 @@ const SignUp = () => {
   const {mutate} = useUpsertCharacterMutation();
   const onSubmit = () => {
     if (charName.trim()) {
+      console.log('input C');
       getCharacter({name: charName}).then(res => {
+        console.log('end C');
         mutate(
           {
             args: JSON.stringify(res),
