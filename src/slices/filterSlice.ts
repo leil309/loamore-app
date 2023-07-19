@@ -11,7 +11,6 @@ const filterSlice = createSlice({
   reducers: {
     setFilter(state, action: PayloadAction<IFindClassQuery>) {
       state.findClass = action.payload.findClass;
-      console.log('SET_FILTER');
     },
     reset() {
       return {...initialState};

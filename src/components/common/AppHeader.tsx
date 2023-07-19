@@ -48,7 +48,7 @@ const AppHeader = ({canBack = false}: IAppHeader) => {
       <View
         style={[styles.wrapper, {marginTop: StatusBar?.currentHeight || 0}]}>
         {!canBack ? (
-          <Text style={styles.headerText}>LoaMore</Text>
+          <Text style={styles.headerText}>LoaMore22</Text>
         ) : (
           <Pressable onPress={() => navigation.goBack()}>
             <MaterialIcons name="arrow-back" color={'#707375'} size={30} />

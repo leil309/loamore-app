@@ -33,12 +33,10 @@ const userSlice = createSlice({
     },
     setCharacter(state, action: PayloadAction<ICharacterName>) {
       state.characterName = action.payload;
-      console.log('SET_NAME');
       AsyncStorage.setItem('character_name', action.payload.name);
     },
     setCharacterInfo(state, action: PayloadAction<ICharacter>) {
       state.character = action.payload;
-      console.log('SET_INFO');
       AsyncStorage.setItem('character_name', action.payload.name);
     },
     reset() {

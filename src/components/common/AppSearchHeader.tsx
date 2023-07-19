@@ -244,7 +244,7 @@ const AppSearchHeader = ({
               justifyContent: 'space-between',
               width: '100%',
             }}>
-            <Text style={styles.headerText}>LoaMore</Text>
+            <Text style={styles.headerText}>LoaMore22</Text>
             <Pressable
               style={{flexDirection: 'row'}}
               onPress={() => showModal()}>

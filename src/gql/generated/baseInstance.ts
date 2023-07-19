@@ -1,7 +1,12 @@
 import axios from 'axios';
+import {Platform} from 'react-native';
 
 export const baseInstance = axios.create({
-  baseURL: 'https://loamore-api-6fmu.vercel.app/graphql', //Config.API_URL,
+  baseURL: __DEV__
+    ? Platform.OS === 'ios'
+      ? 'http://localhost:4001/graphql'
+      : 'http://127.0.0.1:4001/graphql'
+    : 'https://loamore-api-6fmu.vercel.app/graphql',
   timeout: 5000,
 });
 baseInstance.interceptors.request.use(
