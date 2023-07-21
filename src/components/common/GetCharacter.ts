@@ -28,6 +28,7 @@ export const getCharacter = async ({name}: IGetCharacter) => {
     })
     .then(html => {
       const $ = cheerio.load(html);
+
       let character: ICrawCharacter = {
         accessoryList: undefined,
         avatarList: undefined,
@@ -90,12 +91,26 @@ export const getCharacter = async ({name}: IGetCharacter) => {
             wisdom: 0,
           },
         },
+        success: false,
+        error: '',
       };
+
+      const noCharacterCheck =
+        $(
+          '#lostark-wrapper > div > main > div > div.profile-ingame > div > span:nth-child(2)',
+        )
+          .text()
+          .trim() || '';
+      if (noCharacterCheck === '캐릭터명을 확인해주세요.') {
+        character.error = '존재하지 않는 캐릭터입니다.';
+        return character;
+      }
 
       // 닉네임
       character.userName = $('.profile-character-info__name').text().trim();
       if (!character.userName) {
-        return;
+        character.error = '존재하지 않는 캐릭터입니다.';
+        return character;
       }
       // 레벨
       character.level = $('.profile-character-info__lv')
@@ -151,11 +166,24 @@ export const getCharacter = async ({name}: IGetCharacter) => {
         .replace(/\\t/gi, '')
         .replace(/;/gi, '');
 
-      const scriptJson = JSON.parse(script);
-      if (!scriptJson) {
-        return;
+      let scriptJson: {
+        Skill: {[s: string]: unknown} | ArrayLike<unknown>;
+        Equip: {[s: string]: unknown} | ArrayLike<unknown>;
+        GemSkillEffect: any[];
+        Engrave: {[s: string]: unknown} | ArrayLike<unknown>;
+      };
+      try {
+        scriptJson = JSON.parse(script);
+      } catch (e) {
+        character.error =
+          '캐릭터의 정보가 충분하지 않습니다.\n다른 캐릭터를 검색해주세요.';
+        return character;
       }
-
+      if (!scriptJson) {
+        character.error =
+          '캐릭터의 정보가 충분하지 않습니다.\n다른 캐릭터를 검색해주세요.';
+        return character;
+      }
       const skillList = Object.entries(scriptJson.Skill).map(obj => {
         const data: string = JSON.stringify(obj[1]).replace(reg, '  ');
 
@@ -247,7 +275,6 @@ export const getCharacter = async ({name}: IGetCharacter) => {
           };
           return skillInfo;
         });
-
       character.skillList = _.values(
         _.merge(_.keyBy(skillList, 'name'), _.keyBy(tripodList, 'name')),
       );
@@ -498,7 +525,11 @@ export const getCharacter = async ({name}: IGetCharacter) => {
           _.keyBy(engravingInfo, 'name'),
         ),
       );
+      character.success = true;
       return character;
+    })
+    .catch(e => {
+      console.log(e);
     });
 };
 

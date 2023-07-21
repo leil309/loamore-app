@@ -126,7 +126,7 @@ const AppSearchHeader = ({
         },
       });
       getCharacter({name: characterName}).then(res => {
-        if (res) {
+        if (res?.success) {
           mutate(
             {
               args: JSON.stringify(res),

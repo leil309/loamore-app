@@ -15,6 +15,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {getCharacter} from '~/components/common/GetCharacter';
 import GearCard from '~/components/GearCard';
 import {HomeStackScreenProps} from '~/navigation/types';
+import AlertModal from '~/components/common/AlertModal';
 
 const Home = ({route}: HomeStackScreenProps<'Home'>) => {
   const characterName = useAppSelector(state =>
@@ -25,6 +26,8 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
   const [character, setCharacter] = useState<ICharacter>();
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [alertVisible, setAlertVisible] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string>('');
 
   const {data, isLoading, refetch} = useFindCharacterQuery(
     {name: characterName},
@@ -35,7 +38,7 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
         setLoading(true);
         getCharacter({name: characterName})
           .then(res => {
-            if (res) {
+            if (res?.success) {
               mutate(
                 {
                   args: JSON.stringify(res),
@@ -72,19 +75,24 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
           getCharacter({name: characterName})
             .then(res => {
               if (res) {
-                mutate(
-                  {
-                    args: JSON.stringify(res),
-                  },
-                  {
-                    onSuccess: result => {
-                      if (result.upsertCharacter.data) {
-                        setCharacter(result.upsertCharacter.data);
-                      }
-                      refetch();
+                if (res.success) {
+                  mutate(
+                    {
+                      args: JSON.stringify(res),
                     },
-                  },
-                );
+                    {
+                      onSuccess: result => {
+                        if (result.upsertCharacter.data) {
+                          setCharacter(result.upsertCharacter.data);
+                        }
+                        refetch();
+                      },
+                    },
+                  );
+                } else {
+                  setAlertVisible(true);
+                  setErrorMsg(res.error);
+                }
               }
             })
             .finally(() => {
@@ -100,6 +108,10 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
       setCharacter(data.findCharacter.data);
     }
   }, [data]);
+
+  const modalHide = () => {
+    setAlertVisible(false);
+  };
 
   return (
     <SafeAreaView style={mainContainer}>
@@ -139,6 +151,11 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
               />
             </>
           ) : null}
+          <AlertModal
+            visible={alertVisible}
+            message={errorMsg}
+            hideModal={modalHide}
+          />
         </ScrollView>
       )}
       <AppSearchHeader />

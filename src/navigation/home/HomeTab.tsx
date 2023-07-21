@@ -13,6 +13,7 @@ import {Platform, View} from 'react-native';
 import CompareStack from '~/navigation/home/CompareStack';
 import RankingStack from '~/navigation/home/RankingStack';
 import {Colors} from '~/components/common/Colors';
+import MenuStack from '~/navigation/home/MenuStack';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
@@ -116,26 +117,26 @@ const HomeTab = () => {
           ),
         }}
       />
-      {/*<Tab.Screen*/}
-      {/*  name={'MenuStack'}*/}
-      {/*  component={MenuStack}*/}
-      {/*  listeners={{*/}
-      {/*    tabPress: () =>*/}
-      {/*      navigation.navigate('MenuStack', {*/}
-      {/*        screen: 'Menu',*/}
-      {/*      }),*/}
-      {/*  }}*/}
-      {/*  options={{*/}
-      {/*    tabBarLabel: '메뉴',*/}
-      {/*    tabBarIcon: ({color, focused}) => (*/}
-      {/*      <MaterialCommunityIcons*/}
-      {/*        name={focused ? 'menu' : 'menu'}*/}
-      {/*        color={color}*/}
-      {/*        size={30}*/}
-      {/*      />*/}
-      {/*    ),*/}
-      {/*  }}*/}
-      {/*/>*/}
+      <Tab.Screen
+        name={'MenuStack'}
+        component={MenuStack}
+        listeners={{
+          tabPress: () =>
+            navigation.navigate('MenuStack', {
+              screen: 'Menu',
+            }),
+        }}
+        options={{
+          tabBarLabel: '메뉴',
+          tabBarIcon: ({color, focused}) => (
+            <MaterialCommunityIcons
+              name={focused ? 'menu' : 'menu'}
+              color={color}
+              size={30}
+            />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };

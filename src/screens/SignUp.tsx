@@ -15,35 +15,60 @@ import userSlice from '../slices/userSlice';
 import {baseCard, baseText, mainContainer} from '~/components/styles';
 import {useUpsertCharacterMutation} from '~/gql/generated/graphql';
 import {getCharacter} from '~/components/common/GetCharacter';
+import AlertModal from '~/components/common/AlertModal';
+import LoadingModal from '~/components/common/LoadingModal';
 
 const SignUp = () => {
   const dispatch = useAppDispatch();
+  const [alertVisible, setAlertVisible] = useState<boolean>(false);
+  const [loadingVisible, setLoadingVisible] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string>('');
 
   const [charName, setCharName] = useState('');
   const {mutate} = useUpsertCharacterMutation();
   const onSubmit = () => {
+    setLoadingVisible(true);
     if (charName.trim()) {
-      getCharacter({name: charName}).then(res => {
-        mutate(
-          {
-            args: JSON.stringify(res),
-          },
-          {
-            onSuccess: () => {
-              dispatch(userSlice.actions.setCharacter({name: charName.trim()}));
-              dispatch(
-                userSlice.actions.setCharacterInfo({
-                  name: charName.trim(),
-                }),
+      getCharacter({name: charName})
+        .then(res => {
+          if (res) {
+            if (res.success) {
+              mutate(
+                {
+                  args: JSON.stringify(res),
+                },
+                {
+                  onSuccess: () => {
+                    dispatch(
+                      userSlice.actions.setCharacter({name: charName.trim()}),
+                    );
+                    dispatch(
+                      userSlice.actions.setCharacterInfo({
+                        name: charName.trim(),
+                      }),
+                    );
+                  },
+                  onError: (e: any) => {
+                    console.log(e);
+                  },
+                },
               );
-            },
-            onError: (e: any) => {
-              console.log(e);
-            },
-          },
-        );
-      });
+            } else {
+              setAlertVisible(true);
+              setErrorMsg(res.error);
+            }
+          }
+        })
+        .finally(() => {
+          setLoadingVisible(false);
+        });
+    } else {
+      setLoadingVisible(false);
     }
+  };
+
+  const modalHide = () => {
+    setAlertVisible(false);
   };
 
   return (
@@ -69,6 +94,12 @@ const SignUp = () => {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
+      <AlertModal
+        visible={alertVisible}
+        message={errorMsg}
+        hideModal={modalHide}
+      />
+      <LoadingModal visible={loadingVisible} />
     </SafeAreaView>
   );
 };

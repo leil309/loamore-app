@@ -307,6 +307,8 @@ export interface ICrawCharacter {
   cardList?: Array<any>;
   elixir?: Array<any>;
   ownUserName?: Array<any>;
+  success: boolean;
+  error: string;
 }
 export interface IStatsEngraving {
   name: string;

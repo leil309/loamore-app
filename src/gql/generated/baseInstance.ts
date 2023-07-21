@@ -5,7 +5,7 @@ export const baseInstance = axios.create({
   baseURL: __DEV__
     ? Platform.OS === 'ios'
       ? 'http://localhost:4001/graphql'
-      : 'http://127.0.0.1:4001/graphql'
+      : 'http://49.173.69.230:4001/graphql'
     : 'https://loamore-api-6fmu.vercel.app/graphql',
   timeout: 5000,
 });
