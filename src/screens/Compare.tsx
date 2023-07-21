@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView, Text, View} from 'react-native';
+import {Image, SafeAreaView, ScrollView, Text, View} from 'react-native';
 import {
   baseCard,
   baseText,
@@ -29,11 +29,22 @@ interface IWeaponQualityBar {
 
 const Compare = () => {
   const characterName = useAppSelector(state => state.user.characterName)?.name;
+  const defaultImg = Image.resolveAssetSource(
+    require('assets/default-character.png'),
+  );
 
   const {data} = useFindCharacterQuery(
     {name: characterName || ''},
     {enabled: !!characterName},
   );
+  const imageTop =
+    data?.findCharacter.data?.class === '도화가'
+      ? -62
+      : data?.findCharacter.data?.class === '리퍼'
+      ? -13
+      : data?.findCharacter.data?.class === '기상술사'
+      ? -62
+      : -25;
   const {
     data: topData,
     isLoadingError: aveEngravingLoading,
@@ -104,8 +115,59 @@ const Compare = () => {
   return (
     <SafeAreaView style={mainContainer}>
       <ScrollView contentContainerStyle={contentContainer}>
-        <View style={baseCard}>
-          <Text style={baseText}>주 스펙 비교</Text>
+        <View
+          style={[
+            baseCard,
+            {
+              flexDirection: 'row',
+              alignItems: 'center',
+            },
+          ]}>
+          <View
+            style={{
+              alignItems: 'flex-end',
+              overflow: 'hidden',
+              width: 50,
+              height: 50,
+              borderRadius: 20,
+              borderWidth: 0.5,
+              borderColor: '#FFFFFF',
+              marginRight: 10,
+            }}>
+            <Image
+              defaultSource={defaultImg}
+              source={{
+                uri: data?.findCharacter.data?.image_uri,
+              }}
+              style={{
+                top: imageTop,
+                width: 50,
+                height: 250,
+                resizeMode: 'cover',
+              }}
+            />
+          </View>
+          <View style={{alignItems: 'flex-start'}}>
+            <Text
+              style={[
+                baseText,
+                {
+                  textAlign: 'left',
+                },
+              ]}>
+              {characterName}
+            </Text>
+            <Text
+              style={[
+                baseText,
+                {
+                  color: '#949494',
+                  textAlign: 'left',
+                },
+              ]}>
+              {'아이템 Lv.' + data?.findCharacter.data?.item_level}
+            </Text>
+          </View>
         </View>
         <View
           style={{
