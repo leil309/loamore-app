@@ -1,11 +1,9 @@
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {baseCard, baseText, subText} from '~/components/styles';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {
-  HomeTabParamList,
-  RankingStackParamList,
-  RootStackParamList,
-} from '~/navigation/types';
+import {RankingStackParamList} from '~/navigation/types';
+import userSlice from '~/slices/userSlice';
+import {useAppDispatch} from '~/store';
 
 export interface IRankingCard {
   name: string;
@@ -26,6 +24,7 @@ const RankingCard = ({
   setItem,
   imageUri,
 }: IRankingCard) => {
+  const dispatch = useAppDispatch();
   const defaultImg = Image.resolveAssetSource(
     require('assets/default-character.png'),
   );
@@ -44,11 +43,18 @@ const RankingCard = ({
     <View style={[baseCard, {marginBottom: 10}]}>
       <TouchableOpacity
         style={{flexDirection: 'row'}}
-        onPress={() =>
+        onPress={() => {
+          dispatch(userSlice.actions.setCharacter({name: name}));
+          dispatch(
+            userSlice.actions.setCharacterInfo({
+              name: name,
+            }),
+          );
+
           navigation.navigate('RankingDetail', {
             name: name,
-          })
-        }>
+          });
+        }}>
         <View
           style={{
             alignItems: 'flex-end',
