@@ -35,7 +35,6 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
         setLoading(true);
         getCharacter({name: characterName})
           .then(res => {
-            console.log('end');
             if (res) {
               mutate(
                 {
@@ -69,11 +68,9 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
         console.log(character?.name);
         console.log(min);
         if (min > 5) {
-          console.log('start');
           setLoading(true);
           getCharacter({name: characterName})
             .then(res => {
-              console.log('end');
               if (res) {
                 mutate(
                   {

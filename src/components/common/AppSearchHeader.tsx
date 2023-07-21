@@ -206,7 +206,6 @@ const AppSearchHeader = ({
       );
     }
     if (setSelectedEngraving) {
-      console.log(selected);
       setTmpEngraving(selected);
     }
   };
@@ -244,7 +243,7 @@ const AppSearchHeader = ({
               justifyContent: 'space-between',
               width: '100%',
             }}>
-            <Text style={styles.headerText}>LoaMore22</Text>
+            <Text style={styles.headerText}>LoaMore</Text>
             <Pressable
               style={{flexDirection: 'row'}}
               onPress={() => showModal()}>
