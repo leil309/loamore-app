@@ -1,5 +1,5 @@
 import {Image, Text, View} from 'react-native';
-import {baseCard, mainContainer} from '~/components/styles';
+import {baseCard, baseText, mainContainer} from '~/components/styles';
 import {ICharacterGem} from '~/@types';
 
 interface IGemCard {
@@ -21,64 +21,76 @@ const GemCard = ({gemList}: IGemCard) => {
             alignItems: 'center',
           },
         ]}>
-        {gemList
-          ? gemList.map(x => (
-              <View
-                key={x.slot}
+        {gemList && gemList.length > 0 ? (
+          gemList.map(x => (
+            <View
+              key={x.slot}
+              style={{
+                marginHorizontal: 2,
+                borderRadius: 10,
+                borderColor: '#ffb547',
+                borderWidth: 0.5,
+              }}>
+              <Image
+                source={{
+                  uri: `https://cdn-lostark.game.onstove.com/${x.item.image_uri}`,
+                }}
                 style={{
-                  marginHorizontal: 2,
+                  height: 24,
+                  width: 24,
+                  resizeMode: 'cover',
+                }}
+              />
+              <Image
+                source={{
+                  uri: `https://cdn-lostark.game.onstove.com/${x.skill.image_uri}`,
+                }}
+                style={{
                   borderRadius: 10,
-                  borderColor: '#ffb547',
-                  borderWidth: 0.5,
+                  height: 24,
+                  width: 24,
+                  resizeMode: 'cover',
+                }}
+              />
+              <View
+                style={{
+                  backgroundColor: 'rgba(0,0,0,0.5)',
+                  width: '100%',
+                  height: 20,
+                  borderRadius: 10,
+                  borderTopStartRadius: 0,
+                  borderTopEndRadius: 0,
+                  borderTopColor: '#ffb547',
+                  borderTopWidth: 0.5,
                 }}>
-                <Image
-                  source={{
-                    uri: `https://cdn-lostark.game.onstove.com/${x.item.image_uri}`,
-                  }}
-                  style={{
-                    height: 24,
-                    width: 24,
-                    resizeMode: 'cover',
-                  }}
-                />
-                <Image
-                  source={{
-                    uri: `https://cdn-lostark.game.onstove.com/${x.skill.image_uri}`,
-                  }}
-                  style={{
-                    borderRadius: 10,
-                    height: 24,
-                    width: 24,
-                    resizeMode: 'cover',
-                  }}
-                />
-                <View
-                  style={{
-                    backgroundColor: 'rgba(0,0,0,0.5)',
-                    width: '100%',
-                    height: 20,
-                    borderRadius: 10,
-                    borderTopStartRadius: 0,
-                    borderTopEndRadius: 0,
-                    borderTopColor: '#ffb547',
-                    borderTopWidth: 0.5,
-                  }}>
-                  <Text
-                    style={[
-                      {
-                        color: '#FFFFFF',
-                        fontSize: 12,
-                        textAlign: 'center',
-                      },
-                    ]}>
-                    {x.level}
-                    {/* @ts-ignore */}
-                    {gemTypeRegex.exec(x.item.name)[1]}
-                  </Text>
-                </View>
+                <Text
+                  style={[
+                    {
+                      color: '#FFFFFF',
+                      fontSize: 12,
+                      textAlign: 'center',
+                    },
+                  ]}>
+                  {x.level}
+                  {/* @ts-ignore */}
+                  {gemTypeRegex.exec(x.item.name)[1]}
+                </Text>
               </View>
-            ))
-          : null}
+            </View>
+          ))
+        ) : (
+          <View style={{flex: 1}}>
+            <Text
+              style={[
+                baseText,
+                {
+                  color: '#939393',
+                },
+              ]}>
+              보석이 없습니다.
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );

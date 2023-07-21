@@ -33,7 +33,7 @@ export interface ICharacter {
     bracelet_effect?: string | null;
     engraving?: string | null;
     id: any;
-    quality?: number | null;
+    quality: number;
     slot: number;
     item: {
       name: string;
@@ -155,7 +155,23 @@ export interface ICharacterGear {
     grade?: number | null;
   };
 }
-
+export interface ICharacterAccessory {
+  additional_effect?: string | null;
+  base_effect?: string | null;
+  bracelet_effect?: string | null;
+  engraving?: string | null;
+  id: any;
+  quality: number;
+  slot: number;
+  item: {
+    name: string;
+    image_uri: string;
+    grade?: number | null;
+    set_name?: string | null;
+    tier?: number | null;
+    id: any;
+  };
+}
 export interface IEngraving {
   id: any;
   level: number;

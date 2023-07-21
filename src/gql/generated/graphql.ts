@@ -202,7 +202,7 @@ export type ICharacterAccessory = {
   id: Scalars['BigInt'];
   item: IItem;
   item_id: Scalars['BigInt'];
-  quality?: Maybe<Scalars['Int']>;
+  quality: Scalars['Int'];
   slot: Scalars['Int'];
   use_yn: IUseYn;
 };
@@ -394,7 +394,7 @@ export type IUpsertCharacterMutation = {
         bracelet_effect?: string | null;
         engraving?: string | null;
         id: any;
-        quality?: number | null;
+        quality: number;
         slot: number;
         item: {
           name: string;
@@ -518,7 +518,7 @@ export type IFindCharacterQuery = {
         bracelet_effect?: string | null;
         engraving?: string | null;
         id: any;
-        quality?: number | null;
+        quality: number;
         slot: number;
         item: {
           name: string;

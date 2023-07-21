@@ -2,7 +2,7 @@ import type {CodegenConfig} from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: 'https://loamore-api-6fmu.vercel.app/graphql',
+  schema: 'http://localhost:4001/graphql',
   documents: 'src/gql/**/*.graphql',
   hooks: {afterAllFileWrite: ['prettier --write']},
   config: {

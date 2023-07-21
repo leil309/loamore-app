@@ -16,6 +16,7 @@ import {getCharacter} from '~/components/common/GetCharacter';
 import GearCard from '~/components/GearCard';
 import {HomeStackScreenProps} from '~/navigation/types';
 import AlertModal from '~/components/common/AlertModal';
+import AccessoryCard from '~/components/AccessoryCard';
 
 const Home = ({route}: HomeStackScreenProps<'Home'>) => {
   const characterName = useAppSelector(state =>
@@ -134,8 +135,8 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
                 guild={character.guild_name}
                 job={character.class}
               />
+
               <GemCard gemList={character.character_gem} />
-              <GearCard gearList={character.character_gear} />
               <BattleStatsCard
                 critical={character.critical}
                 domination={character.domination}
@@ -149,6 +150,8 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
                 kindness={character.kindness}
                 engraving={character.character_engraving}
               />
+              <GearCard gearList={character.character_gear} />
+              <AccessoryCard accessoryList={character.character_accessory} />
             </>
           ) : null}
           <AlertModal
