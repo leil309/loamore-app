@@ -69,8 +69,7 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
         const min = character
           ? (new Date().getTime() - Date.parse(character.upd_date)) / 1000 / 60
           : 0;
-        console.log(character?.name);
-        console.log(min);
+
         if (min > 5) {
           setLoading(true);
           getCharacter({name: characterName})
@@ -131,11 +130,16 @@ const Home = ({route}: HomeStackScreenProps<'Home'>) => {
                 name={character.name}
                 level={character.level}
                 item_level={character.item_level}
+                weapon={
+                  character.character_gear &&
+                  character.character_gear.length > 0
+                    ? character.character_gear[0].honing
+                    : null
+                }
                 server={character.server_name}
                 guild={character.guild_name}
                 job={character.class}
               />
-
               <GemCard gemList={character.character_gem} />
               <BattleStatsCard
                 critical={character.critical}

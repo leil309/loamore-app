@@ -14,6 +14,7 @@ import GemCard from '~/components/GemCard';
 import BattleStatsCard from '~/components/BattleStatsCard';
 import {getCharacter} from '~/components/common/GetCharacter';
 import GearCard from '~/components/GearCard';
+import AccessoryCard from '~/components/AccessoryCard';
 
 const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
   const {name: characterName} = route.params;
@@ -77,12 +78,16 @@ const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
               name={character.name}
               level={character.level}
               item_level={character.item_level}
+              weapon={
+                character.character_gear && character.character_gear.length > 0
+                  ? character.character_gear[0].honing
+                  : null
+              }
               server={character.server_name}
               guild={character.guild_name}
               job={character.class}
             />
             <GemCard gemList={character.character_gem} />
-            <GearCard gearList={character.character_gear} />
             <BattleStatsCard
               critical={character.critical}
               domination={character.domination}
@@ -96,6 +101,8 @@ const RankingDetail = ({route}: RankingStackScreenProps<'RankingDetail'>) => {
               kindness={character.kindness}
               engraving={character.character_engraving}
             />
+            <GearCard gearList={character.character_gear} />
+            <AccessoryCard accessoryList={character.character_accessory} />
           </>
         ) : null}
       </ScrollView>

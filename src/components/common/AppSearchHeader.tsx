@@ -27,6 +27,7 @@ import {
 import {HomeTabParamList} from '~/navigation/types';
 import {baseText} from '~/components/styles';
 import {getCharacter} from '~/components/common/GetCharacter';
+import LoadingModal from '~/components/common/LoadingModal';
 
 interface IAppSearchHeader {
   rankingFilter?: boolean;
@@ -62,6 +63,8 @@ const AppSearchHeader = ({
   const defaultImg = Image.resolveAssetSource(
     require('assets/default-character.png'),
   );
+
+  const [showLoading, setShowLoading] = useState<boolean>(false);
 
   const [tmpClass, setTmpClass] = useState<string[]>();
   const [tmpEngraving, setTmpEngraving] = useState<number[]>();
@@ -119,34 +122,41 @@ const AppSearchHeader = ({
   const onSubmit = () => {
     if (characterName.trim()) {
       hideModal();
-      getCharacter({name: characterName}).then(res => {
-        if (res?.success) {
-          mutate(
-            {
-              args: JSON.stringify(res),
-            },
-            {
-              onSuccess: () => {
-                dispatch(userSlice.actions.setCharacter({name: characterName}));
-                dispatch(
-                  userSlice.actions.setCharacterInfo({
-                    name: characterName,
-                  }),
-                );
-                navigation.navigate('HomeStack', {
-                  screen: 'Home',
-                  params: {
-                    name: characterName,
-                  },
-                });
+      setShowLoading(true);
+      getCharacter({name: characterName})
+        .then(res => {
+          if (res?.success) {
+            mutate(
+              {
+                args: JSON.stringify(res),
               },
-              onError: (e: any) => {
-                console.log(e);
+              {
+                onSuccess: () => {
+                  dispatch(
+                    userSlice.actions.setCharacter({name: characterName}),
+                  );
+                  dispatch(
+                    userSlice.actions.setCharacterInfo({
+                      name: characterName,
+                    }),
+                  );
+                  navigation.navigate('HomeStack', {
+                    screen: 'Home',
+                    params: {
+                      name: characterName,
+                    },
+                  });
+                },
+                onError: (e: any) => {
+                  console.log(e);
+                },
               },
-            },
-          );
-        }
-      });
+            );
+          }
+        })
+        .finally(() => {
+          setShowLoading(false);
+        });
     }
   };
 
@@ -406,6 +416,7 @@ const AppSearchHeader = ({
           </View>
         </Modal>
       </View>
+      <LoadingModal visible={showLoading} />
     </View>
   );
 };

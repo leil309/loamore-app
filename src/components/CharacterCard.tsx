@@ -15,6 +15,7 @@ interface ICharacterCard {
   name: string;
   level: number;
   item_level: number;
+  weapon?: number | null | undefined;
   server: string;
   guild: string | null | undefined;
   job: string;
@@ -25,6 +26,7 @@ const CharacterCard = ({
   name,
   level,
   item_level,
+  weapon,
   server,
   guild,
   job,
@@ -179,6 +181,18 @@ const CharacterCard = ({
               },
             ]}>
             {'아이템 Lv.' + item_level}
+          </Text>
+          <Text
+            style={[
+              baseText,
+              {
+                fontSize: 15,
+                textAlign: 'left',
+                justifyContent: 'center',
+                padding: 5,
+              },
+            ]}>
+            {'무기 ' + weapon + '+'}
           </Text>
         </View>
       </View>

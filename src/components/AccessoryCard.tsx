@@ -146,7 +146,6 @@ const braceletInfo = (x: ICharacterAccessory) => {
         .filter((f: string) => !!f);
     }
   }
-  console.log(res.length);
   return (
     <View style={{marginBottom: 3, marginLeft: 1}}>
       {res.map((r: string, index: number) => (

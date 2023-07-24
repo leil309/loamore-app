@@ -9,6 +9,10 @@ interface IGemCard {
 const GemCard = ({gemList}: IGemCard) => {
   const gemTypeRegex = /\s(홍|멸|청|원)/;
 
+  // gemList = gemList?.sort((a, b) => {
+  //   return a.skill_id - b.skill_id;
+  // });
+
   return (
     <View style={[mainContainer, {marginTop: 15}]}>
       <View
