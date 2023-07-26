@@ -4,7 +4,7 @@ PODS:
   - BVLinearGradient (2.6.2):
     - React-Core
   - CocoaAsyncSocket (7.6.5)
-  - CodePush (8.0.2):
+  - CodePush (7.0.2):
     - Base64 (~> 1.1)
     - JWT (~> 3.0.0-beta.12)
     - React-Core
@@ -640,7 +640,7 @@ SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  CodePush: 9eddecce05cd10491e2673b259c85885a462be33
+  CodePush: 71915cd671d09614848cd5515f71d9cb4e88b3f7
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 48289402952f4f7a4e235de70a9a590aa0b79ef4
   FBReactNativeSpec: dd1186fd05255e3457baa2f4ca65e94c2cd1e3ac
